@@ -1,0 +1,24 @@
+[
+    {"type": "HEADING"},
+    {"type": "SUBHEADING", "text": "In collaboration with Julie Kelvin, Rubbie Kelvin, Jane Khan."},
+    {"type": "IMAGES", "srcs": [
+        "http://localhost:3000/src/assets/catherine.png"
+    ]},
+    {"type": "ACTION", "platform": "GITHUB", "link": "https://github.com/"},
+    {"type": "LIST", "items": [
+        "Roles - Art Direction, Illustration, Graphic Design",
+        "Tools - Procreate, Adobe Indesign, Adobe Photoshop",
+        "Timeline - 3 weeks"
+    ]},
+    {"type": "TITLE", "text": "Congenital Heart Disease (CHD)"},
+    {"type": "PARAGRAPH", "text": "The Heart and Stroke Foundation of Canada defines Congenital Heart Disease (CHD) as a heart condition that happens when the heart or the blood vessels near the heart don't develop normally before birth. When a patient is first diagnosed, it is important that they and their caretakers fully understand the information they have received. The task was to present eleven (11) heart defects in a manner that was helpful for medical practitioners to explain CHD to patients and families."},
+    {"type": "IMAGES", "srcs": [
+        "http://localhost:3000/src/assets/_/6.png",
+        "http://localhost:3000/src/assets/_/1.png"
+    ]},
+    {"type": "TITLE", "text": "Limitations"},
+    {"type": "PARAGRAPH", "text": "One of the biggest limitations during this project was that we never had the opportunity to talk with teens living with CHD. Due to time constraints, we were unable to pursue this feedback. We only consulted people that worked with teens and relied on information gathered through secondary research. Therefore, it is fair to say that we don’t really know what teens want to know about their heart, and don’t know if they would even hold onto our folder or want it. This is something we would need to investigate further moving forward."},
+    {"type": "TITLE", "text": "Future Considerations"},
+    {"type":"PARAGRAPH","text": "In addition to primary research with teenagers, another problem we weren’t quite able to tackle on paper was the representation of multiple defects on one heart. It is not uncommon for people with CHD to have more than one defect, so having a system for more dynamic representations of someone’s heart is a future consideration. We think exploring a digital medium like an app or web component would help with this. Plus, since teens are known to be tech savvy, perhaps an app would allow for greater adherence."},
+    {"type": "VIEWCOUNT"}
+]
