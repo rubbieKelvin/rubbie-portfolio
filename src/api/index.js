@@ -1,6 +1,6 @@
-const BASEURL = "https://api-rubbiekelvin-portfolio.herokuapp.com"
-// const BASEURL = "http://localhost:8000"
-// const BASEURL = "http://192.168.43.153:8000"
+export const BASEURL = "https://api-rubbiekelvin-portfolio.herokuapp.com"
+// export const BASEURL = "http://localhost:8000"
+// export const BASEURL = "http://192.168.43.153:8000"
 
 const url = (path, params) => {
 	const url_ = new URL(`${BASEURL}/${path}`)
