@@ -9,12 +9,12 @@
             </template>
             <template v-else-if="item.type=='images'">
                 <template v-if="item.srcs.length==1">
-                    <img class="object-cover object-center" :src="item.srcs[0]"/>
+                    <img class="indent w-full object-cover object-center" :src="item.srcs[0]"/>
                 </template>
                 <template v-else-if="item.srcs.length==2">
                     <div class="flex gap-3 flex-col md:flex-row">
-                        <img class="object-cover object-center w-full md:w-1/2" :src="item.srcs[0]" alt="">
-                        <img class="object-cover object-center w-full md:w-1/2" :src="item.srcs[1]" alt="">
+                        <img class=" max-h-96 object-cover object-center w-full md:w-1/2" :src="item.srcs[0]" alt="">
+                        <img class=" max-h-96 object-cover object-center w-full md:w-1/2" :src="item.srcs[1]" alt="">
                     </div>
                 </template>
             </template>

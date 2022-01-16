@@ -15,6 +15,6 @@ export const router = createRouter({
     ],
     history: createWebHistory(),
     scrollBehavior (to, from, savedPosition) {
-        return { x: 0, y: 0 }
+        return { top: 0, behavior: "smooth"}
     }
 })

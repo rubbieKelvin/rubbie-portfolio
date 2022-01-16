@@ -5,10 +5,10 @@
                 <h2 class="text-xl font-dm-sans font-medium">{{title}}</h2>
                 <p class="">{{subtitle}}</p>
             </div>
-            <div class="md:hidden h-full w-full pl-8 pb-8 flex items-end">
-                <div class="bg-gray-900 px-10 py-7 w-max">
+            <div class="md:hidden h-full w-full px-4 pb-4 flex items-end">
+                <div class="bg-gray-900 px-10 py-4 w-max">
                     <h2 class="text-white text-xl font-dm-sans font-medium">{{title}}</h2>
-                    <p class=" text-gray-300 font-light">{{subtitle}}</p>
+                    <p class=" text-blue-200 font-light">{{subtitle}}</p>
                 </div>
             </div>
         </router-link>
