@@ -145,14 +145,17 @@ export default {
 
                 // meta
                 const meta = [
-                    {property:"og:title", content: "European Travel Destinations"},
+                    {property:"og:title", content: this.project.meta_title},
                     {property:"og:type", content: "article"},
-                    {property:"og:image", content: "http://euro-travel-example.com/thumbnail.jpg"},
-                    {property:"og:url", content: "http://euro-travel-example.com/index.htm"},
+                    {property:"og:image", content: image(this.project.cover)},
+                    {property:"og:url", content: this.$route.fullPath},
+                    {property: "og:description", content: this.project.meta_description},
+                    {property: "og:site_name", content: "Rubbie Kelvin"},
+                    {name:"twitter:title", content: this.project.meta_title},
                     {name:"twitter:card", content: "summary_large_image"},
-                    {property: "og:description", content: "Offering tour packages for individuals or groups."},
-                    {property: "og:site_name", content: "European Travel, Inc."},
-                    {name: "twitter:image:alt", content: "Alt text for image"},
+                    {name:"twitter:image", content: image(this.project.cover)},
+                    {name: "twitter:description", content: this.project.meta_description},
+                    {name: "twitter:image:alt", content: this.project.title},
                 ]
 
                 addMetaTags(meta);
