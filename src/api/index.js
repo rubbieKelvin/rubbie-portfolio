@@ -1,6 +1,6 @@
-export const BASEURL = "https://api-rubbiekelvin-portfolio.herokuapp.com"
+// export const BASEURL = "https://api-rubbiekelvin-portfolio.herokuapp.com"
 // export const BASEURL = "http://localhost:8000"
-// export const BASEURL = "http://192.168.43.153:8000"
+export const BASEURL = "http://192.168.43.153:8000"
 
 const url = (path, params) => {
 	const url_ = new URL(`${BASEURL}/${path}`)
@@ -70,6 +70,15 @@ export const send_mail = async (email, message) => {
 	return response.status == 204
 }
 
+export const getIntro = async () => {
+	const response = await fetch(url("rk/", [
+		{key: "max", value: "20"}
+	]));
+
+	const json = await response.json();
+	return json;
+}
+
 // export const get_mails = async (page, token) => {
 // 	page = page || 1
 // 	const headers = new Headers()
@@ -86,3 +95,7 @@ export const send_mail = async (email, message) => {
 // 	if (response.status==200) return await response.json()
 // 	return null
 // }
+
+export const image = (url) => {
+	return (url.startsWith('/')) ? `${BASEURL}${url}` : url
+}
