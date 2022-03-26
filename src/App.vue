@@ -1,7 +1,7 @@
 <template>
-  <NavBar/>
-  <router-view/>
-  <BottomBar/>
+  <NavBar class="text-base text-textBlack"/>
+  <router-view class="text-base text-textBlack"/>
+  <BottomBar class="text-base text-textBlack"/>
 </template>
 
 <script>
