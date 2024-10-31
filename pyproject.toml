@@ -1,0 +1,14 @@
+[project]
+name = "rubbie"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.1.2",
+]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+reportIncompatibleVariableOverride = false
