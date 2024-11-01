@@ -63,11 +63,12 @@ const featuredItems = [
           <div class="md:flex-grow" />
           <div class="pb-2 flex items-center gap-4 flex-col sm:flex-row">
             <a
-              href="#"
+              href="https://drive.google.com/file/d/12qISjwJ74seuPHEd0V1qg5XGZdV2QkNl/view?usp=drive_link"
+              target="_blank"
               class="bg-gray-900 hover:bg-black text-white p-4 rounded-full text-lg flex items-center gap-2"
             >
               <SvgIcon type="mdi" :path="mdiFileAccount" size="22" />
-              <span class="font-pixel"> Download resume </span>
+              <span class="font-pixel"> See resume </span>
             </a>
             <div class="flex gap-4 items-center">
               <a
@@ -84,7 +85,7 @@ const featuredItems = [
         </div>
         <!-- image card -->
         <div class="flex-[40%] relative md:h-auto">
-          <img src="/rubbie.gif" alt="rubbie" class=" sticky top-1" />
+          <img src="/rubbie.gif" alt="rubbie" class="sticky top-1" />
           <div
             class="md:bg-gray-100 md:border absolute w-full top-[35%] bottom-0 -z-10"
           />
