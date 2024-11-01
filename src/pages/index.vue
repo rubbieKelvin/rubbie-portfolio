@@ -3,7 +3,7 @@
 import SvgIcon from "@jamescoyle/vue-icon";
 import NavigationBar from "@/components/NavigationBar.vue";
 import FooterBar from "@/components/FooterBar.vue";
-import { mdiGithub, mdiPostOutline, mdiPalette } from "@mdi/js";
+import { mdiGithub, mdiPostOutline, mdiPalette, mdiFileAccount } from "@mdi/js";
 import { socialLinks } from "@/constants";
 
 const featuredItems = [
@@ -63,9 +63,10 @@ const featuredItems = [
             <!-- download resume -->
             <a
               href="#"
-              class="bg-gray-900 hover:bg-black text-white p-4 rounded-full text-lg"
+              class="bg-gray-900 hover:bg-black text-white p-4 rounded-full text-lg flex items-center gap-2"
             >
-              Download resume
+              <SvgIcon type="mdi" :path="mdiFileAccount" size="22" />
+              <span> Download resume </span>
             </a>
             <div class="flex-grow" />
             <a

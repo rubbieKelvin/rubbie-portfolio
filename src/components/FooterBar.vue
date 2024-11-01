@@ -2,6 +2,7 @@
 // @ts-ignore
 import SvgIcon from "@jamescoyle/vue-icon";
 import { socialLinks } from "@/constants";
+import { mdiVuejs } from "@mdi/js";
 
 const date = new Date();
 const year = date.getFullYear();
@@ -9,7 +10,18 @@ const year = date.getFullYear();
 
 <template>
   <div class="flex items-center justify-between p-4 bg-gray-100 border-t">
-    <p class="text-sm text-gray-900">Copyright Rubbie kelvin &copy; {{ year }}. All rights reserved.</p>
+    <p class="text-sm text-gray-900">
+      Copyright Rubbie kelvin &copy; {{ year }}. All rights reserved. ——— Made
+      with &#10084;&#65039; and
+      <span>
+        <SvgIcon
+          type="mdi"
+          :path="mdiVuejs"
+          size="18"
+          class="text-green-600 inline"
+        />
+      </span>
+    </p>
 
     <div class="flex gap-2">
       <a
