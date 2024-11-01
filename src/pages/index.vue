@@ -109,7 +109,7 @@ const featuredItems = [
             <img
               :src="item.img"
               :alt="item.title"
-              class="object-cover h-96 w-full border border-gray-200"
+              class="object-cover h-52 lg:h-96 w-full border border-gray-200"
             />
           </div>
 
