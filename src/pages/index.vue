@@ -1,126 +1,137 @@
-<script setup lang="ts">
-// @ts-ignore
-import SvgIcon from "@jamescoyle/vue-icon";
-import NavigationBar from "@/components/NavigationBar.vue";
-import FooterBar from "@/components/FooterBar.vue";
-import { mdiGithub, mdiPostOutline, mdiPalette, mdiFileAccount } from "@mdi/js";
+<script lang="ts" setup>
 import { socialLinks } from "@/constants";
+import { onMounted, ref } from "vue";
 
-const featuredItems = [
-  {
-    name: "Featured Post",
-    icon: mdiPostOutline,
-    img: "https://cdn.hashnode.com/res/hashnode/image/upload/v1609630335560/qwDVrDJ6-.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress,format&format=webp",
-    title: "Argparse: Command-line parsing.",
-    summary:
-      "This series covers some of the more frequently reused building blocks that solve problems common to so many applications",
-    link: "https://codewithrubbie.hashnode.dev/argparse-command-line-parsing",
-  },
-  {
-    name: "Featured Project",
-    icon: mdiGithub,
-    img: "https://raw.githubusercontent.com/rubbieKelvin/courier/refs/heads/main/images/cover.png",
-    title: "Courier",
-    summary:
-      "Courier is desktop aplication witten in Python and Qt for data transfer between machines connected to the same network.",
-    link: "https://github.com/rubbieKelvin/courier",
-  },
-  {
-    name: "Featured Artwork",
-    icon: mdiPalette,
-    img: "https://i.pinimg.com/originals/eb/1d/76/eb1d76692ce400d2059889ff21405f1f.png",
-    title: "Rubbie: Character art",
-    summary:
-      "Rubbie Kelvin, a tall and charismatic African character in Nigeria, blends tech and art seamlessly.",
-    link: "https://www.pinterest.com/pin/941744972065560763/",
-  },
+const navigation_links = [
+  { text: "~", hidden_text: "Home", link: "#" },
+  { text: "projects", link: "#" },
+  { text: "articles", link: "#" },
+  { text: "contacts", link: "#" },
 ];
+
+const darkMode = ref(false);
+
+onMounted(() => {
+  const html = document.getElementsByTagName("html")[0];
+  darkMode.value = html.classList.contains("dark");
+});
+
+const setDarkMode = (value: boolean) => {
+  const html = document.getElementsByTagName("html")[0];
+  if (value) html.classList.add("dark");
+  else html.classList.remove("dark");
+  darkMode.value = html.classList.contains("dark");
+};
 </script>
 
 <template>
-  <div class="md:container md:mx-auto">
-    <div class="md:pt-4 flex flex-col gap-6">
-      <NavigationBar />
+  <div
+    class="font-romans flex flex-col h-full bg-white dark:bg-[#131313] dark:text-white"
+  >
+    <!-- nav -->
+    <div class="md:px-4 px-10 py-4 font-fira">rubbiekelvin@localhost ~ $</div>
+    <!-- body -->
+    <div class="flex-grow flex gap-2 md:flex-row flex-col-reverse">
+      <!-- lhs -->
+      <div
+        class="flex md:min-w-[20%] justify-center items-center md:border-0 border-t border-gray-200"
+      >
+        <div class="flex md:flex-col gap-6 md:p-0 py-4">
+          <a v-for="link in socialLinks" :href="link.link" class="font-fira">{{
+            link.label
+          }}</a>
+        </div>
+      </div>
 
-      <!-- cards 1 -->
-      <div class="min-h-[650px] flex gap-4 md:flex-row flex-col px-10 md:px-0">
-        <!-- intro card -->
-        <div
-          class="md:bg-gray-100 md:flex-[60%] md:border p-8 flex flex-col gap-12"
-        >
-          <h1 class="text-6xl lg:text-8xl font-pixel text-center md:text-start">
-            <span class="italic text-gray-600">Hello world</span>,
-            <br />
-            I'm&nbsp;<span class="font-medium">Rubbie kelvin</span>
-          </h1>
-          <p class="text-xl md:w-[70%] text-gray-800 text-center md:text-start">
-            I love solving complex problems with creative solutions. My
-            experience spans everything from building scalable systems to
-            crafting sleek front-end designs, always aiming for seamless user
-            experiences. Whether it’s powering up back-end processes or refining
-            front-end interfaces, I’m here to make technology work for people.
+      <!-- middle -->
+      <div class="flex-grow flex flex-col md:justify-around justify-between">
+        <!-- main -->
+        <div class="flex flex-col gap-4 md:p-0 px-10 py-4">
+          <p class="font-fira md:text-base text-sm">
+            Software developer ・Nigeria
           </p>
-          <div class="md:flex-grow" />
-          <div class="pb-2 flex items-center gap-4 flex-col sm:flex-row">
-            <a
-              href="https://drive.google.com/file/d/12qISjwJ74seuPHEd0V1qg5XGZdV2QkNl/view?usp=drive_link"
-              target="_blank"
-              class="bg-gray-900 hover:bg-black text-white p-4 rounded-full text-lg flex items-center gap-2"
+          <h1 class="lg:text-8xl md:text-7xl text-5xl">Rubbie Kelvin</h1>
+          <hr class="w-[40%] md:w-[20%]" />
+          <p class="text-sm xl:max-w-[60%]">
+            <span class="font-fira"
+              >I’m a guy who thrives on solving complex problems, from writing
+              low-level functionalities to crafting intuitive front-end designs.
+              Although i easily adapt to any tool, my expertise are in Python,
+              C++ and Js/Ts.</span
             >
-              <SvgIcon type="mdi" :path="mdiFileAccount" size="22" />
-              <span class="font-pixel"> See resume </span>
-            </a>
-            <div class="flex gap-4 items-center">
-              <a
-                v-for="sl in socialLinks"
-                :key="sl.label"
-                :href="sl.link"
-                :title="sl.label"
-                class="flex p-4 text-black border border-gray-600 hover:bg-black hover:text-white rounded-full"
-              >
-                <SvgIcon type="mdi" :path="sl.icon" />
-              </a>
-            </div>
-          </div>
-        </div>
-        <!-- image card -->
-        <div class="flex-[40%] relative md:h-auto">
-          <img src="/rubbie.gif" alt="rubbie" class="sticky top-1" />
-          <div
-            class="md:bg-gray-100 md:border absolute w-full top-[35%] bottom-0 -z-10"
-          />
-        </div>
-      </div>
-
-      <!-- featured -->
-      <div class="flex gap-4 md:flex-row flex-col px-10 md:px-0">
-        <a
-          v-for="item in featuredItems"
-          :href="item.link"
-          class="flex-[33%] border bg-gray-100 p-4 flex flex-col gap-4"
-          :key="item.name"
-        >
-          <div class="flex items-center gap-2">
-            <SvgIcon type="mdi" :path="item.icon" size="20" />
-            <p class="font-medium font-pixel">{{ item.name }}</p>
-          </div>
-
-          <div class="flex-grow">
-            <img
-              :src="item.img"
-              :alt="item.title"
-              class="object-cover h-52 lg:h-96 w-full border border-gray-200"
-            />
-          </div>
-
-          <h2 class="text-3xl font-pixel font-medium">{{ item.title }}</h2>
-          <p>
-            {{ item.summary }}
+            <br />
+            <br />
+            <span
+              >* Currently playing with rust for the fun of a new
+              challenge.</span
+            >
           </p>
-        </a>
+          <a
+            href="https://drive.google.com/file/d/12qISjwJ74seuPHEd0V1qg5XGZdV2QkNl/view?usp=drive_link"
+            target="_blank"
+            class="font-fira mt-4 w-max"
+          >
+            Download resume
+          </a>
+        </div>
+
+        <!-- footer -->
+        <div class="px-10 md:px-0">
+          <!-- buttons -->
+          <div class="flex gap-2 font-fira">
+            <button
+              @click="() => setDarkMode(false)"
+              :class="{ 'underline font-bold': !darkMode }"
+            >
+              Light
+            </button>
+            <p>/</p>
+            <button
+              @click="() => setDarkMode(true)"
+              :class="{ 'underline font-bold': darkMode }"
+            >
+              Dark
+            </button>
+          </div>
+
+          <!-- copyrit -->
+          <p class="">
+            <span>Rubbie kelvin © 2025 Made with love and vue</span>
+            <span class="hidden md:inline">&nbsp;·&nbsp;</span>
+            <span
+              class="italic underline hover:font-bold hover:cursor-pointer md:inline hidden"
+              >Copyright</span
+            >
+          </p>
+        </div>
       </div>
 
-      <FooterBar />
+      <!-- rhs -->
+      <div
+        class="flex items-center justify-center min-w-[30%] border-y md:border-0 py-4 md:py-0"
+      >
+        <ul
+          class="flex md:gap-8 md:flex-col flex-row md:w-auto w-full justify-around px-4"
+        >
+          <li v-for="(link, index) in navigation_links" :key="link.text">
+            <RouterLink :to="link.link" class="font-fira group">
+              <span class="md:inline hidden">0{{ index }} ./</span>
+              <span :class="{ 'group-hover:hidden': link.hidden_text }">
+                {{ link.text }}
+              </span>
+              <span v-if="link.hidden_text" class="hidden group-hover:inline">{{
+                link.hidden_text
+              }}</span>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
+
+<style lang="scss">
+a {
+  @apply hover:font-medium hover:underline;
+}
+</style>
