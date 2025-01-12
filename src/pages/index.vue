@@ -17,7 +17,9 @@ import DynLayout from "@/components/DynLayout.vue";
       >
       <br />
       <br />
-      <span>* Currently playing with rust for the fun of a new challenge.</span>
+      <span class="italic"
+        >* Currently playing with rust for the fun of a new challenge.</span
+      >
     </p>
     <a
       href="https://drive.google.com/file/d/12qISjwJ74seuPHEd0V1qg5XGZdV2QkNl/view?usp=drive_link"

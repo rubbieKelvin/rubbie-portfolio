@@ -3,10 +3,10 @@ import { socialLinks } from "@/constants";
 import { onMounted, ref } from "vue";
 
 const navigation_links = [
-  { text: "~", hidden_text: "Home", link: "#" },
-  { text: "projects", link: "#" },
-  { text: "articles", link: "#" },
-  { text: "contacts", link: "#" },
+  { text: "~", hidden_text: "Home", link: { name: "Index" } },
+  { text: "projects", link: { name: "Projects" } },
+  { text: "articles", link: { name: "Articles" } },
+  { text: "contacts", link: { name: "Contact" } },
 ];
 
 const darkMode = ref(false);

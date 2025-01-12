@@ -7,15 +7,26 @@ export const router = createRouter({
       path: "/",
       name: "Index",
       component: () => import("@/pages/index.vue"),
-      // meta: {
-      //   public: true,
-      //   redirect_if_authenticated: true,
-      // },
+    },
+    {
+      path: "/projects",
+      name: "Projects",
+      component: () => import("@/pages/projects.vue"),
     },
     {
       path: "/copycats",
       name: "Copycats",
       component: () => import("@/pages/copycats.vue"),
+    },
+    {
+      path: "/blog",
+      name: "Articles",
+      component: () => import("@/pages/articles.vue"),
+    },
+    {
+      path: "/contact",
+      name: "Contact",
+      component: () => import("@/pages/contacts.vue"),
     },
   ],
 });
