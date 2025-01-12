@@ -22,7 +22,7 @@ import DynLayout from "@/components/DynLayout.vue";
       >
     </p>
     <a
-      href="https://drive.google.com/file/d/12qISjwJ74seuPHEd0V1qg5XGZdV2QkNl/view?usp=drive_link"
+      href="https://drive.google.com/file/d/1jQBVd9TMIipIlEZf4Gx45jkfR5qybBsH/view?usp=sharing"
       target="_blank"
       class="font-fira mt-4 w-max"
     >
