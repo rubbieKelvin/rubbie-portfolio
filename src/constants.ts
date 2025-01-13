@@ -22,3 +22,32 @@ export const socialLinks = [
     link: "https://www.linkedin.com/in/rubbiekelvinvoltsman/",
   },
 ];
+
+export const projects = [
+  {
+    title: "Progress",
+    link: "https://github.com/rubbieKelvin/progress",
+    description: "A progress tracking cli app written in rust",
+  },
+  {
+    title: "Opennotes",
+    link: "https://github.com/rubbieKelvin/notes",
+    description: "Simple paper for storing notes",
+  },
+  {
+    title: "Fuck rust",
+    link: "https://github.com/rubbieKelvin/fuck-rust",
+    description: "Implementation of a brain-fuck interpreter in rust",
+  },
+  {
+    title: "Courier",
+    link: "https://github.com/rubbieKelvin/courier",
+    description:
+      "Desktop app for messaging and sending files via local network",
+  },
+  {
+    title: "Shared",
+    link: "https://github.com/rubbieKelvin/shared",
+    description: "A django utility pack",
+  },
+];
