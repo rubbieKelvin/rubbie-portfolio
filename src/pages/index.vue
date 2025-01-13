@@ -9,12 +9,12 @@ import DynLayout from "@/components/DynLayout.vue";
     <h1 class="lg:text-8xl md:text-7xl text-5xl">Rubbie Kelvin</h1>
     <hr class="w-[40%] md:w-[20%]" />
     <p class="text-sm xl:max-w-[60%]">
-      <span class="font-fira"
-        >I’m a guy who thrives on solving complex problems, from writing
-        low-level functionalities to crafting intuitive front-end designs.
-        Although i easily adapt to any tool, my expertise are in Python, C++ and
-        Js/Ts.</span
-      >
+      <span class="font-fira">
+        I'm a guy who likes solving complex problems, from writing
+        low-level gimicks to building interfaces with nice UIs.
+        I easily adapt to any tool and my expertise are in Python, C++ and
+        Js/Ts.
+      </span>
       <br />
       <br />
       <span class="italic"
