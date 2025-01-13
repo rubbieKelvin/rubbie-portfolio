@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Times New Roman";
+  src: url("/times new roman.ttf");
+}
+
 html,
 body,
 #app {
@@ -13,9 +18,11 @@ div {
 }
 
 hr {
-    @apply border-gray-600;
+  @apply border-gray-600;
 }
 
-p, a, span {
-    @apply dark:text-gray-300;
+p,
+a,
+span {
+  @apply dark:text-gray-300;
 }
