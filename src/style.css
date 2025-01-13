@@ -5,5 +5,17 @@
 html,
 body,
 #app {
-    height: 100%;
+  height: 100%;
+}
+
+div {
+  @apply bg-[#fffdf5] dark:bg-[#131313] dark:text-white dark:border-gray-600;
+}
+
+hr {
+    @apply border-gray-600;
+}
+
+p, a, span {
+    @apply dark:text-gray-300;
 }

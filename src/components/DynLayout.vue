@@ -25,16 +25,18 @@ const setDarkMode = (value: boolean) => {
 </script>
 
 <template>
-  <div
-    class="font-romans flex flex-col h-full bg-white dark:bg-[#131313] dark:text-white"
-  >
+  <div class="font-romans flex flex-col h-full">
     <!-- nav -->
-    <div class="md:px-4 px-10 py-4 font-fira sticky top-0 bg-inherit border-b md:border-0">rubbiekelvin@localhost ~ $</div>
+    <div
+      class="md:px-4 px-10 py-4 font-fira sticky top-0 bg-inherit border-b md:border-0"
+    >
+      <a href="/"> rubbiekelvin@localhost ~ $ </a>
+    </div>
     <!-- body -->
-    <div class="flex-grow flex gap-2 md:flex-row flex-col-reverse bg-white dark:bg-[#131313]">
+    <div class="flex-grow flex gap-2 md:flex-row flex-col-reverse">
       <!-- lhs -->
       <div
-        class="flex md:min-w-[20%] justify-center items-center md:border-0 border-t border-gray-200"
+        class="flex md:min-w-[20%] justify-center items-center md:border-0 border-t"
       >
         <div class="flex md:flex-col gap-6 md:p-0 py-4">
           <a v-for="link in socialLinks" :href="link.link" class="font-fira">{{
@@ -72,10 +74,10 @@ const setDarkMode = (value: boolean) => {
           <p class="">
             <span>Rubbie kelvin © 2025 Made with love and vue</span>
             <span class="hidden md:inline">&nbsp;·&nbsp;</span>
-            <br class="inline md:hidden">
+            <br class="inline md:hidden" />
             <RouterLink
               :to="{ name: 'FAQ' }"
-              class="italic underline hover:font-bold hover:cursor-pointer "
+              class="italic underline hover:font-bold hover:cursor-pointer"
               >Why does your portfolio look plain?</RouterLink
             >
           </p>
@@ -84,7 +86,7 @@ const setDarkMode = (value: boolean) => {
 
       <!-- rhs -->
       <div
-        class="flex items-center justify-center min-w-[30%] border-b md:border-0 py-4 md:py-0 sticky top-9 bg-white dark:bg-[#131313]"
+        class="flex items-center justify-center min-w-[30%] border-b md:border-0 py-4 md:py-0 sticky top-9"
       >
         <ul
           class="flex md:gap-8 md:flex-col flex-row md:w-auto w-full justify-around px-4"

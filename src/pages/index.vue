@@ -24,7 +24,7 @@ import DynLayout from "@/components/DynLayout.vue";
     <a
       href="https://drive.google.com/file/d/1jQBVd9TMIipIlEZf4Gx45jkfR5qybBsH/view?usp=sharing"
       target="_blank"
-      class="font-fira mt-4 w-max"
+      class="font-fira mt-4 w-max dark:text-white"
     >
       Download resume
     </a>
