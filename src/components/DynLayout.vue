@@ -72,9 +72,10 @@ const setDarkMode = (value: boolean) => {
           <p class="">
             <span>Rubbie kelvin © 2025 Made with love and vue</span>
             <span class="hidden md:inline">&nbsp;·&nbsp;</span>
+            <br class="inline md:hidden">
             <RouterLink
               :to="{ name: 'FAQ' }"
-              class="italic underline hover:font-bold hover:cursor-pointer md:inline hidden"
+              class="italic underline hover:font-bold hover:cursor-pointer "
               >Why does your portfolio look plain?</RouterLink
             >
           </p>
