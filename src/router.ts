@@ -14,9 +14,9 @@ export const router = createRouter({
       component: () => import("@/pages/projects.vue"),
     },
     {
-      path: "/copycats",
-      name: "Copycats",
-      component: () => import("@/pages/copycats.vue"),
+      path: "/faq",
+      name: "FAQ",
+      component: () => import("@/pages/faq.vue"),
     },
     {
       path: "/blog",

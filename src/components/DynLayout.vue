@@ -29,9 +29,9 @@ const setDarkMode = (value: boolean) => {
     class="font-romans flex flex-col h-full bg-white dark:bg-[#131313] dark:text-white"
   >
     <!-- nav -->
-    <div class="md:px-4 px-10 py-4 font-fira">rubbiekelvin@localhost ~ $</div>
+    <div class="md:px-4 px-10 py-4 font-fira sticky top-0 bg-inherit border-b md:border-0">rubbiekelvin@localhost ~ $</div>
     <!-- body -->
-    <div class="flex-grow flex gap-2 md:flex-row flex-col-reverse">
+    <div class="flex-grow flex gap-2 md:flex-row flex-col-reverse bg-white dark:bg-[#131313]">
       <!-- lhs -->
       <div
         class="flex md:min-w-[20%] justify-center items-center md:border-0 border-t border-gray-200"
@@ -73,9 +73,9 @@ const setDarkMode = (value: boolean) => {
             <span>Rubbie kelvin © 2025 Made with love and vue</span>
             <span class="hidden md:inline">&nbsp;·&nbsp;</span>
             <RouterLink
-              :to="{ name: 'Copycats' }"
+              :to="{ name: 'FAQ' }"
               class="italic underline hover:font-bold hover:cursor-pointer md:inline hidden"
-              >Copycats</RouterLink
+              >Why does your portfolio look plain?</RouterLink
             >
           </p>
         </div>
@@ -83,7 +83,7 @@ const setDarkMode = (value: boolean) => {
 
       <!-- rhs -->
       <div
-        class="flex items-center justify-center min-w-[30%] border-y md:border-0 py-4 md:py-0"
+        class="flex items-center justify-center min-w-[30%] border-b md:border-0 py-4 md:py-0 sticky top-9 bg-white dark:bg-[#131313]"
       >
         <ul
           class="flex md:gap-8 md:flex-col flex-row md:w-auto w-full justify-around px-4"
