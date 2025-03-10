@@ -11,6 +11,7 @@
   "dependencies": {
     "@jamescoyle/vue-icon": "^0.1.2",
     "@mdi/js": "^7.4.47",
+    "@vueuse/core": "^13.0.0",
     "pinia": "^2.2.2",
     "sass": "^1.79.3",
     "vue": "^3.4.37",

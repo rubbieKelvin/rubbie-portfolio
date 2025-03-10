@@ -8,17 +8,15 @@ import DynLayout from "@/components/DynLayout.vue";
     <p class="font-fira md:text-base text-sm">Software developer ・Nigeria</p>
     <h1 class="lg:text-8xl md:text-7xl text-5xl">Rubbie Kelvin</h1>
     <hr class="w-[40%] md:w-[20%]" />
-    <p class="text-sm xl:max-w-[60%]">
-      <span class="font-fira">
-        I'm a guy who likes solving complex problems, from writing
-        low-level gimicks to building interfaces with nice UIs.
-        I easily adapt to any tool and my expertise are in Python, C++ and
-        Js/Ts.
+    <p class="xl:max-w-[60%]">
+      <span class="">
+        I'm a guy who likes solving complex problems, from writing low-level
+        gimicks to building interfaces with nice UIs. I easily adapt to any tool
+        and my expertise are in Python, C++ and Js/Ts.
       </span>
       <br />
-      <br />
-      <span class="italic"
-        >* Currently playing with rust for the fun of a new challenge.</span
+      <span class=""
+        >Currently playing with rust for the fun of a new challenge.</span
       >
     </p>
     <a
@@ -26,7 +24,7 @@ import DynLayout from "@/components/DynLayout.vue";
       target="_blank"
       class="font-fira mt-4 w-max dark:text-white"
     >
-      Download resume
+      ~ $ wget resume.pdf
     </a>
   </DynLayout>
 </template>

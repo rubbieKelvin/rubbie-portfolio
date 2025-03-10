@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { socialLinks } from "@/constants";
-import { onMounted, ref } from "vue";
+import { useStorage } from "@vueuse/core";
+import { onMounted } from "vue";
 
 const navigation_links = [
   { text: "~", hidden_text: "Home", link: { name: "Index" } },
@@ -9,7 +10,7 @@ const navigation_links = [
   { text: "contacts", link: { name: "Contact" } },
 ];
 
-const darkMode = ref(false);
+const darkMode = useStorage("darkMode", false);
 
 onMounted(() => {
   const html = document.getElementsByTagName("html")[0];

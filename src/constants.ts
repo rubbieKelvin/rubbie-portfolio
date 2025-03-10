@@ -1,10 +1,16 @@
 import { mdiGithub, mdiGmail, mdiLinkedin, mdiTwitter } from "@mdi/js";
 
+export type Project = {
+  title: string;
+  link: string;
+  description: string;
+};
+
 export const socialLinks = [
   {
-    label: "Twitter",
+    label: "X",
     icon: mdiTwitter,
-    link: "https://twitter.com/KelvinRubbie",
+    link: "https://x.com/KelvinRubbie",
   },
   {
     label: "Github",
@@ -23,7 +29,7 @@ export const socialLinks = [
   },
 ];
 
-export const projects = [
+export const projects: Project[] = [
   {
     title: "Progress",
     link: "https://github.com/rubbieKelvin/progress",
