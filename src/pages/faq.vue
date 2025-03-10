@@ -6,7 +6,7 @@ import DynLayout from "@/components/DynLayout.vue";
   <DynLayout>
     <h1 class="lg:text-8xl md:text-7xl text-5xl">Design choice</h1>
     <hr class="w-[40%] md:w-[20%]" />
-    <p class="font-fira text-sm xl:max-w-[80%]">
+    <p class=" xl:max-w-[80%]">
       This portfolio uses a minimalistic, text-focused design inspired by old
       typewritten newspapers and
       <a href="https://p5aholic.me/" class="underline">Keita Yamada</a>'s clean
@@ -28,8 +28,8 @@ import DynLayout from "@/components/DynLayout.vue";
     </p>
     <h2 class="md:text-3xl text-2xl mt-2">Copycats</h2>
     <hr class="w-[40%] md:w-[20%]" />
-    <p class="text-sm xl:max-w-[80%]">
-      <span class="font-fira text-sm">
+    <p class=" xl:max-w-[80%]">
+      <span class="">
         Copycats Inspiration drives creativity, I've refined my skills by
         learning from the work of others, and I welcome anyone who finds value
         in what I create. However, there's a clear line between drawing

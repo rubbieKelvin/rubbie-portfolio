@@ -28,5 +28,10 @@ export const router = createRouter({
       name: "Contact",
       component: () => import("@/pages/contacts.vue"),
     },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "NotFound",
+      component: () => import("@/pages/404.vue"),
+    },
   ],
 });
