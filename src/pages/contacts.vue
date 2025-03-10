@@ -3,7 +3,7 @@ import DynLayout from "@/components/DynLayout.vue";
 import { socialLinks } from "@/constants";
 
 // Create contact descriptions for each social link
-const contactDescriptions = {
+const contactDescriptions: Record<string, string> = {
   X: "Follow me for updates and thoughts",
   Github: "Check out my code and projects",
   LinkedIn: "Connect with me professionally", 

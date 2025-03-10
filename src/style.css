@@ -26,3 +26,7 @@ a,
 span {
   @apply dark:text-gray-300;
 }
+
+.old-link {
+  @apply hover:underline;
+}

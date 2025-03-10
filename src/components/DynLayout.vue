@@ -13,14 +13,20 @@ const navigation_links = [
 const darkMode = useStorage("darkMode", false);
 
 onMounted(() => {
-  const html = document.getElementsByTagName("html")[0];
-  darkMode.value = html.classList.contains("dark");
+  if (darkMode.value) {
+    const html = document.getElementsByTagName("html")[0];
+    html.classList.add("dark");
+  } else {
+    const html = document.getElementsByTagName("html")[0];
+    html.classList.remove("dark");
+  }
 });
 
 const setDarkMode = (value: boolean) => {
   const html = document.getElementsByTagName("html")[0];
   if (value) html.classList.add("dark");
   else html.classList.remove("dark");
+
   darkMode.value = html.classList.contains("dark");
 };
 </script>
@@ -40,9 +46,12 @@ const setDarkMode = (value: boolean) => {
         class="flex md:min-w-[20%] justify-center items-center md:border-0 border-t"
       >
         <div class="flex md:flex-col gap-6 md:p-0 py-4">
-          <a v-for="link in socialLinks" :href="link.link" class="font-fira">{{
-            link.label
-          }}</a>
+          <a
+            v-for="link in socialLinks"
+            :href="link.link"
+            class="font-fira old-link"
+            >{{ link.label }}</a
+          >
         </div>
       </div>
 
@@ -93,7 +102,7 @@ const setDarkMode = (value: boolean) => {
           class="flex md:gap-8 md:flex-col flex-row md:w-auto w-full justify-around px-4"
         >
           <li v-for="(link, index) in navigation_links" :key="link.text">
-            <RouterLink :to="link.link" class="font-fira group">
+            <RouterLink :to="link.link" class="font-fira group old-link">
               <span class="md:inline hidden">0{{ index }} ./</span>
               <span :class="{ 'group-hover:hidden': link.hidden_text }">
                 {{ link.text }}
@@ -108,9 +117,3 @@ const setDarkMode = (value: boolean) => {
     </div>
   </div>
 </template>
-
-<style lang="scss">
-a {
-  @apply hover:font-medium hover:underline;
-}
-</style>
