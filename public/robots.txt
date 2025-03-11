@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://rubbie.onrender.com/sitemap.xml 
