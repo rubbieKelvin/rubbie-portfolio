@@ -63,7 +63,7 @@ export const router = createRouter({
       }
     },
   ],
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(_to, _from, savedPosition) {
     if (savedPosition) {
       return savedPosition;
     } else {
@@ -73,7 +73,7 @@ export const router = createRouter({
 });
 
 // Global navigation guard for updating document title and meta tags
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   // Update page title
   if (to.meta.title) {
     document.title = to.meta.title as string;
