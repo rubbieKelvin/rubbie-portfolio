@@ -10,7 +10,7 @@ const navigation_links = [
   { text: "contacts", link: { name: "Contact" } },
 ];
 
-const darkMode = useStorage("darkMode", false);
+const darkMode = useStorage("darkMode", true);
 
 onMounted(() => {
   if (darkMode.value) {
