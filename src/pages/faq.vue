@@ -6,12 +6,13 @@ import DynLayout from "@/components/DynLayout.vue";
   <DynLayout>
     <h1 class="lg:text-8xl md:text-7xl text-5xl">Design choice</h1>
     <hr class="w-[40%] md:w-[20%]" />
-    <p class=" xl:max-w-[80%]">
+    <p class="xl:max-w-[80%]">
       This portfolio uses a minimalistic, text-focused design inspired by old
       typewritten newspapers and
-      <a href="https://p5aholic.me/" class="underline">Keita Yamada</a>'s clean
-      aesthetic. The goal is to keep things simple, clear, and focused on
-      content. I believe good design doesn't need to be flashy, it should be
+      <a href="https://p5aholic.me/" class="underline" target="_blank"
+        >Keita Yamada</a
+      >'s clean aesthetic. The goal is to keep things simple, clear, and focused
+      on content. I believe good design doesn't need to be flashy, it should be
       functional, intentional, and easy to navigate. This approach reflects my
       preference for substance over unnecessary style.
       <br />
@@ -20,6 +21,7 @@ import DynLayout from "@/components/DynLayout.vue";
         Checkout this&nbsp;
         <a
           href="https://youtu.be/6MCoJvAmnIY?si=dPbzirQ4cqHfRd11"
+          target="_blank"
           class="underline"
           >boring video</a
         >
@@ -28,7 +30,7 @@ import DynLayout from "@/components/DynLayout.vue";
     </p>
     <h2 class="md:text-3xl text-2xl mt-2">Copycats</h2>
     <hr class="w-[40%] md:w-[20%]" />
-    <p class=" xl:max-w-[80%]">
+    <p class="xl:max-w-[80%]">
       <span class="">
         Copycats Inspiration drives creativity, I've refined my skills by
         learning from the work of others, and I welcome anyone who finds value

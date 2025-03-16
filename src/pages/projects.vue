@@ -27,7 +27,6 @@ import { projects } from "@/constants";
 
 <style scoped>
 .project-card {
-  background-color: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(4px);
 }
 </style>
