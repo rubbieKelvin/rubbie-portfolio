@@ -9,7 +9,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="flex-grow pt-[20%] flex gap-2 flex-col">
+  <div class="flex-grow  flex gap-2 flex-col">
     <!-- <h1 class="lg:text-8xl font-romans md:text-7xl text-5xl">Blog</h1> -->
 
     <h1 class="lg:text-8xl md:text-7xl text-5xl">Articles</h1>

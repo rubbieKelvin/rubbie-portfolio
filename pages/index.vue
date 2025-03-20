@@ -4,7 +4,7 @@ useSeoMeta({
 });
 </script>
 <template>
-  <div class="flex-grow pt-[20%] flex gap-2 flex-col">
+  <div class="flex-grow  flex gap-2 flex-col">
     <p class="md:text-base text-sm">Software developer ・Nigeria</p>
     <h1 class="lg:text-8xl md:text-7xl text-5xl">Rubbie Kelvin</h1>
 
