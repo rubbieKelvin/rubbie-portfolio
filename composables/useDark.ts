@@ -1,6 +1,6 @@
-import { useLocalStorage } from "@vueuse/core";
+import { createSharedComposable, useLocalStorage } from "@vueuse/core";
 
-export const useDarkTheme = () => {
+export const useDarkTheme = createSharedComposable(() => {
   const isDark = useLocalStorage<boolean>("theme", true);
 
   onMounted(() => {
@@ -22,4 +22,4 @@ export const useDarkTheme = () => {
   };
 
   return { isDark, setDarkMode };
-};
+});
