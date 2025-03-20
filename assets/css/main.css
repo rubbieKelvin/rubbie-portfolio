@@ -43,7 +43,7 @@ body {
   --font-display: "GeistMono", "sans-serif";
   --font-romans: "Times New Roman";
   --color-bg-dark: oklch(0.2 0 0);
-  --color-bg-light: oklch(100% 0 176);
+  --color-bg-light: oklch(0.99 0 1);
 }
 
 html.dark {

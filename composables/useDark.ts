@@ -1,9 +1,18 @@
 import { createSharedComposable, useLocalStorage } from "@vueuse/core";
 
 export const useDarkTheme = createSharedComposable(() => {
-  const isDark = useLocalStorage<boolean>("dark-theme", true, {
-    initOnMounted: true,
-  });
+  const isDark = useLocalStorage<boolean>(
+    "dark-theme",
+    document === undefined
+      ? true // if rendering on server
+      : // get the one that loaded first as the default??
+      document.getElementsByTagName("html")[0].classList.contains("dark")
+      ? true
+      : false,
+    {
+      initOnMounted: true,
+    }
+  );
 
   const setDarkMode = (value: boolean) => {
     isDark.value = value;
