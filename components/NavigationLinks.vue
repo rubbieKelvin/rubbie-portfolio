@@ -9,7 +9,7 @@ const navigation_links = [
 
 <template>
   <div
-    class="flex items-center justify-center min-w-[20%] max-w-[300px] border-b md:border-b-0 border-gray-300 py-4 md:py-0 sticky top-9"
+    class="flex items-center justify-center min-w-[20%] border-b md:border-b-0 py-4 md:py-0 sticky top-10 bg"
   >
     <ul
       class="flex md:gap-8 md:flex-col flex-row md:w-auto w-full justify-around"

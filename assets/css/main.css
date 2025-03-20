@@ -11,42 +11,59 @@
 }
 
 body {
-  @apply antialiased font-display;
+  @apply antialiased font-display bg-bg-light;
+
+  &::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: 2px 2px;
+    background-repeat: repeat;
+    pointer-events: none;
+    background-image: linear-gradient(
+      rgba(255, 255, 255, 0.412) 1px,
+      transparent 1px
+    );
+    z-index: 9999;
+  }
+
+  .bg {
+    @apply bg-bg-light;
+  }
+
+  * {
+    @apply border-gray-300;
+  }
 }
 
 @theme {
   --font-display: "GeistMono", "sans-serif";
   --font-romans: "Times New Roman";
+  --color-bg-dark: oklch(0.2 0 0);
+  --color-bg-light: oklch(100% 0 176);
 }
 
 html.dark {
   body {
-    background-color: #1b1b1b;
+    @apply bg-bg-dark;
+
+    &::after {
+      background-image: linear-gradient(
+        rgba(0, 0, 0, 0.4) 1px,
+        transparent 1px
+      );
+    }
+  }
+
+  .bg {
+    @apply bg-bg-dark;
   }
 
   * {
     color: white;
+    @apply border-gray-600 text-white;
   }
-}
-
-/* CRT · effect */
-body::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: 2px 2px;
-  background-repeat: repeat;
-  pointer-events: none;
-  background-image: linear-gradient(
-    rgba(255, 255, 255, 0.4) 1px,
-    transparent 1px
-  );
-  z-index: 9999;
-}
-
-html.dark > body::after {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4) 1px, transparent 1px);
 }

@@ -5,9 +5,9 @@ useDarkTheme();
 <template>
   <div class="default-layout h-screen flex flex-col">
     <PageHeader />
-    <div class="flex flex-grow">
+    <div class="flex flex-grow md:flex-row flex-col-reverse">
       <ContactLinks />
-      <div class="flex-grow flex flex-col">
+      <div class="flex-grow flex flex-col px-5 md:px-0">
         <slot />
         <PageFooter />
       </div>

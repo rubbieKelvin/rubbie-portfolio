@@ -13,9 +13,9 @@ useSeoMeta({
 
     <div class="xl:max-w-[70%] mb-8">
       <p class="text-lg">
-        I'm most active on X/Twitter, but feel free to email me if you'd like to
-        discuss work. Don't forget to follow me on GitHub and X/Twitter! If
-        you've got a job offer, let's connect on LinkedIn. ;)
+        I'm most active on X/Twttr, but feel free to email me if you'd like to
+        discuss work. Don't forget to follow me on GitHub and X/Twttr! If
+        you've got a job offer, send me an email or let's connect on LinkedIn. ;)
       </p>
     </div>
 
