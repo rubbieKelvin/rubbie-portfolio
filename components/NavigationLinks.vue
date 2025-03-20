@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const navigation_links = [
-  { text: "~", hidden_text: "Home", link: { name: "index" } },
+  { text: "~", hidden_text: "home", link: { name: "index" } },
   { text: "projects", link: { name: "projects" } },
-  { text: "articles", link: { name: "blog" } },
+  { text: "blog", link: { name: "blog" } },
   { text: "contacts", link: { name: "contact" } },
 ];
 </script>

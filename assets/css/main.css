@@ -10,6 +10,12 @@
   src: url("/assets/fonts/times new roman.ttf");
 }
 
+html,
+body,
+#__nuxt {
+  @apply h-full;
+}
+
 body {
   @apply antialiased font-display bg-bg-light;
 
@@ -65,5 +71,53 @@ html.dark {
   * {
     color: white;
     @apply border-gray-600 text-white;
+  }
+}
+
+.content-renderer {
+  @apply space-y-4;
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+
+  p,
+  em,
+  ul > li,
+  ol > li {
+    @apply text-gray-800;
+  }
+
+  ol > li {
+    @apply list-decimal list-inside;
+  }
+
+  ul > li {
+    @apply list-disc list-inside;
+  }
+
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    @apply text-sm bg-gray-200 p-2 rounded-md;
+  }
+}
+
+html.dark {
+  .content-renderer {
+    p,
+    em,
+    ul > li,
+    ol > li {
+      @apply text-gray-400;
+    }
+
+    pre {
+      @apply bg-gray-800;
+    }
   }
 }

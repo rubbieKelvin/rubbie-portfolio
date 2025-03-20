@@ -8,7 +8,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="flex-grow flex gap-2 flex-col">
+  <div class="flex-grow flex gap-4 flex-col">
     <h1 class="lg:text-8xl md:text-7xl text-5xl">Wanna reach out?</h1>
 
     <div class="xl:max-w-[70%] mb-8">
