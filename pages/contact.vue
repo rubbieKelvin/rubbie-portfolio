@@ -8,14 +8,14 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="flex-grow  flex gap-2 flex-col">
+  <div class="flex-grow flex gap-2 flex-col">
     <h1 class="lg:text-8xl md:text-7xl text-5xl">Wanna reach out?</h1>
 
     <div class="xl:max-w-[70%] mb-8">
       <p class="text-lg">
         I'm most active on X/Twttr, but feel free to email me if you'd like to
-        discuss work. Don't forget to follow me on GitHub and X/Twttr! If
-        you've got a job offer, send me an email or let's connect on LinkedIn. ;)
+        discuss work. Don't forget to follow me on GitHub and X/Twttr! If you've
+        got a job offer, send me an email or let's connect on LinkedIn. ;)
       </p>
     </div>
 
@@ -33,7 +33,7 @@ useSeoMeta({
           class="block"
         >
           <h2 class="text-xl font-semibold">{{ social.label }}</h2>
-          <p class="text-gray-700 dark:text-gray-300 font-fira text-sm mt-1">
+          <p class="text-sm mt-1">
             {{ social.description }}
           </p>
         </NuxtLink>

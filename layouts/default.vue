@@ -7,7 +7,7 @@ useDarkTheme();
     <PageHeader />
     <div class="flex flex-grow md:flex-row flex-col-reverse">
       <ContactLinks />
-      <div class="flex-grow flex flex-col px-5 md:px-0 pt-[10%] md:pt-[20%]">
+      <div class="flex-grow flex flex-col px-5 md:px-0 pt-[10%] md:pt-[15%]">
         <slot class="" />
         <PageFooter />
       </div>
