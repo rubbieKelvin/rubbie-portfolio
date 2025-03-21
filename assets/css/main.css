@@ -105,6 +105,10 @@ html.dark {
     word-wrap: break-word;
     @apply text-sm bg-gray-200 p-2 rounded-md;
   }
+
+  img {
+    @apply max-h-[450px] object-contain grayscale;
+  }
 }
 
 html.dark {

@@ -23,7 +23,7 @@ const articles = computed(() => {
     <div v-for="article in articles" :key="article.id">
       <NuxtLink :to="article.path" class="flex gap-2 md:items-center md:flex-row flex-col">
         <div>
-          <h2>{{ article.title }}</h2>
+          <h2>~ {{ article.title }}</h2>
           <p class="text-xs italic">{{ article.description }}</p>
         </div>
 
