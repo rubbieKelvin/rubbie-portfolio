@@ -18,7 +18,7 @@ useSeoMeta({
       >
         <a :href="project.link" class="block h-full">
           <h2 class="text-xl font-semibold mb-2">{{ project.title }}</h2>
-          <p class="font-fira text-sm">
+          <p class="mute text-sm">
             {{ project.description }}
           </p>
         </a>

@@ -43,6 +43,10 @@ body {
   * {
     @apply border-gray-300;
   }
+
+  .mute {
+    @apply text-gray-800;
+  }
 }
 
 @theme {
@@ -66,6 +70,10 @@ html.dark {
 
   .bg {
     @apply bg-bg-dark;
+  }
+
+  .mute {
+    @apply text-gray-400!;
   }
 
   * {

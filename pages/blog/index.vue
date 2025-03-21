@@ -24,7 +24,7 @@ const articles = computed(() => {
       <NuxtLink :to="article.path" class="flex gap-2 md:items-center md:flex-row flex-col">
         <div>
           <h2>~ {{ article.title }}</h2>
-          <p class="text-xs italic">{{ article.description }}</p>
+          <p class="text-xs italic mute">{{ article.description }}</p>
         </div>
 
         <div class="border-b border-dotted my-2 flex-grow hidden md:block" />

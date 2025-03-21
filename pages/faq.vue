@@ -9,7 +9,7 @@ useSeoMeta({
   <div class="flex-grow  flex gap-4 flex-col">
     <h1 class="lg:text-8xl md:text-7xl text-5xl">Design choice</h1>
 
-    <p class="xl:max-w-[80%]">
+    <p class="xl:max-w-[80%] mute">
       This portfolio uses a minimalistic, text-focused design inspired by old
       typewritten newspapers and
       <a href="https://p5aholic.me/" class="underline" target="_blank"
@@ -19,7 +19,7 @@ useSeoMeta({
       functional, intentional, and easy to navigate. This approach reflects my
       preference for substance over unnecessary style.
 
-      <span class="italic">
+      <span class="italic mute">
         Checkout this&nbsp;
         <a
           href="https://youtu.be/6MCoJvAmnIY?si=dPbzirQ4cqHfRd11"
@@ -33,7 +33,7 @@ useSeoMeta({
     <h2 class="md:text-3xl text-2xl mt-2">Copycats</h2>
 
     <p class="xl:max-w-[80%]">
-      <span class="">
+      <span class="mute">
         Copycats Inspiration drives creativity, I've refined my skills by
         learning from the work of others, and I welcome anyone who finds value
         in what I create. However, there's a clear line between drawing

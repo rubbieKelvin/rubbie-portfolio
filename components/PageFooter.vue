@@ -25,7 +25,7 @@ const { isDark, setDarkMode } = useDarkTheme();
 
     <!-- copyright -->
     <p class="text-sm">
-      <span>Rubbie kelvin © {{ new Date().getFullYear() }} Made with ❤️ & vue</span>
+      <span>Rubbie kelvin © {{ new Date().getFullYear() }} Made with love & vue</span>
       <span class="hidden md:inline">&nbsp;&middot;&nbsp;</span>
 
       <NuxtLink
