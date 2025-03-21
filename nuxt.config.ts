@@ -14,4 +14,14 @@ export default defineNuxtConfig({
     "@nuxt/fonts",
     "@nuxt/image",
   ],
+  content: {
+    preview: {
+      api: "https://api.nuxt.studio",
+      // gitInfo: {
+      //   name: "rubbie-portfolio",
+      //   owner: "rubbieKelvin",
+      //   url: "https://github.com/rubbieKelvin/rubbie-portfolio",
+      // },
+    },
+  },
 });
