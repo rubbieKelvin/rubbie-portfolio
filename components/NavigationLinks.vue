@@ -15,7 +15,7 @@ const navigation_links = [
       class="flex md:gap-8 md:flex-col flex-row md:w-auto w-full justify-around"
     >
       <li v-for="(link, index) in navigation_links" :key="link.text">
-        <NuxtLink :to="link.link" class="font-fira group old-link">
+        <NuxtLink :to="link.link" class="font-fira group hover:underline">
           <span class="md:inline hidden">0{{ index }} ./</span>
           <span :class="{ 'group-hover:hidden': link.hidden_text }">
             {{ link.text }}

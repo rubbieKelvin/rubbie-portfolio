@@ -12,6 +12,7 @@ const config = useAppConfig();
         :key="link.label"
         :to="link.link"
         external
+        class="hover:underline"
       >
         {{ link.label }}
       </NuxtLink>

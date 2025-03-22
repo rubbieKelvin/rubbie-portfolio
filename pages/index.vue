@@ -24,7 +24,7 @@ useSeoMeta({
       to="https://drive.google.com/file/d/1OHI72FXBm46HS7XhxY_IObJM6buUcQ05/view?usp=sharing"
       external
       target="_blank"
-      class="mt-4 w-max"
+      class="mt-4 w-max hover:underline"
     >
       ~ $ wget resume.pdf
     </NuxtLink>

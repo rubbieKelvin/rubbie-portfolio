@@ -17,7 +17,7 @@ const articles = computed(() => {
   <div class="flex-grow flex gap-4 flex-col">
     <div class="flex items-center justify-between">
       <h1 class="lg:text-8xl md:text-7xl text-5xl">Blog</h1>
-      <NuxtLink to="/rss.xml" external class="muted">rss</NuxtLink>
+      <NuxtLink to="/rss.xml" external class="muted hover:underline">~ $ wget rss.xml</NuxtLink>
     </div>
     <p v-if="articles.length === 0" class="xl:max-w-[60%]">
       I definitely have some articles coming up here. Follow my on x/twttr so
@@ -26,10 +26,10 @@ const articles = computed(() => {
     <div v-for="article in articles" :key="article.id">
       <NuxtLink
         :to="article.path"
-        class="flex gap-2 md:items-center md:flex-row flex-col"
+        class="flex gap-2 md:items-center md:flex-row flex-col group"
       >
         <div>
-          <h2>~ {{ article.title }}</h2>
+          <h2 class="group-hover:underline">~ {{ article.title }}</h2>
           <p class="text-sm italic mute">{{ article.description }}</p>
         </div>
 
