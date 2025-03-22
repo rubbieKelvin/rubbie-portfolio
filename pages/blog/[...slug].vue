@@ -18,6 +18,23 @@ useSeoMeta({
   ogTitle: page.value?.title ? `${page.value?.title} | Rubbie kelvin` : "404",
   ogDescription: page.value?.description ?? "Blog post not found",
 });
+
+const formatedDate = computed(() => {
+  if (!page.value?.date) return "";
+  return (
+    new Date(page.value.date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }) +
+    ", " +
+    new Date(page.value.date).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+  );
+});
 </script>
 
 <template>
@@ -25,7 +42,7 @@ useSeoMeta({
     <template v-if="page">
       <h1 class="lg:text-6xl md:text-5xl text-4xl">{{ page.title }}</h1>
       <div class="flex gap-2 items-center">
-        <p class="text-xs italic">{{ page.date }}</p>
+        <p class="text-xs italic">{{ formatedDate }}</p>
         <span v-if="page.tags" class="text-xs italic">&middot;</span>
         <div v-if="page.tags" class="flex gap-2 flex-wrap">
           <p
