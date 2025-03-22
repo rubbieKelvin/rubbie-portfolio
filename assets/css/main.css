@@ -117,6 +117,25 @@ html.dark {
   img {
     @apply max-h-[450px] object-contain grayscale;
   }
+
+  a[href^="#"] {
+    &:hover {
+      &::after {
+        content: "↗";
+        @apply ml-1;
+      }
+    }
+  }
+
+  a[href^="https://"]
+  {
+    @apply hover:underline;
+
+    &::before {
+      content: "~";
+      @apply mr-1;
+    }
+  }
 }
 
 html.dark {
