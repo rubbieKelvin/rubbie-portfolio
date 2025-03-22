@@ -17,11 +17,11 @@ export default defineNuxtConfig({
   content: {
     preview: {
       api: "https://api.nuxt.studio",
-      // gitInfo: {
-      //   name: "rubbie-portfolio",
-      //   owner: "rubbieKelvin",
-      //   url: "https://github.com/rubbieKelvin/rubbie-portfolio",
-      // },
+    },
+  },
+  nitro: {
+    prerender: {
+      routes: ["/rss.xml"],
     },
   },
 });
