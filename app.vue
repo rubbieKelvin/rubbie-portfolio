@@ -8,6 +8,9 @@ useSeoMeta({
   ogTitle: "Rubbie kelvin",
   ogDescription:
     "Software developer from Nigeria. Experienced in Python, C++, JavaScript/TypeScript, and exploring Rust. Passionate about solving complex problems and building intuitive interfaces.",
+  ogType: "website",
+  ogLocale: "en_US",
+  ogSiteName: "Rubbie Kelvin",
 });
 </script>
 <template>

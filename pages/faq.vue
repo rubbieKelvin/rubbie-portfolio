@@ -2,6 +2,9 @@
 useSeoMeta({
   title: "FAQ",
   description: "Here's a few more things you should checkout",
+  ogTitle: "FAQ | Rubbie kelvin",
+  ogDescription: "Here's a few more things you should checkout",
+  
 });
 </script>
 

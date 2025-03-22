@@ -3,6 +3,9 @@ const config = useAppConfig();
 useSeoMeta({
   title: "Projects",
   description: "Projects by Rubbie Kelvin",
+  ogTitle: "Projects | Rubbie kelvin",
+  ogDescription: "Projects by Rubbie Kelvin",
+  
 });
 </script>
 

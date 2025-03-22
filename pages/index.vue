@@ -1,6 +1,10 @@
 <script setup lang="ts">
 useSeoMeta({
   title: "Rubbie kelvin",
+  description: "Software developer ・Nigeria",
+  ogTitle: "Rubbie kelvin",
+  ogDescription: "Software developer ・Nigeria",
+  
 });
 </script>
 <template>

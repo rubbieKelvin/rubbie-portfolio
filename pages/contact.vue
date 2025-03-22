@@ -4,6 +4,8 @@ const { socials } = useAppConfig();
 useSeoMeta({
   title: "Contact",
   description: "Wanna reach out? Here's how",
+  ogTitle: "Contact | Rubbie kelvin",
+  ogDescription: "Wanna reach out? Here's how",
 });
 </script>
 

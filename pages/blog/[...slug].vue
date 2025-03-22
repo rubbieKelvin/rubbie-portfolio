@@ -15,6 +15,8 @@ const { data: page } = await useAsyncData(route.path, () => {
 useSeoMeta({
   title: page.value?.title ?? "404",
   description: page.value?.description ?? "Blog post not found",
+  ogTitle: page.value?.title ? `${page.value?.title} | Rubbie kelvin` : "404",
+  ogDescription: page.value?.description ?? "Blog post not found",
 });
 </script>
 

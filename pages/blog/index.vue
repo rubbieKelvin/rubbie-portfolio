@@ -2,6 +2,9 @@
 useSeoMeta({
   title: "Blog",
   description: "Checkout my blog posts",
+  ogTitle: "Blog | Rubbie kelvin",
+  ogDescription: "Checkout my blog posts",
+  
 });
 
 const { data: articles_data } = await useAsyncData("articles", () => {
