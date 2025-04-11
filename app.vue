@@ -1,16 +1,18 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: "Rubbie kelvin",
-  titleTemplate: "%s | Rubbie kelvin",
-  description:
-    "Software developer from Nigeria. Experienced in Python, C++, JavaScript/TypeScript, and exploring Rust. Passionate about solving complex problems and building intuitive interfaces.",
+  title: "Rubbie Kelvin - Software Developer & Engineer",
+  titleTemplate: "%s | Portfolio",
+  description: "Rubbie Kelvin is a skilled software developer from Nigeria specializing in Python, C++, JavaScript/TypeScript, and Rust. Expert in building robust applications and solving complex problems.",
   author: "Rubbie Kelvin",
-  ogTitle: "Rubbie kelvin",
-  ogDescription:
-    "Software developer from Nigeria. Experienced in Python, C++, JavaScript/TypeScript, and exploring Rust. Passionate about solving complex problems and building intuitive interfaces.",
+  keywords: "Rubbie Kelvin, Software Developer, Python Developer, JavaScript Developer, TypeScript Developer, Rust Developer, Nigerian Developer, Portfolio",
+  ogTitle: "Rubbie Kelvin - Software Developer & Engineer",
+  ogDescription: "Professional portfolio of Rubbie Kelvin, a skilled software developer specializing in Python, C++, JavaScript/TypeScript, and Rust.",
   ogType: "website",
   ogLocale: "en_US",
-  ogSiteName: "Rubbie Kelvin",
+  ogSiteName: "Rubbie Kelvin Portfolio",
+  twitterCard: "summary_large_image",
+  twitterTitle: "Rubbie Kelvin - Software Developer & Engineer",
+  twitterDescription: "Professional portfolio of Rubbie Kelvin, showcasing software development projects and expertise.",
 });
 </script>
 <template>
