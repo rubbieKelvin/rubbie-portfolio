@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://iam.rubbietheone.com/sitemap.xml
+
+# Crawl-delay for better server performance
+Crawl-delay: 1

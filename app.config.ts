@@ -31,6 +31,11 @@ export default defineAppConfig({
       description: "Check out my code and projects",
     },
     {
+      label: "Youtube",
+      link: "https://www.youtube.com/@rubbietheone",
+      description: "I stream from time to time",
+    },
+    {
       label: "Mail",
       link: "mailto:dev.rubbie+portfolio@gmail.com",
       description: "Reach out for work inquiries",
