@@ -88,8 +88,11 @@ useSchemaOrg([
       >
         ~ $ wget resume.pdf
       </NuxtLink>
+
+      <div>&middot;</div>
       
       <div class="flex gap-4 text-sm">
+        <p>&plus;</p>
         <NuxtLink to="/projects" class="hover:underline">View Projects</NuxtLink>
         <NuxtLink to="/contact" class="hover:underline">Get In Touch</NuxtLink>
         <NuxtLink to="/blog" class="hover:underline">Read Blog</NuxtLink>

@@ -48,6 +48,11 @@ export default defineAppConfig({
   ],
   projects: <Project[]>[
     {
+      title: "Native Doctor",
+      link: "https://github.com/rubbieKelvin/nativedoctor",
+      description: "An API testing tool built in Rust with YAML configuration",
+    },
+    {
       title: "Progress",
       link: "https://github.com/rubbieKelvin/progress",
       description: "A progress tracking cli app written in rust",

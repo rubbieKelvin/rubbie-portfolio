@@ -10,6 +10,39 @@ useSeoMeta({
   ogUrl: "https://iam.rubbietheone.com/projects",
 });
 
+// Organize projects by category and development stage
+const projectCategories = computed(() => {
+  return [
+    {
+      title: "Professional Tools",
+      subtitle: "Production-ready applications solving real-world problems",
+      description: "These projects represent my evolution into building professional-grade tools that developers and teams can rely on.",
+      projects: [
+        config.projects.find(p => p.title === "Native Doctor"),
+        config.projects.find(p => p.title === "Courier"),
+      ].filter(Boolean)
+    },
+    {
+      title: "System Utilities",
+      subtitle: "Command-line tools and productivity enhancers",
+      description: "My journey into systems programming, focusing on creating efficient tools that enhance developer productivity.",
+      projects: [
+        config.projects.find(p => p.title === "Progress"),
+        config.projects.find(p => p.title === "Opennotes"),
+      ].filter(Boolean)
+    },
+    {
+      title: "Learning & Exploration",
+      subtitle: "Experimental projects and learning exercises",
+      description: "Projects that showcase my curiosity and willingness to explore new concepts, languages, and paradigms.",
+      projects: [
+        config.projects.find(p => p.title === "Fuck rust"),
+        config.projects.find(p => p.title === "Shared"),
+      ].filter(Boolean)
+    }
+  ];
+});
+
 // Add structured data for projects
 useSchemaOrg([
   {
@@ -33,36 +66,53 @@ useSchemaOrg([
 </script>
 
 <template>
-  <div class="flex-grow flex gap-4 flex-col">
+  <div class="flex-grow flex gap-8 flex-col">
     <header>
       <h1 class="lg:text-8xl md:text-7xl text-5xl">Projects</h1>
       <p class="mt-4 mute xl:max-w-[60%]">
-        A collection of software projects I've built, ranging from system utilities 
-        to web applications. Each project showcases different aspects of my 
-        programming expertise and problem-solving approach.
+        From learning experiments to professional tools—each project tells part of my development story.
       </p>
     </header>
 
-    <section class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6" role="main">
-      <article
-        v-for="project in config.projects"
-        :key="project.title"
-        class="project-card p-4 rounded-lg border border-gray-200 dark:border-gray-700 duration-300 hover:border-gray-300 dark:hover:border-gray-600"
+    <main class="space-y-8">
+      <section 
+        v-for="category in projectCategories" 
+        :key="category.title"
+        class="space-y-4"
       >
-        <a 
-          :href="project.link" 
-          class="block h-full" 
-          :aria-label="`View ${project.title} project on GitHub`"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 class="text-xl font-semibold mb-2">{{ project.title }}</h2>
-          <p class="mute text-sm">
-            {{ project.description }}
-          </p>
-          <span class="text-xs mute mt-2 block">View on GitHub →</span>
-        </a>
-      </article>
-    </section>
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold">{{ category.title }}</h2>
+          <p class="text-sm mute mt-1">{{ category.subtitle }}</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <article
+            v-for="project in category.projects"
+            :key="project.title"
+            class="group"
+          >
+            <a 
+              :href="project.link" 
+              class="block p-4 rounded-lg border border-gray-200 dark:border-gray-700 
+                     hover:border-gray-300 dark:hover:border-gray-600 
+                     transition-colors duration-200"
+              :aria-label="`View ${project.title} project on GitHub`"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="space-y-2">
+                <h3 class="text-lg font-semibold group-hover:underline">
+                  {{ project.title }}
+                </h3>
+                <p class="text-sm mute">
+                  {{ project.description }}
+                </p>
+                <span class="text-xs mute">View on GitHub →</span>
+              </div>
+            </a>
+          </article>
+        </div>
+      </section>
+    </main>
   </div>
 </template>
