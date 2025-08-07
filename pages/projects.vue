@@ -10,6 +10,8 @@ useSeoMeta({
   ogUrl: "https://iam.rubbietheone.com/projects",
 });
 
+type Project = (typeof config.projects)[number];
+
 // Organize projects by category and development stage
 const projectCategories = computed(() => {
   return [
@@ -20,7 +22,7 @@ const projectCategories = computed(() => {
       projects: [
         config.projects.find(p => p.title === "Native Doctor"),
         config.projects.find(p => p.title === "Courier"),
-      ].filter(Boolean)
+      ].filter(Boolean) as Project[]
     },
     {
       title: "System Utilities",
@@ -29,7 +31,7 @@ const projectCategories = computed(() => {
       projects: [
         config.projects.find(p => p.title === "Progress"),
         config.projects.find(p => p.title === "Opennotes"),
-      ].filter(Boolean)
+      ].filter(Boolean) as Project[]
     },
     {
       title: "Learning & Exploration",
@@ -38,7 +40,7 @@ const projectCategories = computed(() => {
       projects: [
         config.projects.find(p => p.title === "Fuck rust"),
         config.projects.find(p => p.title === "Shared"),
-      ].filter(Boolean)
+      ].filter(Boolean) as Project[]
     }
   ];
 });
