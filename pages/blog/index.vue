@@ -7,25 +7,24 @@ useSeoMeta({
   
 });
 
-// Use refresh to ensure data is fetched on both server and client
-const { data: articles, refresh } = await useAsyncData("blog-articles", async () => {
+// Use queryCollection with proper SSR support and hydration handling
+const { data: articles, pending, error } = await useAsyncData('blog-articles', async () => {
   try {
-    const result = await queryCollection("blog").order("date", "DESC").all();
+    const result = await queryCollection('blog').order('date', 'DESC').all();
     return result || [];
-  } catch (error) {
-    console.error("Error fetching blog articles:", error);
+  } catch (err) {
+    console.error('Error fetching blog articles:', err);
     return [];
   }
 }, {
-  default: () => [],
-  server: true
+  server: true,
+  default: () => []
 });
 
-// Ensure we have data on the client side
-onMounted(() => {
-  if (!articles.value || articles.value.length === 0) {
-    refresh();
-  }
+// Computed property to ensure articles is always an array
+const blogArticles = computed(() => {
+  if (pending.value) return [];
+  return Array.isArray(articles.value) ? articles.value : [];
 });
 
 // Format date to be more readable
@@ -45,13 +44,21 @@ const formatDate = (dateString: string) => {
       <h1 class="lg:text-8xl md:text-7xl text-5xl">Blog</h1>
       <NuxtLink to="/rss.xml" external class="muted hover:underline">~ $ wget rss.xml</NuxtLink>
     </div>
-    <p v-if="!articles || articles.length === 0" class="xl:max-w-[60%] mute">
+    <div v-if="pending" class="xl:max-w-[60%] mute">
+      Loading articles...
+    </div>
+    
+    <div v-else-if="error" class="xl:max-w-[60%] text-red-600 dark:text-red-400">
+      Error loading articles. Please try refreshing the page.
+    </div>
+    
+    <p v-else-if="blogArticles.length === 0" class="xl:max-w-[60%] mute">
       I definitely have some articles coming up here. Follow me on x/twttr so
       you don't miss when that happens ;)
     </p>
     
-    <div v-if="articles && articles.length > 0" class="space-y-5 mt-6">
-      <article v-for="article in articles" :key="article.id" class="group">
+    <div v-else class="space-y-5 mt-6">
+      <article v-for="article in blogArticles" :key="article.id" class="group">
         <NuxtLink
           :to="article.path"
           class="flex gap-4 md:items-center md:flex-row flex-col hover:bg-gray-50 dark:hover:bg-gray-900/30 p-4 rounded-lg transition-colors duration-200"
