@@ -56,4 +56,11 @@ export default defineNuxtConfig({
     format: ["webp", "avif", "png", "jpg"],
     quality: 80,
   },
+
+  // Runtime config for environment variables
+  runtimeConfig: {
+    public: {
+      googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID || 'G-XXXXXXXXXX'
+    }
+  },
 });

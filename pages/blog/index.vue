@@ -7,12 +7,25 @@ useSeoMeta({
   
 });
 
-const { data: articles_data } = await useAsyncData("articles", () => {
-  return queryCollection("blog").order("date", "DESC").all();
+// Use refresh to ensure data is fetched on both server and client
+const { data: articles, refresh } = await useAsyncData("blog-articles", async () => {
+  try {
+    const result = await queryCollection("blog").order("date", "DESC").all();
+    return result || [];
+  } catch (error) {
+    console.error("Error fetching blog articles:", error);
+    return [];
+  }
+}, {
+  default: () => [],
+  server: true
 });
 
-const articles = computed(() => {
-  return articles_data.value ?? [];
+// Ensure we have data on the client side
+onMounted(() => {
+  if (!articles.value || articles.value.length === 0) {
+    refresh();
+  }
 });
 
 // Format date to be more readable
@@ -32,12 +45,12 @@ const formatDate = (dateString: string) => {
       <h1 class="lg:text-8xl md:text-7xl text-5xl">Blog</h1>
       <NuxtLink to="/rss.xml" external class="muted hover:underline">~ $ wget rss.xml</NuxtLink>
     </div>
-    <p v-if="articles.length === 0" class="xl:max-w-[60%] mute">
+    <p v-if="!articles || articles.length === 0" class="xl:max-w-[60%] mute">
       I definitely have some articles coming up here. Follow me on x/twttr so
       you don't miss when that happens ;)
     </p>
     
-    <div class="space-y-6 mt-8">
+    <div v-if="articles && articles.length > 0" class="space-y-5 mt-6">
       <article v-for="article in articles" :key="article.id" class="group">
         <NuxtLink
           :to="article.path"
