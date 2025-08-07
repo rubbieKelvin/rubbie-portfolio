@@ -4,5 +4,4 @@ Allow: /
 # Sitemap location
 Sitemap: https://iam.rubbietheone.com/sitemap.xml
 
-# Crawl-delay for better server performance
-Crawl-delay: 1
+# Performance optimization - standard delay handled by server
