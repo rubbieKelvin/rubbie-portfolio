@@ -3,7 +3,7 @@
     <NuxtLink to="/"
       >rubbiekelvin@localhost ~ $ <span class="">status</span></NuxtLink
     >
-    <div class="">
+    <div aria-hidden="true">
       <span class="text-gray-400!">08-'25 - </span>
       <span class="text-blue-300!">log</span>
       <span class="text-yellow-300!"> [warning] </span>
