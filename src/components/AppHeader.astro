@@ -1,0 +1,15 @@
+---
+interface Props {
+  className?: string;
+}
+
+const { className } = Astro.props as Props;
+---
+
+<div class:list={[className, "h-12 flex items-center"]}>
+  <h1>
+    <a href="/">rubbiekelvin@localhost</a>
+    <span class="text-gray-500">&nbsp;~ $</span>
+    <span class="animate-blink">&nbsp;_</span>
+  </h1>
+</div>

@@ -9,7 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.13.2"
+    "@tailwindcss/vite": "^4.1.12",
+    "astro": "^5.13.2",
+    "tailwindcss": "^4.1.12"
   },
   "packageManager": "pnpm@9.15.3+sha1.120e76442c589bb9a3267dbbefa5658c9943fcae"
 }

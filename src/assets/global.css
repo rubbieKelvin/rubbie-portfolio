@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+html,
+body {
+  @apply h-full;
+}
+
+body {
+  @apply antialiased font-display;
+}
+
+@theme {
+  --font-display: "Google Sans Code", "monospace";
+  --animate-blink: blink 1s step-end infinite;
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }  
+}
+
+:root {
+  font-optical-sizing: auto;
+}
+
