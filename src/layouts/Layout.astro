@@ -1,6 +1,40 @@
 ---
 import "@/assets/global.css";
 import AppHeader from "@/components/AppHeader.astro";
+import { sanityClient } from "sanity:client";
+import type { SanityDocument } from "@sanity/client";
+
+const LINKS_QUERY = `
+*[_type == "link" && featured_contact_link == true] {
+  _id,
+  title,
+  slug,
+  url
+}
+`;
+
+const contactLinks = await sanityClient.fetch<SanityDocument[]>(LINKS_QUERY);
+
+const navigationLinks = [
+  {
+    title: "~",
+    url: "/",
+  },
+
+  {
+    title: "Projects",
+    url: "/projects",
+  },
+
+  {
+    title: "Blog",
+    url: "/blog",
+  },
+  {
+    title: "Contact",
+    url: "/contact",
+  },
+];
 ---
 
 <!doctype html>
@@ -18,6 +52,7 @@ import AppHeader from "@/components/AppHeader.astro";
     />
     <title>Astro Basics</title>
   </head>
+
   <body class="h-full flex flex-col">
     <div class="flex-row flex">
       <div class="flex-[20%] bg-red-100"></div>
@@ -25,11 +60,30 @@ import AppHeader from "@/components/AppHeader.astro";
       <div class="flex-[20%] bg-red-100"></div>
     </div>
     <div class="flex-grow flex">
-      <div class="flex-[20%] bg-red-100"></div>
+      <!-- Contact Links -->
+      <div
+        class="flex-[20%] bg-green-100 flex flex-col gap-4 items-center justify-center"
+      >
+        {
+          contactLinks.map((link) => (
+            <div class="w-1/2">
+              <a href={link.url}>{link.title}</a>
+            </div>
+          ))
+        }
+      </div>
       <div class="flex-[60%] bg-blue-100">
         <slot />
       </div>
-      <div class="flex-[20%] bg-red-100"></div>
+      <div class="flex-[20%] bg-amber-100 flex flex-col gap-4 items-center justify-center">
+        {
+          navigationLinks.map((link, index) => (
+            <div class="w-1/2">
+              <a href={link.url}>0{index + 1}. {link.title}</a>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </body>
 </html>
