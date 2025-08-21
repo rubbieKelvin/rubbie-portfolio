@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-
-# Sitemap location
-Sitemap: https://iam.rubbietheone.com/sitemap.xml
-
-# Performance optimization - standard delay handled by server
