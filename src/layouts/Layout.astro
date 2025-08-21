@@ -55,31 +55,34 @@ const navigationLinks = [
 
   <body class="h-full flex flex-col">
     <div class="flex-row flex">
-      <div class="flex-[20%] bg-red-100"></div>
+      <div class="flex-[20%]"></div>
       <AppHeader className="flex-[60%]" />
-      <div class="flex-[20%] bg-red-100"></div>
+      <div class="flex-[20%]"></div>
     </div>
     <div class="flex-grow flex">
       <!-- Contact Links -->
-      <div
-        class="flex-[20%] bg-green-100 flex flex-col gap-4 items-center justify-center"
-      >
+      <div class="flex-[20%] flex flex-col gap-4 items-center justify-center">
         {
           contactLinks.map((link) => (
             <div class="w-1/2">
-              <a href={link.url}>{link.title}</a>
+              <a class="cursor-underline-effect" href={link.url}>
+                <span>{link.title}</span>
+              </a>
             </div>
           ))
         }
       </div>
-      <div class="flex-[60%] bg-blue-100">
+      <div class="flex-[60%]">
         <slot />
       </div>
-      <div class="flex-[20%] bg-amber-100 flex flex-col gap-4 items-center justify-center">
+      <div class="flex-[20%] flex flex-col gap-4 items-center justify-center">
         {
           navigationLinks.map((link, index) => (
             <div class="w-1/2">
-              <a href={link.url}>0{index + 1}. {link.title}</a>
+              <a class="cursor-underline-effect" href={link.url}>
+                <span>0{index + 1}.</span>
+                <span>{link.title}</span>
+              </a>
             </div>
           ))
         }

@@ -1,9 +1,37 @@
 ---
-import Layout from '@/layouts/Layout.astro';
+import Layout from "@/layouts/Layout.astro";
+import { sanityClient } from "sanity:client";
+import type { SanityDocument } from "@sanity/client";
+import { PortableText } from "astro-portabletext";
+import AppFooter from "@/components/AppFooter.astro";
+
+const INTRO_QUERY = `
+*[_type == "intro" && active == true][0] {
+  action_link -> {
+    url
+  },
+  action_text,
+  description,
+  subtitle,
+  title,
+}`;
+
+const intro = await sanityClient.fetch<SanityDocument>(INTRO_QUERY);
 ---
 
 <Layout>
-	<div>
-		<h1>Hello World</h1>
-	</div>
+  <div class="flex flex-col justify-center h-full">
+    <div class="flex flex-col gap-4 flex-grow justify-center">
+      <h2 class="text-sm">{intro.subtitle}</h2>
+      <h1 class="text-7xl">{intro.title}</h1>
+      <div class="max-w-[50%]">
+        <PortableText value={intro.description} />
+      </div>
+	  <div>
+		  <a href={intro.action_link.url} class="cursor-after-effect">{intro.action_text}</a>
+	  </div>
+    </div>
+
+    <AppFooter />
+  </div>
 </Layout>
