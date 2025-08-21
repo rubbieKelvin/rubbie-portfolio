@@ -53,15 +53,17 @@ const navigationLinks = [
     <title>Astro Basics</title>
   </head>
 
-  <body class="h-full flex flex-col">
+  <body class="h-full flex flex-col max-h-full">
+	<!-- Header -->
     <div class="flex-row flex">
       <div class="flex-[20%]"></div>
       <AppHeader className="flex-[60%]" />
       <div class="flex-[20%]"></div>
     </div>
-    <div class="flex-grow flex">
+	<!-- Main Content -->
+    <div class="flex-grow flex h-0 overflow-y-auto">
       <!-- Contact Links -->
-      <div class="flex-[20%] flex flex-col gap-4 items-center justify-center">
+      <div class="flex-[20%] flex flex-col gap-4 items-center justify-center sticky top-0">
         {
           contactLinks.map((link) => (
             <div class="w-1/2">
@@ -75,7 +77,7 @@ const navigationLinks = [
       <div class="flex-[60%]">
         <slot />
       </div>
-      <div class="flex-[20%] flex flex-col gap-4 items-center justify-center">
+      <div class="flex-[20%] flex flex-col gap-4 items-center justify-center sticky top-0">
         {
           navigationLinks.map((link, index) => (
             <div class="w-1/2">

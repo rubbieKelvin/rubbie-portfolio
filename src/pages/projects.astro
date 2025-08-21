@@ -1,0 +1,12 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout>
+  <div>Projects</div>
+  {
+    Array.from({ length: 1000 }).map((_, index) => (
+      <div>Project {index}</div>
+    ))
+  }
+</Layout>
