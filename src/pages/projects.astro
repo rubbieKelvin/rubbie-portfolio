@@ -1,12 +1,66 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { sanityClient, } from "sanity:client";
+import ProjectItem from "@/components/ProjectItem.astro";
+import type { SanityDocument } from "@sanity/client";
+
+const PROJECT_BY_CATEGORY = `
+*[_type == "category" && is_project_category == true] {
+  _id,
+  title,
+  description,
+  "projects": *[_type == "project" && references(^._id)] {
+    _id,
+    title,
+    slug,
+    description,
+    mainImage,
+    url
+  }
+}
+`;
+
+const projects_by_category =
+  await sanityClient.fetch<SanityDocument[]>(PROJECT_BY_CATEGORY);
 ---
 
 <Layout>
-  <div>Projects</div>
-  {
-    Array.from({ length: 1000 }).map((_, index) => (
-      <div>Project {index}</div>
-    ))
-  }
+  <div class="px-5 lg:px-0">
+    <div class="pt-10 py-15">
+      <h1 class="text-5xl">
+        <span class="text-gray-300 animate-pulse">&gt;</span>
+        <span>Projects</span>
+      </h1>
+      <h2 class="mt-3 xl:max-w-[50%]">
+        From learning experiments to professional tools—each project tells part
+        of my development story.
+      </h2>
+    </div>
+
+    <!-- listing -->
+    <div class="flex flex-col gap-6">
+      {
+        projects_by_category.map((category) => {
+          return (
+            <div>
+              <h2 class="text-2xl">{category.title}</h2>
+              <h3 class="lg:max-w-[50%]">{category.description}</h3>
+              <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-8">
+                {category.projects.map((project: SanityDocument) => {
+                  return (
+                    <ProjectItem
+                      name={project.title}
+                      image={project.mainImage}
+                      description={project.description}
+                      url={project.url}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
 </Layout>

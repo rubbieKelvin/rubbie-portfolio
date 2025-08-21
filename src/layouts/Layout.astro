@@ -3,6 +3,7 @@ import "@/assets/global.css";
 import AppHeader from "@/components/AppHeader.astro";
 import { sanityClient } from "sanity:client";
 import type { SanityDocument } from "@sanity/client";
+import { ClientRouter } from "astro:transitions";
 
 const LINKS_QUERY = `
 *[_type == "link" && featured_contact_link == true] {
@@ -50,20 +51,30 @@ const navigationLinks = [
       href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Mozilla+Text:wght@200..700&display=swap"
       rel="stylesheet"
     />
-    <title>Astro Basics</title>
+    <title>Rubbie Kelvin</title>
+    <ClientRouter />
+    <script>
+      document.addEventListener("astro:page-load", () => {
+        window.scrollTo(0, 0);
+      });
+    </script>
   </head>
 
   <body class="h-full flex flex-col max-h-full">
-	<!-- Header -->
+    <!-- Header -->
     <div class="flex-row flex">
-      <div class="flex-[20%]"></div>
-      <AppHeader className="flex-[60%]" />
-      <div class="flex-[20%]"></div>
+      <div class="flex-[20%] hidden lg:block"></div>
+      <AppHeader className="flex-[60%] px-5 lg:px-0" />
+      <div class="flex-[20%] hidden lg:block"></div>
     </div>
-	<!-- Main Content -->
-    <div class="flex-grow flex h-0 overflow-y-auto">
+    <!-- Main Content -->
+    <div
+      class="flex-grow flex h-0 overflow-y-auto flex-col-reverse lg:flex-row"
+    >
       <!-- Contact Links -->
-      <div class="flex-[20%] flex flex-col gap-4 items-center justify-center sticky top-0">
+      <div
+        class="lg:flex-[20%] flex lg:flex-col gap-4 items-center justify-center lg:sticky top-0 px-5 py-2 lg:p-0"
+      >
         {
           contactLinks.map((link) => (
             <div class="w-1/2">
@@ -74,15 +85,17 @@ const navigationLinks = [
           ))
         }
       </div>
-      <div class="flex-[60%]">
+      <div class="lg:flex-[60%] flex-grow">
         <slot />
       </div>
-      <div class="flex-[20%] flex flex-col gap-4 items-center justify-center sticky top-0">
+      <div
+        class="lg:flex-[20%] flex lg:flex-col gap-4 items-center justify-center lg:sticky top-0 px-5 py-2 lg:p-0"
+      >
         {
           navigationLinks.map((link, index) => (
             <div class="w-1/2">
               <a class="cursor-underline-effect" href={link.url}>
-                <span>0{index + 1}.</span>
+                <span class="hidden lg:inline">0{index + 1}.</span>
                 <span>{link.title}</span>
               </a>
             </div>

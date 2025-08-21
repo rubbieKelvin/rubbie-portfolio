@@ -11,6 +11,7 @@
   "dependencies": {
     "@sanity/astro": "^3.2.10",
     "@sanity/client": "^7.9.0",
+    "@sanity/image-url": "^1.1.0",
     "@tailwindcss/vite": "^4.1.12",
     "astro": "^5.13.2",
     "astro-portabletext": "^0.11.1",
@@ -18,6 +19,7 @@
     "react-dom": "^19.1.1",
     "react-is": "^19.1.1",
     "sanity": "^4.5.0",
+    "sanity-image": "^1.0.0",
     "styled-components": "^6.1.19",
     "tailwindcss": "^4.1.12"
   },

@@ -20,16 +20,18 @@ const intro = await sanityClient.fetch<SanityDocument>(INTRO_QUERY);
 ---
 
 <Layout>
-  <div class="flex flex-col justify-center h-full">
+  <div class="flex flex-col justify-center h-full px-5 lg:px-0">
     <div class="flex flex-col gap-4 flex-grow justify-center">
       <h2 class="text-sm">{intro.subtitle}</h2>
       <h1 class="text-7xl">{intro.title}</h1>
-      <div class="max-w-[50%]">
+      <div class="2xl:max-w-[65%]">
         <PortableText value={intro.description} />
       </div>
-	  <div>
-		  <a href={intro.action_link.url} class="cursor-after-effect">{intro.action_text}</a>
-	  </div>
+      <div>
+        <a href={intro.action_link.url} class="cursor-after-effect"
+          >{intro.action_text}</a
+        >
+      </div>
     </div>
 
     <AppFooter />

@@ -37,4 +37,41 @@ a.cursor-underline-effect:hover::before {
 a.cursor-after-effect:hover::after {
   content: "_";
   animation: var(--animate-blink);
+}
+
+/* Slanted image edge effect */
+.slanted-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.slanted-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%);
+  z-index: 1;
+}
+
+.slanted-image img {
+  clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Alternative slanted edge using transform */
+.slanted-edge {
+  position: relative;
+  overflow: hidden;
+  transform: skewX(-15deg);
+  transform-origin: bottom left;
+}
+
+.slanted-edge img {
+  transform: skewX(15deg);
+  transform-origin: bottom left;
+  width: 120%;
+  margin-left: -10%;
 } 

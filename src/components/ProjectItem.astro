@@ -1,0 +1,39 @@
+---
+import { urlFor } from "@/lib/sanity";
+
+type Props = {
+  name: string;
+  description: string;
+  image: object | null;
+  url: string;
+};
+
+const { name, description, image, url }: Props = Astro.props;
+
+const imageUrl = () => {
+  if (!image) return null;
+  return urlFor(image).url();
+};
+---
+
+<a
+  href={url}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="flex gap-4 border border-gray-300 rounded-lg overflow-hidden group/project-item h-32"
+>
+  <div class="flex flex-col gap-2 p-4 flex-grow">
+    <h2 class="text-lg">
+      <span>{name}</span>
+      <span
+        class="animate-blink text-gray-500 group-hover/project-item:inline hidden"
+      >
+        ▋
+      </span>
+    </h2>
+    <p class="w-full line-clamp-2">{description}</p>
+  </div>
+  <div class="flex-[30%] min-w-[200px] max-w-[200px] slanted-image hidden xl:block">
+    <img src={imageUrl()} alt={name} class="w-full h-full object-cover" />
+  </div>
+</a>
