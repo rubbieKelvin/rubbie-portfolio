@@ -1,6 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { sanityClient, } from "sanity:client";
+import { sanityClient } from "sanity:client";
 import ProjectItem from "@/components/ProjectItem.astro";
 import type { SanityDocument } from "@sanity/client";
 
@@ -8,7 +8,7 @@ const PROJECT_BY_CATEGORY = `
 *[_type == "category" && is_project_category == true] {
   _id,
   title,
-  description,
+  // description,
   "projects": *[_type == "project" && references(^._id)] {
     _id,
     title,
@@ -25,7 +25,7 @@ const projects_by_category =
 ---
 
 <Layout>
-  <div class="px-5 lg:px-0">
+  <div class="px-5 lg:px-0 pb-10">
     <div class="pt-10 py-15">
       <h1 class="text-5xl">
         <span class="text-gray-300 animate-pulse">&gt;</span>
@@ -38,14 +38,18 @@ const projects_by_category =
     </div>
 
     <!-- listing -->
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-10">
       {
         projects_by_category.map((category) => {
           return (
             <div>
               <h2 class="text-2xl">{category.title}</h2>
-              <h3 class="lg:max-w-[50%]">{category.description}</h3>
-              <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-8">
+              {
+                category.description &&
+                category.description.length > 0 &&               
+                <h3 class="lg:max-w-[50%]">{category.description}</h3>
+              }
+              <div class="grid grid-cols-1 xl:grid-cols-2 lg:gap-8 gap-4 mt-2">
                 {category.projects.map((project: SanityDocument) => {
                   return (
                     <ProjectItem
