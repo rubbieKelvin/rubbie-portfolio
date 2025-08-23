@@ -50,11 +50,11 @@ const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
             <BlogItem
               title={post.title}
               description={post.description}
+              short_content={post.short_content}
               mainImage={post.mainImage}
               publishedAt={post.publishedAt}
               external_link={post.external_link}
               slug={post.slug}
-              short_content={post.short_content}
             />
           );
         })

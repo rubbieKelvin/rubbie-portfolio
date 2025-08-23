@@ -34,7 +34,9 @@ const formatDate = (dateString: string) => {
   });
 };
 
-const blogUrl = external_link || `/blog/${slug.current}`;
+// Typically we want to link to the blog post, but if there is an external link, we want to link to that
+// But slug url takes precedence over external link
+const blogUrl = slug.current ? `/blog/${slug.current}` : external_link;
 const isExternal = !!external_link;
 ---
 

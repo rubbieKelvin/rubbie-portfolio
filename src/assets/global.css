@@ -75,7 +75,3 @@ a.cursor-after-effect:hover::after {
   width: 120%;
   margin-left: -10%;
 } 
-
-p {
-  @apply text-gray-600;
-}

@@ -1,0 +1,153 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { sanityClient } from "sanity:client";
+import type { SanityDocument } from "@sanity/client";
+import { PortableText } from "astro-portabletext";
+import { urlFor } from "@/lib/sanity";
+
+export async function getStaticPaths() {
+  const POSTS_QUERY = `
+  *[_type == "post"] {
+    "slug": slug.current,
+    _id
+  }
+  `;
+  
+  const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
+  
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { postId: post._id },
+  }));
+}
+
+const { slug } = Astro.params;
+const { postId } = Astro.props;
+
+const POST_QUERY = `
+*[_type == "post" && _id == $postId][0] {
+  _id,
+  title,
+  slug,
+  body,
+  mainImage,
+  publishedAt,
+  external_link,
+  description,
+  author -> {
+    name,
+    image
+  },
+  categories[] -> {
+    title
+  }
+}
+`;
+
+const post = await sanityClient.fetch<SanityDocument>(POST_QUERY, { postId });
+
+if (!post) {
+  return Astro.redirect("/404");
+}
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+
+const imageUrl = post.mainImage ? urlFor(post.mainImage).url() : null;
+---
+
+<Layout>
+  <div class="px-5 lg:px-0 pb-10">
+    <!-- Back to blog -->
+    <div class="py-5">
+      <a href="/blog" class="text-sm cursor-after-effect hidden lg:block">&larr; Back to Blog</a>
+    </div>
+
+    <!-- Article header -->
+    <article class="max-w-4xl">
+      <header class="mb-8">
+        <h1 class="text-4xl lg:text-5xl text-gray-900 mb-4 leading-tight">
+          {post.title}
+        </h1>
+        
+        <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
+          {post.publishedAt && (
+            <time datetime={post.publishedAt}>
+              {formatDate(post.publishedAt)}
+            </time>
+          )}
+          
+          {post.author && (
+            <div class="flex items-center gap-2">
+              {post.author.image && (
+                <img 
+                  src={urlFor(post.author.image).width(24).height(24).url()} 
+                  alt={post.author.name}
+                  class="w-6 h-6 rounded-full"
+                />
+              )}
+              <span>by {post.author.name}</span>
+            </div>
+          )}
+          
+          {post.categories && post.categories.length > 0 && (
+            <div class="flex gap-2">
+              {post.categories.map((category: any) => (
+                <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                  {category.title}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {post.external_link && (
+          <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p class=" mb-2">
+              This post was originally published externally.
+            </p>
+            <a 
+              href={post.external_link} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+            >
+              Read the original article &rarr;
+            </a>
+          </div>
+        )}
+
+        {imageUrl && (
+          <div class="mb-8">
+            <img 
+              src={imageUrl} 
+              alt={post.title}
+              class="w-full h-64 lg:h-96 object-cover rounded-lg"
+            />
+          </div>
+        )}
+      </header>
+
+      <!-- Article content -->
+      <div class="prose prose-lg max-w-none">
+        {post.body && <PortableText value={post.body} />}
+        {!post.body && post.description && (
+          <p class="text-gray-700 leading-relaxed">{post.description}</p>
+        )}
+        {!post.body && !post.description && (
+          <p class="text-gray-500 italic">No content available for this post.</p>
+        )}
+      </div>
+    </article>
+
+    <!-- Navigation footer -->
+    <div class="mt-12 pt-8 border-t border-gray-200">
+      <a href="/blog" class="text-sm cursor-after-effect">&larr; Back to blog</a>
+    </div>
+  </div>
+</Layout>
