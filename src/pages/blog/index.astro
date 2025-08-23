@@ -27,7 +27,7 @@ const POSTS_QUERY = `
 const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
 ---
 
-<Layout>
+<Layout title="Blog">
   <div class="px-5 lg:px-0 pb-10">
     <div class="pt-10 py-15">
       <h1 class="text-5xl">

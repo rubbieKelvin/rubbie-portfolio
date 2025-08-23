@@ -3,7 +3,6 @@ import "@/assets/global.css";
 import AppHeader from "@/components/AppHeader.astro";
 import { sanityClient } from "sanity:client";
 import type { SanityDocument } from "@sanity/client";
-import { ClientRouter } from "astro:transitions";
 
 const LINKS_QUERY = `
 *[_type == "link" && featured_contact_link == true] {
@@ -15,6 +14,15 @@ const LINKS_QUERY = `
 `;
 
 const contactLinks = await sanityClient.fetch<SanityDocument[]>(LINKS_QUERY);
+
+type Props = {
+  title?: string;
+  description?: string;
+};
+
+const { title, description } = Astro.props;
+
+const pageTitle = title ? `${title} | Rubbie Kelvin` : "Rubbie Kelvin";
 
 const navigationLinks = [
   {
@@ -52,13 +60,20 @@ const navigationLinks = [
       href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Mozilla+Text:wght@200..700&display=swap"
       rel="stylesheet"
     />
-    <title>Rubbie Kelvin</title>
-    <ClientRouter />
-    <script>
-      document.addEventListener("astro:page-load", () => {
-        window.scrollTo(0, 0);
-      });
-    </script>
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Rubbie Kelvin" />
+    <meta
+      name="keywords"
+      content="Rubbie Kelvin, Software Developer, Python Developer, JavaScript Developer, TypeScript Developer, Rust Developer, Nigerian Developer, Full Stack Developer, Portfolio"
+    />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url.toString()} />
+    <meta property="og:image" content="/rto.png" />
+    <meta property="og:image:alt" content="Rubbie Kelvin" />
+    <meta property="og:image:width" content="1042" />
   </head>
 
   <body class="h-full flex flex-col max-h-full">

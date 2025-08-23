@@ -61,7 +61,7 @@ const formatDate = (dateString: string) => {
 const imageUrl = post.mainImage ? urlFor(post.mainImage).url() : null;
 ---
 
-<Layout>
+<Layout title={post.title}>
   <div class="px-5 lg:px-0 pb-10">
     <!-- Back to blog -->
     <div class="py-5">
