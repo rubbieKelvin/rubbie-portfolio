@@ -1,0 +1,64 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { sanityClient } from "sanity:client";
+import BlogItem from "@/components/BlogItem.astro";
+import type { SanityDocument } from "@sanity/client";
+
+// https://stackoverflow.com/questions/73962212/it-it-possible-to-truncate-text-in-a-groq-query
+const POSTS_QUERY = `
+*[_type == "post"] | order(publishedAt desc) {
+  _id,
+  title,
+  slug,
+  mainImage,
+  publishedAt,
+  external_link,
+  description,
+  "short_content": pt::text(body)
+} {
+  ...,
+  "short_content": string::split(short_content, "")[0..100]
+}{
+  ...,
+  "short_content": array::join(short_content, "") + "..."
+}
+`;
+
+const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
+---
+
+<Layout>
+  <div class="px-5 lg:px-0 pb-10">
+    <div class="pt-10 py-15">
+      <h1 class="text-5xl">
+        <span class="text-gray-300 animate-pulse">&gt;</span>
+        <span>Blog</span>
+      </h1>
+      <h2 class="mt-3 xl:max-w-[70%]">
+        Thoughts, tutorials, and insights from my development journey—sharing
+        what I learn along the way.
+      </h2>
+    </div>
+
+    <!-- listing -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-2"
+    >
+      {
+        posts.map((post: SanityDocument) => {
+          return (
+            <BlogItem
+              title={post.title}
+              description={post.description}
+              mainImage={post.mainImage}
+              publishedAt={post.publishedAt}
+              external_link={post.external_link}
+              slug={post.slug}
+              short_content={post.short_content}
+            />
+          );
+        })
+      }
+    </div>
+  </div>
+</Layout>

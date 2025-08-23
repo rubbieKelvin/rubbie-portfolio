@@ -1,0 +1,72 @@
+---
+import { urlFor } from "@/lib/sanity";
+
+type Props = {
+  title: string;
+  description: string;
+  mainImage: object | null;
+  publishedAt: string;
+  external_link?: string;
+  slug: { current: string };
+  short_content: string;
+};
+
+const {
+  title,
+  description,
+  mainImage,
+  publishedAt,
+  external_link,
+  slug,
+  short_content,
+}: Props = Astro.props;
+
+const imageUrl = () => {
+  if (!mainImage) return null;
+  return urlFor(mainImage).url();
+};
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+const blogUrl = external_link || `/blog/${slug.current}`;
+const isExternal = !!external_link;
+---
+
+<a
+  href={blogUrl}
+  class="flex flex-col h-64 border border-gray-200 rounded-lg group/blog-item hover:border-gray-500 transition-all"
+>
+  <img
+    src={imageUrl()}
+    alt={title}
+    class="w-full h-10 object-cover rounded-t-lg mb-4"
+  />
+
+  <h2 class="text-lg text-gray-900 leading-tight px-4 line-clamp-2">
+    {title}
+  </h2>
+
+  <p class="leading-relaxed mb-4 px-4 line-clamp-2">{description}</p>
+
+  <!-- short content -->
+  <p class="text-gray-600 leading-relaxed mb-4 text-xs px-4 flex-grow line-clamp-3">
+    {short_content}
+  </p>
+
+  <div class="flex items-center justify-between gap-2 px-4 pb-4">
+    <p class="text-xs">{formatDate(publishedAt)}</p>
+    {
+      isExternal && (
+        <span class="text-xs border border-gray-300 text-gray-500 bg-gray-100 px-1 rounded flex-shrink-0">
+          ext
+        </span>
+      )
+    }
+  </div>
+</a>
