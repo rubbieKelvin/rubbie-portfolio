@@ -1,0 +1,29 @@
+---
+import type { TypedObject, Props as TypeProps } from "astro-portabletext/types";
+import "highlight.js/styles/github.css";
+import hljs from "highlight.js";
+
+type Props = TypeProps<
+  TypedObject & {
+    code: string;
+    language: string;
+  }
+>;
+
+const { node } = Astro.props as Props;
+
+const highlightedCode = hljs.highlight(node.code, {
+  language: node.language,
+}).value;
+---
+
+<div class=" bg-gray-100 p-2 rounded-md relative">
+  {
+    node.code && (
+        <p class="text-sm text-gray-500 absolute top-2 right-2">
+          {node.language}
+        </p>
+      <pre class="text-sm"><code set:html={highlightedCode} /></pre>
+    )
+  }
+</div>

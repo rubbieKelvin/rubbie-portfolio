@@ -14,9 +14,15 @@ body {
   --animate-blink: blink 1s step-end infinite;
 
   @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-  }  
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0;
+    }
+  }
 }
 
 :root {
@@ -32,7 +38,7 @@ a.cursor-underline-effect:hover::before {
   position: absolute;
   top: 10px;
   animation: var(--animate-blink);
-} 
+}
 
 a.cursor-after-effect:hover::after {
   content: "_";
@@ -46,7 +52,7 @@ a.cursor-after-effect:hover::after {
 }
 
 .slanted-image::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -74,4 +80,28 @@ a.cursor-after-effect:hover::after {
   transform-origin: bottom left;
   width: 120%;
   margin-left: -10%;
-} 
+}
+
+div.prose {
+  @apply space-y-4;
+
+  p {
+    @apply text-sm text-gray-700;
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+
+  blockquote {
+    @apply border-l-4 border-yellow-400 pl-4 bg-yellow-100 text-yellow-700;
+  }
+}
