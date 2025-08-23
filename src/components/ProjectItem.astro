@@ -6,9 +6,12 @@ type Props = {
   description: string;
   image: object | null;
   url: string;
+  categories: {
+    title: string;
+  }[];
 };
 
-const { name, description, image, url }: Props = Astro.props;
+const { name, description, image, url, categories }: Props = Astro.props;
 
 const imageUrl = () => {
   if (!image) return null;
@@ -20,7 +23,7 @@ const imageUrl = () => {
   href={url}
   target="_blank"
   rel="noopener noreferrer"
-  class="flex gap-4 border border-gray-300 rounded-lg overflow-hidden group/project-item h-32"
+  class="flex gap-4 border border-gray-300 rounded-lg overflow-hidden group/project-item flex-col h-[160px]"
 >
   <div class="flex flex-col gap-2 p-4 flex-grow">
     <h2 class="text-lg">
@@ -31,9 +34,29 @@ const imageUrl = () => {
         ▋
       </span>
     </h2>
-    <p class="w-full line-clamp-2 text-sm">{description}</p>
+    <p class="w-full line-clamp-2 text-sm flex-grow">{description}</p>
+    <div class="flex gap-1 items-center">
+      {
+        categories.map((category, index) => (
+          <>
+            <span class="text-xs text-gray-500">{category.title}</span>
+            {index < categories.length - 1 && <span>&middot;</span>}
+          </>
+        ))
+      }
+    </div>
   </div>
-  <div class="flex-[30%] min-w-[200px] max-w-[200px] slanted-image">
-    <img src={imageUrl()} alt={name} class="w-full h-full object-fill" />
-  </div>
+
+
+  <!-- {
+    image && (
+      <div class="flex-[30%] min-w-[200px] max-w-[200px] p-4">
+        <img
+          src={urlFor(image).width(200).height(200).url()}
+          alt={name}
+          class="w-full h-full object-fill rounded-lg"
+        />
+      </div>
+    )
+  } -->
 </a>
