@@ -104,4 +104,16 @@ div.prose {
   blockquote {
     @apply border-l-4 border-yellow-400 pl-4 bg-yellow-100 text-yellow-700;
   }
+
+  ul {
+    @apply list-disc list-inside;
+  }
+
+  ol {
+    @apply list-decimal list-inside;
+  }
+
+  li {
+    @apply text-sm text-gray-700;
+  }
 }

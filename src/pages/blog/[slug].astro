@@ -5,6 +5,7 @@ import type { SanityDocument } from "@sanity/client";
 import { PortableText } from "astro-portabletext";
 import { urlFor } from "@/lib/sanity";
 import BlockCode from "@/components/BlockCode.astro";
+import BlockImage from "@/components/BlockImage.astro";
 
 export async function getStaticPaths() {
   const POSTS_QUERY = `
@@ -64,6 +65,7 @@ const imageUrl = post.mainImage ? urlFor(post.mainImage).url() : null;
 const components = {
   type: {
     code: BlockCode,
+    image: BlockImage,
   },
 };
 ---

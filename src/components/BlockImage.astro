@@ -1,0 +1,19 @@
+---
+import { urlFor } from "@/lib/sanity";
+import type { Props as TypeProps } from "astro-portabletext/types";
+import type { TypedObject } from "astro-portabletext/types";
+
+type Props = TypeProps<
+  TypedObject & {
+    alt: string;
+    asset: any;
+  }
+>;
+
+const { node } = Astro.props as Props;
+const imageUrl = node.asset ? urlFor(node.asset).url() : null;
+---
+
+<div>
+  <img src={imageUrl} alt={node.alt} class="w-full h-auto" />
+</div>

@@ -13,7 +13,7 @@ type Props = TypeProps<
 const { node } = Astro.props as Props;
 
 const highlightedCode = hljs.highlight(node.code, {
-  language: node.language,
+  language: node.language ?? "plaintext",
 }).value;
 ---
 
