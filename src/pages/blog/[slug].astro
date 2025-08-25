@@ -82,12 +82,13 @@ const components = {
     <!-- Article header -->
     <article class="max-w-4xl">
       <header class="mb-8">
-        <h1 class="text-4xl lg:text-5xl text-gray-900 mb-4 leading-tight">
+        <h1 class="text-4xl lg:text-5xl mb-4 leading-tight">
           {post.title}
         </h1>
 
         <div
-          class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6"
+          class="flex flex-wrap items-center gap-4 text-sm mb-6"
+          style="color: var(--color-text-muted)"
         >
           {
             post.publishedAt && (
@@ -116,7 +117,7 @@ const components = {
             post.categories && post.categories.length > 0 && (
               <div class="flex gap-2">
                 {post.categories.map((category: any) => (
-                  <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                  <span class="px-2 py-1 rounded text-xs" style="background-color: var(--color-accent-bg); color: var(--color-text)">
                     {category.title}
                   </span>
                 ))}
@@ -127,15 +128,15 @@ const components = {
 
         {
           post.external_link && (
-            <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p class=" mb-2">
+            <div class="mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200 dark:bg-blue-900/40 dark:border-blue-500/20">
+              <p class="mb-2" style="color: var(--color-text)">
                 This post was originally published externally.
               </p>
               <a
                 href={post.external_link}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                class="font-medium text-sm text-blue-500 cursor-after-effect"
               >
                 Read the original article &rarr;
               </a>
@@ -165,12 +166,12 @@ const components = {
         }
         {
           !post.body && post.description && (
-            <p class="text-gray-700 leading-relaxed">{post.description}</p>
+            <p class="leading-relaxed" style="color: var(--color-text-muted)">{post.description}</p>
           )
         }
         {
           !post.body && !post.description && (
-            <p class="text-gray-500 italic">
+            <p class="italic" style="color: var(--color-text-muted)">
               No content available for this post.
             </p>
           )
@@ -179,7 +180,7 @@ const components = {
     </article>
 
     <!-- Navigation footer -->
-    <div class="mt-12 pt-8 border-t border-gray-200">
+    <div class="mt-12 pt-8" style="border-top: 1px solid var(--color-border)">
       <a href="/blog" class="text-sm cursor-after-effect">&larr; Back to blog</a
       >
     </div>

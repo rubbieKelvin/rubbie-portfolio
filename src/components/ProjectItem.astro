@@ -23,24 +23,28 @@ const imageUrl = () => {
   href={url}
   target="_blank"
   rel="noopener noreferrer"
-  class="flex gap-4 border border-gray-300 hover:border-gray-500 rounded-lg overflow-hidden group/project-item flex-col h-[160px]"
+  class="flex gap-4 rounded-lg overflow-hidden group/project-item flex-col h-[160px]"
+  style="border: 1px solid var(--color-border); transition: border-color 0.2s ease"
+  onmouseover="this.style.borderColor='var(--color-accent)'"
+  onmouseout="this.style.borderColor='var(--color-border)'"
 >
   <div class="flex flex-col gap-2 p-4 flex-grow">
-    <h2 class="text-lg">
+    <h2 class="text-lg" style="color: var(--color-text)">
       <span>{name}</span>
       <span
-        class="animate-blink text-gray-500 group-hover/project-item:inline hidden"
+        class="animate-blink group-hover/project-item:inline hidden"
+        style="color: var(--color-text-muted)"
       >
         ▋
       </span>
     </h2>
-    <p class="w-full line-clamp-2 text-sm flex-grow">{description}</p>
+    <p class="w-full line-clamp-2 text-sm flex-grow text-text-muted">{description}</p>
     <div class="flex gap-1 items-center">
       {
         categories.map((category, index) => (
           <>
-            <span class="text-xs text-gray-500">{category.title}</span>
-            {index < categories.length - 1 && <span>&middot;</span>}
+            <span class="text-xs text-text-muted">{category.title}</span>
+            {index < categories.length - 1 && <span class="text-text-muted">&middot;</span>}
           </>
         ))
       }

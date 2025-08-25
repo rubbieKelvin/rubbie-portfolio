@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 html,
 body {
@@ -7,11 +8,22 @@ body {
 
 body {
   @apply antialiased font-display;
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }
 
 @theme {
   --font-display: "Google Sans Code", "monospace";
   --animate-blink: blink 1s step-end infinite;
+
+  /* Color scheme variables */
+  --color-bg: light-dark(white, #0a0a0f);
+  --color-bg-nav: light-dark(white, #0a0a0f);
+  --color-text: light-dark(black, #e2e8f0);
+  --color-text-muted: light-dark(#6b7280, #bdbdbd);
+  --color-accent: light-dark(#fbbf24, #fcd34d);
+  --color-accent-bg: light-dark(#fef3c7, #1e1b3a);
+  --color-border: light-dark(#d1d5db, #2d3748);
 
   @keyframes blink {
     0%,
@@ -29,20 +41,23 @@ body {
   font-optical-sizing: auto;
 }
 
-a.cursor-underline-effect {
+.cursor-underline-effect {
   position: relative;
+  color: var(--color-text);
 }
 
-a.cursor-underline-effect:hover::before {
+.cursor-underline-effect:hover::before {
   content: "⸺";
   position: absolute;
   top: 10px;
   animation: var(--animate-blink);
+  color: var(--color-accent);
 }
 
-a.cursor-after-effect:hover::after {
+.cursor-after-effect:hover::after {
   content: "_";
   animation: var(--animate-blink);
+  color: var(--color-accent);
 }
 
 /* Slanted image edge effect */
@@ -85,24 +100,35 @@ a.cursor-after-effect:hover::after {
 div.prose {
   @apply space-y-4;
 
+  a {
+    @apply text-blue-500 underline;
+  }
+
   p {
-    @apply text-sm text-gray-700;
+    @apply text-sm;
+    color: var(--color-text-muted);
   }
 
   h1 {
     @apply text-3xl;
+    color: var(--color-text);
   }
 
   h2 {
     @apply text-2xl;
+    color: var(--color-text);
   }
 
   h3 {
     @apply text-xl;
+    color: var(--color-text);
   }
 
   blockquote {
-    @apply border-l-4 border-yellow-400 pl-4 bg-yellow-100 text-yellow-700;
+    @apply border-l-4 pl-4;
+    border-color: var(--color-accent);
+    background-color: var(--color-accent-bg);
+    color: var(--color-text);
   }
 
   ul {
@@ -114,6 +140,7 @@ div.prose {
   }
 
   li {
-    @apply text-sm text-gray-700;
+    @apply text-sm;
+    color: var(--color-text-muted);
   }
 }

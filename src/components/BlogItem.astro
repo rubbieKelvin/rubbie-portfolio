@@ -42,7 +42,10 @@ const isExternal = !!external_link;
 
 <a
   href={blogUrl}
-  class="flex flex-col h-48 border border-gray-200 rounded-lg group/blog-item hover:border-gray-500 transition-all"
+  class="flex flex-col h-48 rounded-lg group/blog-item"
+  style="border: 1px solid var(--color-border); transition: border-color 0.2s ease"
+  onmouseover="this.style.borderColor='var(--color-accent)'"
+  onmouseout="this.style.borderColor='var(--color-border)'"
 >
   <!-- <img
     src={imageUrl()}
@@ -50,22 +53,22 @@ const isExternal = !!external_link;
     class="w-full h-10 object-cover rounded-t-lg mb-4"
   /> -->
 
-  <h2 class="text-xl text-gray-900 leading-tight px-4 line-clamp-2 pt-4">
+  <h2 class="text-xl leading-tight px-4 line-clamp-2 pt-4" style="color: var(--color-text)">
     {title}
   </h2>
 
-  <p class="leading-relaxed mb-4 px-4 line-clamp-2">{description}</p>
+  <p class="leading-relaxed mb-4 px-4 line-clamp-2" style="color: var(--color-text-muted)">{description}</p>
 
   <!-- short content -->
-  <p class="text-gray-600 leading-relaxed mb-4 text-sm px-4 flex-grow line-clamp-3">
+  <p class="leading-relaxed mb-4 text-sm px-4 flex-grow line-clamp-3" style="color: var(--color-text-muted)">
     {short_content}
   </p>
 
   <div class="flex items-center justify-between gap-2 px-4 pb-4">
-    <p class="text-xs">{formatDate(publishedAt)}</p>
+    <p class="text-xs" style="color: var(--color-text-muted)">{formatDate(publishedAt)}</p>
     {
       isExternal && (
-        <span class="text-xs border border-gray-300 text-gray-500 bg-gray-100 px-1 rounded flex-shrink-0">
+        <span class="text-xs px-1 rounded flex-shrink-0" style="border: 1px solid var(--color-border); color: var(--color-text-muted); background-color: var(--color-accent-bg)">
           ext
         </span>
       )

@@ -24,7 +24,7 @@ const intro = await sanityClient.fetch<SanityDocument>(INTRO_QUERY);
     <div class="flex flex-col gap-4 flex-grow justify-center">
       <h2 class="text-sm">{intro.subtitle}</h2>
       <h1 class="text-7xl">{intro.title}</h1>
-      <div class="2xl:max-w-[70%] xl:max-w-[80%] lg:max-w-[90%] text-gray-700">
+      <div class="2xl:max-w-[70%] xl:max-w-[80%] lg:max-w-[90%]" style="color: var(--color-text-muted)">
         <PortableText value={intro.description} />
       </div>
       <div>

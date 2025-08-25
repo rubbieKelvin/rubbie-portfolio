@@ -1,0 +1,94 @@
+---
+// Theme toggle component with client-side JavaScript
+---
+
+<button
+  id="theme-toggle"
+  class="theme-toggle-btn"
+  aria-label="Toggle dark mode"
+  title="Toggle theme"
+>
+  <span class="theme-text light-text">&gt;dark</span>
+  <span class="theme-text dark-text hidden">&gt;light</span>
+</button>
+
+<style>
+  .theme-toggle-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--color-text);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  .theme-toggle-btn:hover {
+    color: var(--color-accent);
+  }
+
+  .theme-toggle-btn:focus {
+    outline: none;
+  }
+
+  .theme-text {
+    display: inline;
+  }
+
+  /* Hide/show text based on theme */
+  :root:not([data-theme="dark"]) .dark-text,
+  :root[data-theme="dark"] .light-text {
+    display: none;
+  }
+
+  :root:not([data-theme="dark"]) .light-text,
+  :root[data-theme="dark"] .dark-text {
+    display: inline;
+  }
+</style>
+
+<script>
+  // Theme toggle functionality
+  function initializeTheme() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    
+    // Get stored theme or default to light
+    const storedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
+    
+    // Apply initial theme
+    applyTheme(initialTheme);
+    
+    // Toggle theme on button click
+    themeToggle?.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      applyTheme(newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  }
+  
+  function applyTheme(theme: string) {
+    const html = document.documentElement;
+    html.setAttribute('data-theme', theme);
+    html.style.colorScheme = theme;
+  }
+  
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeTheme);
+  } else {
+    initializeTheme();
+  }
+  
+  // Re-initialize on navigation (for SPA-like behavior)
+  document.addEventListener('astro:page-load', initializeTheme);
+</script>

@@ -1,4 +1,6 @@
 ---
+import ThemeToggle from "./ThemeToggle.astro";
+
 interface Props {
   className?: string;
 }
@@ -6,10 +8,11 @@ interface Props {
 const { className } = Astro.props as Props;
 ---
 
-<div class:list={[className, "h-12 flex items-center"]}>
+<div class:list={[className, "h-12 flex items-center justify-between"]}>
   <h1>
     <a href="/">rubbiekelvin@localhost</a>
-    <span class="text-gray-500">&nbsp;~ $</span>
+    <span style="color: var(--color-text-muted)">&nbsp;~ $</span>
     <span class="animate-blink">&nbsp;_</span>
   </h1>
+  <ThemeToggle />
 </div>
