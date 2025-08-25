@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-const timeLeft = ref(5);
+const timeLeft = ref(10);
 let timeoutHandler: NodeJS.Timeout | null = null;
 
 onMounted(() => {
