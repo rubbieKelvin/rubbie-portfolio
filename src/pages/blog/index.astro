@@ -3,6 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import { sanityClient } from "sanity:client";
 import BlogItem from "@/components/BlogItem.astro";
 import type { SanityDocument } from "@sanity/client";
+import AppFooter from "@/components/AppFooter.astro";
 
 // https://stackoverflow.com/questions/73962212/it-it-possible-to-truncate-text-in-a-groq-query
 const POSTS_QUERY = `
@@ -28,7 +29,7 @@ const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
 ---
 
 <Layout title="Blog">
-  <div class="px-5 lg:px-0 pb-10">
+  <div class="px-5 lg:px-0">
     <div class="pt-10 py-15">
       <h1 class="text-5xl">
         <span class="text-gray-300 animate-pulse">&gt;</span><span>Blog</span>
@@ -41,7 +42,7 @@ const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
 
     <!-- listing -->
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-6 mt-2"
+      class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-6 mt-2 pb-10"
     >
       {
         posts.map((post: SanityDocument) => {
@@ -59,5 +60,6 @@ const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
         })
       }
     </div>
+    <AppFooter />
   </div>
 </Layout>

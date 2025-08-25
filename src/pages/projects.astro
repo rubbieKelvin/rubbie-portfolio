@@ -3,6 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import { sanityClient } from "sanity:client";
 import ProjectItem from "@/components/ProjectItem.astro";
 import type { SanityDocument } from "@sanity/client";
+import AppFooter from "@/components/AppFooter.astro";
 
 const PROJECT_BY_CATEGORY = `
 *[_type == "category" && is_project_category == true] {
@@ -28,7 +29,7 @@ const projects_by_category =
 ---
 
 <Layout title="Projects">
-  <div class="px-5 lg:px-0 pb-10">
+  <div class="px-5 lg:px-0">
     <div class="pt-10 py-15">
       <h1 class="text-5xl">
         <span class="text-gray-300 animate-pulse">&gt;</span><span
@@ -42,7 +43,7 @@ const projects_by_category =
     </div>
 
     <!-- listing -->
-    <div class="flex flex-col gap-10">
+    <div class="flex flex-col gap-10 pb-10">
       {
         projects_by_category.map((category) => {
           return (
@@ -69,5 +70,6 @@ const projects_by_category =
         })
       }
     </div>
+    <AppFooter />
   </div>
 </Layout>
