@@ -18,14 +18,16 @@ const contactLinks = await sanityClient.fetch<SanityDocument[]>(LINKS_QUERY);
 type Props = {
   title?: string;
   description?: string;
+  image?: string;
   article?: {
     publishedAt: string;
   };
 };
 
-const { title, description, article } = Astro.props;
+const { title, description, image, article } = Astro.props;
 
 const pageTitle = title ? `${title} | Rubbie Kelvin` : "Rubbie Kelvin";
+const imageUrl = image ? image : "/rto.png";
 
 const navigationLinks = [
   {
@@ -80,8 +82,8 @@ const navigationLinks = [
       )
     }
     <meta property="og:url" content={Astro.url.toString()} />
-    <meta property="og:image" content="/rto.png" />
-    <meta property="og:image:alt" content="Rubbie Kelvin" />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content={pageTitle} />
     <meta property="og:image:width" content="1042" />
     {
       article && (
