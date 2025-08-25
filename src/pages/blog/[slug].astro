@@ -6,6 +6,7 @@ import { PortableText } from "astro-portabletext";
 import { urlFor } from "@/lib/sanity";
 import BlockCode from "@/components/BlockCode.astro";
 import BlockImage from "@/components/BlockImage.astro";
+import AppFooter from "@/components/AppFooter.astro";
 
 export async function getStaticPaths() {
   const POSTS_QUERY = `
@@ -180,9 +181,10 @@ const components = {
     </article>
 
     <!-- Navigation footer -->
-    <div class="mt-12 pt-8" style="border-top: 1px solid var(--color-border)">
+    <div class="mt-12 pt-8 pb-4" style="border-top: 1px solid var(--color-border)">
       <a href="/blog" class="text-sm cursor-after-effect">&larr; Back to blog</a
       >
     </div>
+    <AppFooter />
   </div>
 </Layout>

@@ -94,6 +94,44 @@ const navigationLinks = [
         />
       )
     }
+    
+    <meta id="theme-color-meta" name="theme-color" content="white" />
+
+    <script>
+      function updateThemeColor() {
+        const html = document.documentElement;
+        const themeColorMeta = document.getElementById('theme-color-meta');
+        const currentTheme = html.getAttribute('data-theme') || 'light';
+        
+        // Set theme color based on current theme
+        const themeColor = currentTheme === 'dark' ? '#0a0a0f' : 'white';
+        themeColorMeta?.setAttribute('content', themeColor);
+      }
+      
+      // Update on page load
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateThemeColor);
+      } else {
+        updateThemeColor();
+      }
+      
+      // Update on theme changes
+      document.addEventListener('astro:page-load', updateThemeColor);
+      
+      // Watch for theme attribute changes
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+            updateThemeColor();
+          }
+        });
+      });
+      
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+      });
+    </script>
   </head>
 
   <body class="h-full flex flex-col max-h-full">
