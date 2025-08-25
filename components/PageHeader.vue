@@ -16,7 +16,7 @@
       <span class="">
         This site is outdated and has moved to
         <NuxtLink
-          to="www.rubbietheone.com"
+          to="https://www.rubbietheone.com"
           external
           class="underline text-blue-500!"
           >www.rubbietheone.com</NuxtLink
