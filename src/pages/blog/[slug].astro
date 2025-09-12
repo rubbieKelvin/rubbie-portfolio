@@ -93,7 +93,7 @@ const components = {
         >
           {
             post.publishedAt && (
-              <time datetime={post.publishedAt}>
+              <time datetime={post.publishedAt} title={post.publishedAt}>
                 {formatDate(post.publishedAt)}
               </time>
             )

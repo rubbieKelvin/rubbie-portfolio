@@ -20,7 +20,7 @@ body {
   --color-bg: light-dark(white, #0a0a0f);
   --color-bg-nav: light-dark(white, #0a0a0f);
   --color-text: light-dark(black, #e2e8f0);
-  --color-text-muted: light-dark(#6b7280, #bdbdbd);
+  --color-text-muted: light-dark(#323437, #bdbdbd);
   --color-accent: light-dark(#fbbf24, #fcd34d);
   --color-accent-bg: light-dark(#fef3c7, #1e1b3a);
   --color-border: light-dark(#d1d5db, #2d3748);
