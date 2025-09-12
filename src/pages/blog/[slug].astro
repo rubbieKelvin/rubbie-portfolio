@@ -72,7 +72,12 @@ const components = {
 };
 ---
 
-<Layout title={post.title} image={imageUrl ?? undefined}>
+<Layout 
+  title={post.title} 
+  description={post.description}
+  image={imageUrl ?? undefined}
+  article={post.publishedAt ? { publishedAt: post.publishedAt } : undefined}
+>
   <div class="px-5 lg:px-0 pb-10">
     <!-- Back to blog -->
     <div class="py-5">
