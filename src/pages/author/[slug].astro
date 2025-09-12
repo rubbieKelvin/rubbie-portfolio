@@ -1,0 +1,178 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { sanityClient } from "sanity:client";
+import type { SanityDocument } from "@sanity/client";
+import { PortableText } from "astro-portabletext";
+import { urlFor } from "@/lib/sanity";
+import BlogItem from "@/components/BlogItem.astro";
+import AppFooter from "@/components/AppFooter.astro";
+
+export async function getStaticPaths() {
+  const AUTHORS_QUERY = `
+  *[_type == "author"] {
+    "slug": slug.current,
+    _id
+  }
+  `;
+
+  const authors = await sanityClient.fetch<SanityDocument[]>(AUTHORS_QUERY);
+
+  return authors.map((author) => ({
+    params: { slug: author.slug },
+    props: { authorId: author._id },
+  }));
+}
+
+const { slug } = Astro.params;
+const { authorId } = Astro.props;
+
+// Fetch author details
+const AUTHOR_QUERY = `
+*[_type == "author" && _id == $authorId][0] {
+  _id,
+  name,
+  slug,
+  image,
+  bio,
+  links[] -> {
+    title,
+    url
+  }
+}
+`;
+
+// Fetch posts by this author
+const AUTHOR_POSTS_QUERY = `
+*[_type == "post" && author._ref == $authorId] | order(publishedAt desc) {
+  _id,
+  title,
+  slug,
+  mainImage,
+  publishedAt,
+  external_link,
+  description,
+  "short_content": pt::text(body)
+} {
+  ...,
+  "short_content": string::split(short_content, "")[0..100]
+}{
+  ...,
+  "short_content": array::join(short_content, "") + "..."
+}
+`;
+
+const author = await sanityClient.fetch<SanityDocument>(AUTHOR_QUERY, {
+  authorId,
+});
+const posts = await sanityClient.fetch<SanityDocument[]>(AUTHOR_POSTS_QUERY, {
+  authorId,
+});
+
+if (!author) {
+  return Astro.redirect("/404");
+}
+
+const authorImageUrl = author.image ? urlFor(author.image).url() : null;
+---
+
+<Layout title={`${author.name} - Author`} image={authorImageUrl ?? undefined}>
+  <div class="px-5 lg:px-0 pb-10 pt-10">
+    <!-- Author profile -->
+    <div class="mb-12">
+      <div class="flex flex-col md:flex-row gap-8 items-start">
+        <!-- Author image -->
+        {
+          authorImageUrl && (
+            <div class="flex-shrink-0 w-full md:w-auto">
+              <img
+                src={urlFor(author.image).width(200).height(200).url()}
+                alt={author.name}
+                class="rounded-md w-full md:w-48 md:h-48 md:rounded-full object-cover"
+              />
+            </div>
+          )
+        }
+
+        <!-- Author info -->
+        <div class="flex-grow">
+          <h1 class="text-4xl lg:text-5xl mb-4 leading-tight">
+            {author.name}
+          </h1>
+
+          <!-- Author bio -->
+          {
+            author.bio && (
+              <div class="prose prose-lg max-w-none mb-6">
+                <PortableText value={author.bio} />
+              </div>
+            )
+          }
+
+          <!-- Author links -->
+          {
+            author.links && author.links.length > 0 && (
+              <div class="flex flex-wrap gap-3">
+                {author.links.map((link: any) => (
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-sm cursor-underline-effect"
+                  >
+                    {link.title}
+                  </a>
+                ))}
+              </div>
+            )
+          }
+
+          <!-- Post count -->
+          <div class="mt-6">
+            <p class="text-sm" style="color: var(--color-text-muted)">
+              {posts.length}
+              {posts.length === 1 ? "post" : "posts"} published
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Author's posts -->
+    {
+      posts.length > 0 && (
+        <div>
+          <h2 class="text-2xl mb-6 md:hidden">Articles</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-6">
+            {posts.map((post: SanityDocument) => (
+              <BlogItem
+                title={post.title}
+                description={post.description}
+                short_content={post.short_content}
+                mainImage={post.mainImage}
+                publishedAt={post.publishedAt}
+                external_link={post.external_link}
+                slug={post.slug}
+              />
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    {
+      posts.length === 0 && (
+        <div class="text-center py-12">
+          <p style="color: var(--color-text-muted)">
+            {author.name} hasn't published any posts yet.
+          </p>
+        </div>
+      )
+    }
+
+    <!-- Navigation footer -->
+    <div class="mt-12 pt-8 pb-4">
+      <a href="/blog" class="text-sm cursor-after-effect">&larr; Back to blog</a
+      >
+    </div>
+  </div>
+</Layout>

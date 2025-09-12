@@ -39,7 +39,8 @@ const POST_QUERY = `
   description,
   author -> {
     name,
-    image
+    image,
+    "slug": slug.current
   },
   categories[] -> {
     title
@@ -109,7 +110,19 @@ const components = {
                     class="w-6 h-6 rounded-full"
                   />
                 )}
-                <span>by {post.author.name}</span>
+                <span>by 
+                  {post.author.slug ? (
+                    <a 
+                      href={`/author/${post.author.slug}`}
+                      class="cursor-underline-effect"
+                      style="color: var(--color-text)"
+                    >
+                      {post.author.name}
+                    </a>
+                  ) : (
+                    <span>{post.author.name}</span>
+                  )}
+                </span>
               </div>
             )
           }
