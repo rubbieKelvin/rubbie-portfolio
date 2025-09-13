@@ -28,9 +28,9 @@ const intro = await sanityClient.fetch<SanityDocument>(INTRO_QUERY);
         <PortableText value={intro.description} />
       </div>
       <div>
-        <a href={intro.action_link.url} class="cursor-after-effect"
-          >{intro.action_text}</a
-        >
+        <a href={intro.action_link.url} class="cursor-after-effect">
+          {intro.action_text}
+        </a>
       </div>
     </div>
 
