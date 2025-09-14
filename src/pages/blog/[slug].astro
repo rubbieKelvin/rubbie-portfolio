@@ -65,8 +65,6 @@ const formatDate = (dateString: string) => {
 const imageUrl = post.mainImage ? urlFor(post.mainImage).url() : null;
 const ogImageUrl = post.mainImage ? urlFor(post.mainImage).width(960).height(540).url() : null;
 
-console.log(ogImageUrl);
-
 const components = {
   type: {
     code: BlockCode,
