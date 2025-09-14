@@ -76,7 +76,9 @@ if (!author) {
 }
 
 const authorImageUrl = author.image ? urlFor(author.image).url() : null;
-const ogImageUrl = author.image ? urlFor(author.image).width(960).height(540).url() : null;
+const ogImageUrl = author.image
+  ? urlFor(author.image).width(960).height(540).quality(80).url()
+  : null;
 ---
 
 <Layout title={`${author.name} - Author`} image={ogImageUrl ?? undefined}>

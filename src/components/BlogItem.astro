@@ -25,7 +25,7 @@ const {
 
 const imageUrl = () => {
   if (!mainImage) return null;
-  return urlFor(mainImage).url();
+  return urlFor(mainImage).quality(80).height(540).width(960).url();
 };
 
 const isArtOnly = is_art_only && !!mainImage;

@@ -63,7 +63,9 @@ const formatDate = (dateString: string) => {
 };
 
 const imageUrl = post.mainImage ? urlFor(post.mainImage).url() : null;
-const ogImageUrl = post.mainImage ? urlFor(post.mainImage).width(960).height(540).url() : null;
+const ogImageUrl = post.mainImage
+  ? urlFor(post.mainImage).width(960).height(540).quality(80).url()
+  : null;
 
 const components = {
   type: {
@@ -73,8 +75,8 @@ const components = {
 };
 ---
 
-<Layout 
-  title={post.title} 
+<Layout
+  title={post.title}
   description={post.description}
   image={ogImageUrl ?? undefined}
   article={post.publishedAt ? { publishedAt: post.publishedAt } : undefined}
@@ -116,9 +118,10 @@ const components = {
                     class="w-6 h-6 rounded-full"
                   />
                 )}
-                <span>by 
+                <span>
+                  by
                   {post.author.slug ? (
-                    <a 
+                    <a
                       href={`/author/${post.author.slug}`}
                       class="cursor-underline-effect"
                       style="color: var(--color-text)"
@@ -137,7 +140,10 @@ const components = {
             post.categories && post.categories.length > 0 && (
               <div class="flex gap-2">
                 {post.categories.map((category: any) => (
-                  <span class="px-2 py-1 rounded text-xs" style="background-color: var(--color-accent-bg); color: var(--color-text)">
+                  <span
+                    class="px-2 py-1 rounded text-xs"
+                    style="background-color: var(--color-accent-bg); color: var(--color-text)"
+                  >
                     {category.title}
                   </span>
                 ))}
@@ -186,7 +192,9 @@ const components = {
         }
         {
           !post.body && post.description && (
-            <p class="leading-relaxed" style="color: var(--color-text-muted)">{post.description}</p>
+            <p class="leading-relaxed" style="color: var(--color-text-muted)">
+              {post.description}
+            </p>
           )
         }
         {
@@ -200,7 +208,10 @@ const components = {
     </article>
 
     <!-- Navigation footer -->
-    <div class="mt-12 pt-8 pb-4" style="border-top: 1px solid var(--color-border)">
+    <div
+      class="mt-12 pt-8 pb-4"
+      style="border-top: 1px solid var(--color-border)"
+    >
       <a href="/blog" class="text-sm cursor-after-effect">&larr; Back to blog</a
       >
     </div>

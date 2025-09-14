@@ -13,10 +13,10 @@ type Props = {
 
 const { name, description, image, url, categories }: Props = Astro.props;
 
-const imageUrl = () => {
-  if (!image) return null;
-  return urlFor(image).url();
-};
+// const imageUrl = () => {
+//   if (!image) return null;
+//   return urlFor(image).url();
+// };
 ---
 
 <a
