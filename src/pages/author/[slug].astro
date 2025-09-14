@@ -51,6 +51,9 @@ const AUTHOR_POSTS_QUERY = `
   publishedAt,
   external_link,
   description,
+  categories[] -> {
+    title
+  },
   "short_content": pt::text(body)
 } {
   ...,
@@ -152,6 +155,11 @@ const authorImageUrl = author.image ? urlFor(author.image).url() : null;
                 publishedAt={post.publishedAt}
                 external_link={post.external_link}
                 slug={post.slug}
+                is_art_only={
+                  post.categories &&
+                  post.categories.length === 1 &&
+                  post.categories[0].title.toLowerCase() === "art"
+                }
               />
             ))}
           </div>

@@ -9,6 +9,7 @@ type Props = {
   external_link?: string;
   slug: { current: string };
   short_content: string;
+  is_art_only: boolean;
 };
 
 const {
@@ -19,12 +20,15 @@ const {
   external_link,
   slug,
   short_content,
+  is_art_only,
 }: Props = Astro.props;
 
 const imageUrl = () => {
   if (!mainImage) return null;
   return urlFor(mainImage).url();
 };
+
+const isArtOnly = is_art_only && !!mainImage;
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("en-US", {
@@ -42,33 +46,61 @@ const isExternal = !!external_link;
 
 <a
   href={blogUrl}
-  class="flex flex-col h-48 rounded-lg group/blog-item"
+  class="flex flex-col h-48 rounded-lg group/blog-item relative overflow-clip"
   style="border: 1px solid var(--color-border); transition: border-color 0.2s ease"
   onmouseover="this.style.borderColor='var(--color-accent)'"
   onmouseout="this.style.borderColor='var(--color-border)'"
 >
-  <!-- <img
-    src={imageUrl()}
-    alt={title}
-    class="w-full h-10 object-cover rounded-t-lg mb-4"
-  /> -->
+  {
+    isArtOnly && (
+      <img
+        src={imageUrl()}
+        alt={title}
+        class="w-full h-full object-cover rounded-t-lg mb-4 absolute top-0 left-0 z-[-2]"
+      />
+      <div class="absolute top-0 left-0 w-full h-full bg-black/30 z-[-1]"/>
+      <div class="flex-grow"/>
+    )
+  }
 
-  <h2 class="text-xl leading-tight px-4 line-clamp-2 pt-4" style="color: var(--color-text)">
+  <h2
+    class={`text-xl leading-tight px-4 line-clamp-2 pt-4 ${isArtOnly ? "text-white" : "text-text"}`}
+  >
     {title}
   </h2>
 
-  <p class="leading-relaxed mb-4 px-4 line-clamp-2" style="color: var(--color-text-muted)">{description}</p>
+  {
+    description && !isArtOnly && (
+      <p
+        class="leading-relaxed mb-4 px-4 line-clamp-2 text-text-muted"
+      >
+        {description}
+      </p>
+    )
+  }
 
   <!-- short content -->
-  <p class="leading-relaxed mb-4 text-sm px-4 flex-grow line-clamp-3" style="color: var(--color-text-muted)">
-    {short_content}
-  </p>
+  {
+    !isArtOnly && (
+      <p
+        class="leading-relaxed mb-4 text-sm px-4 flex-grow line-clamp-3"
+        style="color: var(--color-text-muted)"
+      >
+        {short_content}
+      </p>
+    )
+  }
 
   <div class="flex items-center justify-between gap-2 px-4 pb-4">
-    <p class="text-xs" style="color: var(--color-text-muted)">{formatDate(publishedAt)}</p>
+    <p class={`text-xs ${isArtOnly ? "text-white" : "text-text-muted"}`}>
+      {formatDate(publishedAt)}
+    </p>
     {
       isExternal && (
-        <span class="text-xs px-1 rounded flex-shrink-0" style="border: 1px solid var(--color-border); color: var(--color-text-muted); background-color: var(--color-accent-bg)">
+        <span
+          class="text-xs px-1 rounded flex-shrink-0"
+          style="border: 1px solid var(--color-border); color: var(--color-text-muted); background-color: var(--color-accent-bg)"
+        >
           ext
         </span>
       )
