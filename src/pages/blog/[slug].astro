@@ -7,6 +7,7 @@ import { urlFor } from "@/lib/sanity";
 import BlockCode from "@/components/BlockCode.astro";
 import BlockImage from "@/components/BlockImage.astro";
 import AppFooter from "@/components/AppFooter.astro";
+import Image from "@/components/Image.astro";
 
 export async function getStaticPaths() {
   const POSTS_QUERY = `
@@ -173,7 +174,7 @@ const components = {
         {
           imageUrl && (
             <div class="mb-8">
-              <img
+              <Image
                 src={imageUrl}
                 alt={post.title}
                 class="w-full h-64 lg:h-96 object-cover rounded-lg"
