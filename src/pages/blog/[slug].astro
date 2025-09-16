@@ -91,7 +91,7 @@ const components = {
     </div>
 
     <!-- Article header -->
-    <article class="max-w-4xl">
+    <article class="max-w-3xl">
       <header class="mb-8">
         <h1 class="text-4xl lg:text-5xl mb-4 leading-tight">
           {post.title}
@@ -142,8 +142,7 @@ const components = {
               <div class="flex gap-2">
                 {post.categories.map((category: any) => (
                   <span
-                    class="px-2 py-1 rounded text-xs"
-                    style="background-color: var(--color-accent-bg); color: var(--color-text)"
+                    class="px-2 py-1 rounded text-xs bg-accent-bg text-text"
                   >
                     {category.title}
                   </span>
@@ -156,7 +155,7 @@ const components = {
         {
           post.external_link && (
             <div class="mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200 dark:bg-blue-900/40 dark:border-blue-500/20">
-              <p class="mb-2" style="color: var(--color-text)">
+              <p class="mb-2 text-text">
                 This post was originally published externally.
               </p>
               <a
@@ -193,14 +192,14 @@ const components = {
         }
         {
           !post.body && post.description && (
-            <p class="leading-relaxed" style="color: var(--color-text-muted)">
+            <p class="leading-relaxed text-text-muted">
               {post.description}
             </p>
           )
         }
         {
           !post.body && !post.description && (
-            <p class="italic" style="color: var(--color-text-muted)">
+            <p class="italic text-text-muted">
               No content available for this post.
             </p>
           )

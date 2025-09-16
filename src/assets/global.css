@@ -105,7 +105,6 @@ div.prose {
   }
 
   p {
-    @apply text-sm;
     color: var(--color-text-muted);
   }
 
