@@ -8,18 +8,17 @@ if (!gaMeasurementId) {
 {
   gaMeasurementId && (
     <>
-      {/* Partytown proxy + GA4 script */}
       <script
         async
         src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
       ></script>
-
       <script set:html={`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
-
-        gtag("js", new Date());
-        gtag("config", "${gaMeasurementId}");
+        gtag('js', new Date());
+        gtag('config', '${gaMeasurementId}', {
+          send_page_view: true
+        });
       `}></script>
     </>
   )
