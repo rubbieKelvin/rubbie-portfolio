@@ -16,10 +16,7 @@ if (!gaMeasurementId) {
 
       <script set:html={`
         window.dataLayer = window.dataLayer || [];
-
-        function gtag(...args){
-          'dataLayer' in window && Array.isArray(window.dataLayer) && window.dataLayer?.push(args);
-        }
+        function gtag(){dataLayer.push(arguments);}
 
         gtag("js", new Date());
         gtag("config", "${gaMeasurementId}");
