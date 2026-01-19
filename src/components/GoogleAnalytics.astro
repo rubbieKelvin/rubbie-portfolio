@@ -15,17 +15,14 @@ if (!gaMeasurementId) {
       ></script>
 
       <script>
-        if ('dataLayer' in window) {
-          window.dataLayer = window.dataLayer || [];
+        (window as any).dataLayer = (window as any).dataLayer || [];
 
-          function gtag(...args: any[]){
-            'dataLayer' in window && Array.isArray(window.dataLayer) && window.dataLayer?.push(args);
-          }
-
-          gtag("js", new Date());
-          gtag("config", "{gaMeasurementId}");
+        function gtag(...args: any[]){
+          'dataLayer' in window && Array.isArray(window.dataLayer) && window.dataLayer?.push(args);
         }
-        
+
+        gtag("js", new Date());
+        gtag("config", "{gaMeasurementId}");
       </script>
     </>
   )
