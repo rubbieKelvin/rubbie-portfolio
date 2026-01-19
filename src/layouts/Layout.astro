@@ -28,7 +28,8 @@ type Props = {
 const { title, description, image, article } = Astro.props;
 
 const pageTitle = title ? `${title} | Rubbie Kelvin` : "Rubbie Kelvin";
-const imageUrl = image ? image : `${Astro.url.origin}/rto.png`;
+const siteUrl = Astro.site || Astro.url.origin;
+const imageUrl = image ? image : `${siteUrl}/rto.png`;
 
 const navigationLinks = [
   {
@@ -83,7 +84,7 @@ const navigationLinks = [
         <meta property="og:type" content="website" />
       )
     }
-    <meta property="og:url" content={Astro.url.toString()} />
+    <meta property="og:url" content={`${siteUrl}${Astro.url.pathname}`} />
     <meta property="og:image" content={imageUrl} />
     <meta property="og:image:alt" content={pageTitle} />
     <meta property="og:image:width" content="1042" />
