@@ -28,7 +28,7 @@ type Props = {
 const { title, description, image, article } = Astro.props;
 
 const pageTitle = title ? `${title} | Rubbie Kelvin` : "Rubbie Kelvin";
-const siteUrl = Astro.site || Astro.url.origin;
+const siteUrl = (Astro.site?.toString() || Astro.url.origin).replace(/\/$/, "");
 const imageUrl = image ? image : `${siteUrl}/rto.png`;
 
 const navigationLinks = [
