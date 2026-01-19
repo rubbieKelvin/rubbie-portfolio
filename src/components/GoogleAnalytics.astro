@@ -1,0 +1,27 @@
+---
+const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+if (!gaMeasurementId) {
+  console.warn("Missing PUBLIC_GA_MEASUREMENT_ID → Google Analytics disabled");
+}
+---
+
+{
+  gaMeasurementId && (
+    <>
+      {/* Partytown proxy + GA4 script */}
+      <script
+        type="text/partytown"
+        src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+      ></script>
+
+      <script type="text/partytown">
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{gaMeasurementId}');
+        // Optional: disable page view on SPA navigation (recommended with View Transitions)
+        // gtag('config', '{gaMeasurementId}', { send_page_view: false });
+      </script>
+    </>
+  )
+}
