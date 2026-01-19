@@ -10,17 +10,22 @@ if (!gaMeasurementId) {
     <>
       {/* Partytown proxy + GA4 script */}
       <script
-        type="text/partytown"
+        async
         src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
       ></script>
 
-      <script type="text/partytown">
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '{gaMeasurementId}');
-        // Optional: disable page view on SPA navigation (recommended with View Transitions)
-        // gtag('config', '{gaMeasurementId}', { send_page_view: false });
+      <script>
+        if ('dataLayer' in window) {
+          window.dataLayer = window.dataLayer || [];
+
+          function gtag(...args: any[]){
+            'dataLayer' in window && Array.isArray(window.dataLayer) && window.dataLayer?.push(args);
+          }
+
+          gtag("js", new Date());
+          gtag("config", "{gaMeasurementId}");
+        }
+        
       </script>
     </>
   )

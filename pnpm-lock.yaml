@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@astrojs/partytown':
-        specifier: ^2.1.4
-        version: 2.1.4
       '@astrojs/rss':
         specifier: ^4.0.12
         version: 4.0.12
@@ -116,9 +113,6 @@ packages:
 
   '@astrojs/markdown-remark@6.3.6':
     resolution: {integrity: sha512-bwylYktCTsLMVoCOEHbn2GSUA3c5KT/qilekBKA3CBng0bo1TYjNZPr761vxumRk9kJGqTOtU+fgCAp5Vwokug==}
-
-  '@astrojs/partytown@2.1.4':
-    resolution: {integrity: sha512-loUrAu0cGYFDC6dHVRiomdsBJ41VjDYXPA+B3Br51V5hENFgDSOLju86OIj1TvBACcsB22UQV7BlppODDG5gig==}
 
   '@astrojs/prism@3.3.0':
     resolution: {integrity: sha512-q8VwfU/fDZNoDOf+r7jUnMC2//H2l0TuQ6FkGJL8vD8nw/q5KiL3DS1KKBI3QhI9UQhpJ5dc7AtqfbXWuOgLCQ==}
@@ -1393,11 +1387,6 @@ packages:
   '@portabletext/types@2.0.15':
     resolution: {integrity: sha512-2e6i2gSQsrA/5OL5Gm4/9bxB9MNO73Fa47zj+0mT93xkoQUCGCWX5fZh1YBJ86hszaRYlqvqG08oULxvvPPp/Q==}
     engines: {node: ^14.13.1 || >=16.0.0 || >=18.0.0}
-
-  '@qwik.dev/partytown@0.11.2':
-    resolution: {integrity: sha512-795y49CqBiKiwKAD+QBZlzlqEK275hVcazZ7wBPSfgC23L+vWuA7PJmMpgxojOucZHzYi5rAAQ+IP1I3BKVZxw==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
 
   '@rexxars/react-json-inspector@9.0.1':
     resolution: {integrity: sha512-4uZ4RnrVoOGOShIKKcPoF+qhwDCZJsPPqyoEoW/8HRdzNknN9Q2yhlbEgTX1lMZunF1fv7iHzAs+n1vgIgfg/g==}
@@ -2753,10 +2742,6 @@ packages:
   dot-prop@5.3.0:
     resolution: {integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==}
     engines: {node: '>=8'}
-
-  dotenv@16.6.1:
-    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
-    engines: {node: '>=12'}
 
   dset@3.1.4:
     resolution: {integrity: sha512-2QF/g9/zTaPDc3BjNcVTGoBbXBgYfMTTceLaYcFJ/W9kggFUkhxD/hMEeuLKbugyef9SqAx8cpgwlIP/jinUTA==}
@@ -5869,11 +5854,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/partytown@2.1.4':
-    dependencies:
-      '@qwik.dev/partytown': 0.11.2
-      mrmime: 2.0.1
-
   '@astrojs/prism@3.3.0':
     dependencies:
       prismjs: 1.30.0
@@ -7280,10 +7260,6 @@ snapshots:
   '@portabletext/types@2.0.14': {}
 
   '@portabletext/types@2.0.15': {}
-
-  '@qwik.dev/partytown@0.11.2':
-    dependencies:
-      dotenv: 16.6.1
 
   '@rexxars/react-json-inspector@9.0.1(react@19.1.1)':
     dependencies:
@@ -8949,8 +8925,6 @@ snapshots:
   dot-prop@5.3.0:
     dependencies:
       is-obj: 2.0.0
-
-  dotenv@16.6.1: {}
 
   dset@3.1.4: {}
 

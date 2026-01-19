@@ -9,7 +9,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/partytown": "^2.1.4",
     "@astrojs/rss": "^4.0.12",
     "@portabletext/to-html": "^3.0.0",
     "@sanity/astro": "^3.2.10",

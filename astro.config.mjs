@@ -4,8 +4,6 @@ import tailwindcss from "@tailwindcss/vite";
 
 import sanity from "@sanity/astro";
 
-import partytown from "@astrojs/partytown";
-
 // https://astro.build/config
 export default defineConfig({
   vite: {
@@ -28,12 +26,6 @@ export default defineConfig({
       projectId: "16odtdyl",
       dataset: "production",
       useCdn: false,
-    }),
-    partytown({
-      config: {
-        forward: ["dataLayer.push"],
-        debug: import.meta.env.DEV,
-      },
     }),
   ],
 });
