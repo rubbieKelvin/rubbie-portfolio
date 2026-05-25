@@ -2,8 +2,6 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 
-import sanity from "@sanity/astro";
-
 // https://astro.build/config
 export default defineConfig({
   site: "https://rubbietheone.com",
@@ -22,11 +20,4 @@ export default defineConfig({
       tailwindcss(),
     ],
   },
-  integrations: [
-    sanity({
-      projectId: "16odtdyl",
-      dataset: "production",
-      useCdn: false,
-    }),
-  ],
 });

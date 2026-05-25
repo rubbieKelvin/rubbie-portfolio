@@ -1,0 +1,21 @@
+---
+title: Rubbie Kelvin
+publishedAt: 2025-03-20
+description: Creating the character; rubbie.
+author: rubbie-kelvin
+categories:
+  - art
+mainImage: /images/5eadc03f9c22b5be8e90049744a265fc0683d093-1042x575.png
+---
+
+Rubbie Kelvin is a tall and charismatic cartoon character who exudes confidence and coolness. With his stylish demeanour, Rubbie stands out in a crowd with his well-groomed black hair and a pair of sleek, dark sunglasses that add a touch of mystery to his appearance. His African heritage is reflected in his rich skin tone, making him a distinctive and dynamic character.
+
+Rubbie is often seen donning fashionable shorts paired with a trendy hoodie, showcasing his keen sense of style. He accessorises with a pair of oversized headphones that not only highlight his preference for immersive sound but also serve as a statement piece, reflecting his bold personality.
+
+As a computer science graduate and a skilled programmer, Rubbie works at a cutting-edge tech company in California. His workspace is adorned with sketches and doodles, evidence of his love for art. Rubbie has a knack for drawing, and his artistic talent adds a touch of creativity to his otherwise tech-focused life.
+
+Coffee is Rubbie's elixir, and he is often found with a cup in hand, whether he's coding at work or taking a break to enjoy a quiet moment. His affinity for coffee shops and the rich aroma of freshly brewed coffee adds a warm and inviting element to his character.
+
+Rubbie's preference for a quiet and focused life is reflected in his minimal presence on social media. He values his privacy and finds solace in the world of programming and art. Despite his reserved nature, Rubbie enjoys the company of tall girls, finding a unique connection between their height and the depth of his artistic inspiration.
+
+In the vibrant landscape of Lagos, Rubbie Kelvin stands out as a tech-savvy artist who seamlessly blends the worlds of technology, creativity, and a laid-back lifestyle, creating a character that is both intriguing and relatable.

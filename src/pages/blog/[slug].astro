@@ -1,59 +1,24 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { sanityClient } from "sanity:client";
-import type { SanityDocument } from "@sanity/client";
-import { PortableText } from "astro-portabletext";
-import { urlFor } from "@/lib/sanity";
-import BlockCode from "@/components/BlockCode.astro";
-import BlockImage from "@/components/BlockImage.astro";
+import { getCollection, getEntry } from "astro:content";
 import AppFooter from "@/components/AppFooter.astro";
 import Image from "@/components/Image.astro";
 
 export async function getStaticPaths() {
-  const POSTS_QUERY = `
-  *[_type == "post"] {
-    "slug": slug.current,
-    _id
-  }
-  `;
-
-  const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
-
+  const posts = await getCollection("posts");
   return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { postId: post._id },
+    params: { slug: post.id.replace(/\.md$/, "") },
+    props: { post },
   }));
 }
 
-const { slug } = Astro.params;
-const { postId } = Astro.props;
-
-const POST_QUERY = `
-*[_type == "post" && _id == $postId][0] {
-  _id,
-  title,
-  slug,
-  body,
-  mainImage,
-  publishedAt,
-  external_link,
-  description,
-  author -> {
-    name,
-    image,
-    "slug": slug.current
-  },
-  categories[] -> {
-    title
-  }
-}
-`;
-
-const post = await sanityClient.fetch<SanityDocument>(POST_QUERY, { postId });
+const { post } = Astro.props as { post: any };
 
 if (!post) {
   return Astro.redirect("/404");
 }
+
+const { Content } = await post.render();
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("en-US", {
@@ -63,24 +28,18 @@ const formatDate = (dateString: string) => {
   });
 };
 
-const imageUrl = post.mainImage ? urlFor(post.mainImage).url() : null;
-const ogImageUrl = post.mainImage
-  ? urlFor(post.mainImage).width(960).height(540).quality(80).url()
-  : null;
+const { title, description, publishedAt, mainImage, external_link, categories, author: authorSlug } = post.data;
 
-const components = {
-  type: {
-    code: BlockCode,
-    image: BlockImage,
-  },
-};
+const author = authorSlug ? await getEntry("authors", authorSlug) : null;
+
+const ogImageUrl = mainImage || undefined;
 ---
 
 <Layout
-  title={post.title}
-  description={post.description}
-  image={ogImageUrl ?? undefined}
-  article={post.publishedAt ? { publishedAt: post.publishedAt } : undefined}
+  title={title}
+  description={description ?? undefined}
+  image={ogImageUrl}
+  article={publishedAt ? { publishedAt: publishedAt.toISOString() } : undefined}
 >
   <div class="px-5 lg:px-0 pb-10">
     <!-- Back to blog -->
@@ -94,7 +53,7 @@ const components = {
     <article class="md:max-w-3xl">
       <header class="mb-8">
         <h1 class="text-4xl lg:text-5xl mb-4 leading-tight">
-          {post.title}
+          {title}
         </h1>
 
         <div
@@ -102,49 +61,45 @@ const components = {
           style="color: var(--color-text-muted)"
         >
           {
-            post.publishedAt && (
-              <time datetime={post.publishedAt} title={post.publishedAt}>
-                {formatDate(post.publishedAt)}
+            publishedAt && (
+              <time datetime={publishedAt.toISOString()} title={publishedAt.toISOString()}>
+                {formatDate(publishedAt.toISOString())}
               </time>
             )
           }
 
           {
-            post.author && (
+            author && (
               <div class="flex items-center gap-2">
-                {post.author.image && (
+                {author.data.image && (
                   <img
-                    src={urlFor(post.author.image).width(24).height(24).url()}
-                    alt={post.author.name}
+                    src={author.data.image}
+                    alt={author.data.name}
                     class="w-6 h-6 rounded-full"
                   />
                 )}
                 <span>
                   by
-                  {post.author.slug ? (
-                    <a
-                      href={`/author/${post.author.slug}`}
-                      class="cursor-underline-effect"
-                      style="color: var(--color-text)"
-                    >
-                      {post.author.name}
-                    </a>
-                  ) : (
-                    <span>{post.author.name}</span>
-                  )}
+                  <a
+                    href={`/author/${author.data.slug}`}
+                    class="cursor-underline-effect"
+                    style="color: var(--color-text)"
+                  >
+                    {author.data.name}
+                  </a>
                 </span>
               </div>
             )
           }
 
           {
-            post.categories && post.categories.length > 0 && (
+            categories && categories.length > 0 && (
               <div class="flex gap-2">
-                {post.categories.map((category: any) => (
+                {categories.map((category: string) => (
                   <span
                     class="px-2 py-1 rounded text-xs bg-accent-bg text-text"
                   >
-                    {category.title}
+                    {category}
                   </span>
                 ))}
               </div>
@@ -153,13 +108,13 @@ const components = {
         </div>
 
         {
-          post.external_link && (
+          external_link && (
             <div class="mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200 dark:bg-blue-900/40 dark:border-blue-500/20">
               <p class="mb-2 text-text">
                 This post was originally published externally.
               </p>
               <a
-                href={post.external_link}
+                href={external_link}
                 target="_blank"
                 rel="noopener noreferrer"
                 class="font-medium text-sm text-blue-500 cursor-after-effect"
@@ -171,11 +126,11 @@ const components = {
         }
 
         {
-          imageUrl && (
+          mainImage && (
             <div class="mb-8">
               <Image
-                src={imageUrl}
-                alt={post.title}
+                src={mainImage}
+                alt={title}
                 class="w-full h-64 lg:h-96 object-cover rounded-lg"
               />
             </div>
@@ -185,25 +140,7 @@ const components = {
 
       <!-- Article content -->
       <div class="prose prose-lg max-w-none">
-        {
-          post.body && (
-            <PortableText value={post.body} components={components} />
-          )
-        }
-        {
-          !post.body && post.description && (
-            <p class="leading-relaxed text-text-muted">
-              {post.description}
-            </p>
-          )
-        }
-        {
-          !post.body && !post.description && (
-            <p class="italic text-text-muted">
-              No content available for this post.
-            </p>
-          )
-        }
+        <Content />
       </div>
     </article>
 

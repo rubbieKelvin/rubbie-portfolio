@@ -1,0 +1,10 @@
+{
+  "title": "f69",
+  "description": "Manage feature flags, experiments, and remote configs",
+  "url": "https://f69.rubbietheone.com/",
+  "mainImage": "/images/d76483250f9bd52e201950ed5f41ae74ea78b644-1200x750.jpg",
+  "categories": [
+    "rust",
+    "platform-as-a-service"
+  ]
+}

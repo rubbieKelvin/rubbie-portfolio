@@ -1,0 +1,11 @@
+{
+  "title": "Progress",
+  "description": "A progress tracking cli app written in rust",
+  "url": "https://github.com/rubbieKelvin/progress",
+  "mainImage": null,
+  "categories": [
+    "utilities",
+    "rust",
+    "productivity-tools"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Fuck rust",
+  "description": "Simple implementation of a brain-fuck interpreter in rust",
+  "url": "https://github.com/rubbieKelvin/fuck-rust",
+  "mainImage": null,
+  "categories": [
+    "compilers-interpreters",
+    "rust"
+  ]
+}

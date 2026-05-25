@@ -1,14 +1,11 @@
 ---
-import { urlFor } from "@/lib/sanity";
-
 type Props = {
   title: string;
-  description: string;
-  mainImage: object | null;
+  description: string | null;
+  mainImage: string | null;
   publishedAt: string;
   external_link?: string;
-  slug: { current: string };
-  short_content: string;
+  slug: string;
   is_art_only: boolean;
 };
 
@@ -19,14 +16,8 @@ const {
   publishedAt,
   external_link,
   slug,
-  short_content,
   is_art_only,
 }: Props = Astro.props;
-
-const imageUrl = () => {
-  if (!mainImage) return null;
-  return urlFor(mainImage).quality(80).height(540).width(960).url();
-};
 
 const isArtOnly = is_art_only && !!mainImage;
 
@@ -38,9 +29,7 @@ const formatDate = (dateString: string) => {
   });
 };
 
-// Typically we want to link to the blog post, but if there is an external link, we want to link to that
-// But slug url takes precedence over external link
-const blogUrl = slug.current ? `/blog/${slug.current}` : external_link;
+const blogUrl = slug ? `/blog/${slug}` : external_link;
 const isExternal = !!external_link;
 ---
 
@@ -54,7 +43,7 @@ const isExternal = !!external_link;
   {
     isArtOnly && (
       <img
-        src={imageUrl()}
+        src={mainImage!}
         alt={title}
         class="w-full h-full object-cover rounded-t-lg mb-4 absolute top-0 left-0 z-[-2]"
       />
@@ -80,14 +69,13 @@ const isExternal = !!external_link;
     )
   }
 
-  <!-- short content -->
   {
     !isArtOnly && (
       <p
         class="leading-relaxed mb-4 text-sm px-4 flex-grow line-clamp-3"
         style="color: var(--color-text-muted)"
       >
-        {short_content}
+        {description}
       </p>
     )
   }

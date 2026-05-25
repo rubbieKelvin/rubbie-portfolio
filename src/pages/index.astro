@@ -1,35 +1,20 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { sanityClient } from "sanity:client";
-import type { SanityDocument } from "@sanity/client";
-import { PortableText } from "astro-portabletext";
 import AppFooter from "@/components/AppFooter.astro";
-
-const INTRO_QUERY = `
-*[_type == "intro" && active == true][0] {
-  action_link -> {
-    url
-  },
-  action_text,
-  description,
-  subtitle,
-  title,
-}`;
-
-const intro = await sanityClient.fetch<SanityDocument>(INTRO_QUERY);
+import introData from "@/data/intro.json";
 ---
 
 <Layout>
   <div class="flex flex-col justify-center h-full px-5 lg:px-0">
     <div class="flex flex-col gap-4 flex-grow justify-center">
-      <h2 class="text-sm">{intro.subtitle}</h2>
-      <h1 class="text-7xl">{intro.title}</h1>
+      <h2 class="text-sm">{introData.subtitle}</h2>
+      <h1 class="text-7xl">{introData.title}</h1>
       <div class="2xl:max-w-[70%] xl:max-w-[80%] lg:max-w-[90%]" style="color: var(--color-text-muted)">
-        <PortableText value={intro.description} />
+        <Fragment set:html={introData.description} />
       </div>
       <div>
-        <a href={intro.action_link.url} class="cursor-after-effect">
-          {intro.action_text}
+        <a href={introData.action_url} class="cursor-after-effect">
+          {introData.action_text}
         </a>
       </div>
     </div>

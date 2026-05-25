@@ -1,31 +1,21 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { sanityClient } from "sanity:client";
 import ProjectItem from "@/components/ProjectItem.astro";
-import type { SanityDocument } from "@sanity/client";
 import AppFooter from "@/components/AppFooter.astro";
+import { getCollection } from "astro:content";
 
-const PROJECT_BY_CATEGORY = `
-*[_type == "category" && is_project_category == true] {
-  _id,
-  title,
-  // description,
-  "projects": *[_type == "project" && references(^._id)] {
-    _id,
-    title,
-    slug,
-    description,
-    mainImage,
-    url,
-    categories[] -> {
-      title
-    }
-  }
-}
-`;
+const categories = await getCollection("categories", ({ data }) => {
+  return data.is_project_category === true;
+});
 
-const projects_by_category =
-  await sanityClient.fetch<SanityDocument[]>(PROJECT_BY_CATEGORY);
+const projects = await getCollection("projects");
+
+const projectsByCategory = categories.map((cat) => {
+  return {
+    title: cat.data.title,
+    projects: projects.filter((proj) => proj.data.categories.includes(cat.id)),
+  };
+}).filter((group) => group.projects.length > 0);
 ---
 
 <Layout title="Projects">
@@ -45,22 +35,19 @@ const projects_by_category =
     <!-- listing -->
     <div class="flex flex-col gap-10 pb-10">
       {
-        projects_by_category.map((category) => {
+        projectsByCategory.map((category) => {
           return (
             <div>
               <h2 class="text-2xl">{category.title}</h2>
-              {category.description && category.description.length > 0 && (
-                <h3 class="lg:max-w-[50%]">{category.description}</h3>
-              )}
               <div class="grid grid-cols-1 xl:grid-cols-3 lg:gap-8 gap-4 mt-2">
-                {category.projects.map((project: SanityDocument) => {
+                {category.projects.map((project) => {
                   return (
                     <ProjectItem
-                      name={project.title}
-                      image={project.mainImage}
-                      description={project.description}
-                      url={project.url}
-                      categories={project.categories}
+                      name={project.data.title}
+                      image={project.data.mainImage}
+                      description={project.data.description}
+                      url={project.data.url}
+                      categories={project.data.categories.map((c) => ({ title: c }))}
                     />
                   );
                 })}

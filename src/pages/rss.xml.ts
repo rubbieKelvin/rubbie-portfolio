@@ -1,69 +1,29 @@
 import rss, { type RSSFeedItem } from "@astrojs/rss";
-import { sanityClient } from "sanity:client";
-import type { SanityDocument } from "@sanity/client";
-import { urlFor } from "@/lib/sanity";
-import { toHTML } from "@portabletext/to-html";
+import { getCollection } from "astro:content";
 
 const SITE_URL = "https://rubbietheone.com";
 
 export async function GET() {
-  const posts = await sanityClient.fetch<SanityDocument[]>(
-    `*[_type == "post"] | order(publishedAt desc) {
-      _id,
-      title,
-      slug,
-      body,
-      mainImage,
-      publishedAt,
-      external_link,
-      categories[] -> {
-        title
-      },
-      "short_content": pt::text(body)
-    } {
-      ...,
-      "short_content": string::split(short_content, "")[0..40]
-    }{
-      ...,
-      "short_content": array::join(short_content, "") + "..."
-    }`
-  );
+  const posts = await getCollection("posts");
+  posts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
 
-  let items = posts.map((post): RSSFeedItem => {
-    const mainImage = post.mainImage ? urlFor(post.mainImage).url() : null;
-    let content: string = toHTML(post.body, {
-      components: {
-        types: {
-          code(props) {
-            // const language = props.value?.language ?? "text";
-            return `<pre><code>${props.value?.code}</code></pre>`;
-          },
-          image(props) {
-            const imageUrl = post.mainImage ? urlFor(props.value).url() : null;
-            return `<img src="${imageUrl}" alt="${props.value?.altText || "Image"}" />`;
-          },
-        },
-      },
-    });
-
-    if (mainImage) {
-      content = `<img src="${mainImage}" alt="${post.title}" />\n\n${content}`;
-    }
+  const items: RSSFeedItem[] = posts.map((post) => {
+    const mainImageTag = post.data.mainImage
+      ? `<img src="${SITE_URL}${post.data.mainImage}" alt="${post.data.title}" />`
+      : "";
 
     return {
-      title: post.title,
-      link: `${SITE_URL}/blog/${post.slug.current}`,
-      pubDate: post.publishedAt,
-      description: post.short_content,
-      content,
+      title: post.data.title,
+      link: `${SITE_URL}/blog/${post.id.replace(/\.md$/, "")}`,
+      pubDate: post.data.publishedAt,
+      description: post.data.description || post.body?.substring(0, 200) || "",
+      content: `${mainImageTag}\n\n${post.body || ""}`,
       author: "dev.rubbie@gmail.com",
-      categories: post.categories?.map(
-        (category: { title: string }) => category.title
-      ),
-      source: post.external_link
+      categories: post.data.categories,
+      source: post.data.external_link
         ? {
-            url: post.external_link,
-            title: post.title,
+            url: post.data.external_link,
+            title: post.data.title,
           }
         : undefined,
     };

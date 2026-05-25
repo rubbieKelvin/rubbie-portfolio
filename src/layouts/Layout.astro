@@ -1,20 +1,8 @@
 ---
 import "@/assets/global.css";
 import AppHeader from "@/components/AppHeader.astro";
-import { sanityClient } from "sanity:client";
-import type { SanityDocument } from "@sanity/client";
 import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
-
-const LINKS_QUERY = `
-*[_type == "link" && featured_contact_link == true] {
-  _id,
-  title,
-  slug,
-  url
-}
-`;
-
-const contactLinks = await sanityClient.fetch<SanityDocument[]>(LINKS_QUERY);
+import contactLinks from "@/data/links.json";
 
 type Props = {
   title?: string;

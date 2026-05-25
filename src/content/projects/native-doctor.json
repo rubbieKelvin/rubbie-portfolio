@@ -1,0 +1,10 @@
+{
+  "title": "Native doctor",
+  "description": "A configurable API testing tool built in Rust, designed for easy YAML definition and seamless integration into CI/CD pipelines.",
+  "url": "https://github.com/rubbieKelvin/nativedoctor",
+  "mainImage": "/images/d76483250f9bd52e201950ed5f41ae74ea78b644-1200x750.jpg",
+  "categories": [
+    "rust",
+    "developer-tools"
+  ]
+}

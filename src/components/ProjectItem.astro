@@ -1,22 +1,15 @@
 ---
-import { urlFor } from "@/lib/sanity";
-
 type Props = {
   name: string;
   description: string;
-  image: object | null;
+  image: string | null;
   url: string;
   categories: {
     title: string;
   }[];
 };
 
-const { name, description, image, url, categories }: Props = Astro.props;
-
-// const imageUrl = () => {
-//   if (!image) return null;
-//   return urlFor(image).url();
-// };
+const { name, description, url, categories }: Props = Astro.props;
 ---
 
 <a
@@ -50,17 +43,4 @@ const { name, description, image, url, categories }: Props = Astro.props;
       }
     </div>
   </div>
-
-
-  <!-- {
-    image && (
-      <div class="flex-[30%] min-w-[200px] max-w-[200px] p-4">
-        <img
-          src={urlFor(image).width(200).height(200).url()}
-          alt={name}
-          class="w-full h-full object-fill rounded-lg"
-        />
-      </div>
-    )
-  } -->
 </a>

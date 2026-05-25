@@ -1,0 +1,9 @@
+{
+  "title": "BMO",
+  "description": "Pomorodo timer written with rust & gpui.",
+  "url": "https://github.com/rubbieKelvin/bmo",
+  "mainImage": "/images/4fe5795a20db6a4d91f47a34f667ed5bc831c053-719x565.png",
+  "categories": [
+    "productivity-tools"
+  ]
+}

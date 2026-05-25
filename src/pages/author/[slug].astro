@@ -1,98 +1,44 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { sanityClient } from "sanity:client";
-import type { SanityDocument } from "@sanity/client";
-import { PortableText } from "astro-portabletext";
-import { urlFor } from "@/lib/sanity";
+import { getCollection, getEntry } from "astro:content";
 import BlogItem from "@/components/BlogItem.astro";
 import AppFooter from "@/components/AppFooter.astro";
 
 export async function getStaticPaths() {
-  const AUTHORS_QUERY = `
-  *[_type == "author"] {
-    "slug": slug.current,
-    _id
-  }
-  `;
-
-  const authors = await sanityClient.fetch<SanityDocument[]>(AUTHORS_QUERY);
-
+  const authors = await getCollection("authors");
   return authors.map((author) => ({
-    params: { slug: author.slug },
-    props: { authorId: author._id },
+    params: { slug: author.data.slug },
+    props: { author },
   }));
 }
 
-const { slug } = Astro.params;
-const { authorId } = Astro.props;
-
-// Fetch author details
-const AUTHOR_QUERY = `
-*[_type == "author" && _id == $authorId][0] {
-  _id,
-  name,
-  slug,
-  image,
-  bio,
-  links[] -> {
-    title,
-    url
-  }
-}
-`;
-
-// Fetch posts by this author
-const AUTHOR_POSTS_QUERY = `
-*[_type == "post" && author._ref == $authorId] | order(publishedAt desc) {
-  _id,
-  title,
-  slug,
-  mainImage,
-  publishedAt,
-  external_link,
-  description,
-  categories[] -> {
-    title
-  },
-  "short_content": pt::text(body)
-} {
-  ...,
-  "short_content": string::split(short_content, "")[0..100]
-}{
-  ...,
-  "short_content": array::join(short_content, "") + "..."
-}
-`;
-
-const author = await sanityClient.fetch<SanityDocument>(AUTHOR_QUERY, {
-  authorId,
-});
-const posts = await sanityClient.fetch<SanityDocument[]>(AUTHOR_POSTS_QUERY, {
-  authorId,
-});
+const { author } = Astro.props as { author: any };
 
 if (!author) {
   return Astro.redirect("/404");
 }
 
-const authorImageUrl = author.image ? urlFor(author.image).url() : null;
-const ogImageUrl = author.image
-  ? urlFor(author.image).width(960).height(540).quality(80).url()
-  : null;
+const posts = await getCollection("posts", ({ data }) => {
+  return data.author === author.data.slug;
+});
+
+posts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+const ogImageUrl = author.data.image || undefined;
 ---
 
-<Layout title={`${author.name} - Author`} image={ogImageUrl ?? undefined}>
+<Layout title={`${author.data.name} - Author`} image={ogImageUrl}>
   <div class="px-5 lg:px-0 pb-10 pt-10">
     <!-- Author profile -->
     <div class="mb-12">
       <div class="flex flex-col md:flex-row gap-8 items-start">
         <!-- Author image -->
         {
-          authorImageUrl && (
+          author.data.image && (
             <div class="flex-shrink-0">
               <img
-                src={urlFor(author.image).width(200).height(200).url()}
-                alt={author.name}
+                src={author.data.image}
+                alt={author.data.name}
                 class="rounded-md w-48 h-48 md:rounded-full object-cover"
               />
             </div>
@@ -102,23 +48,23 @@ const ogImageUrl = author.image
         <!-- Author info -->
         <div class="flex-grow">
           <h1 class="text-4xl lg:text-5xl mb-4 leading-tight">
-            {author.name}
+            {author.data.name}
           </h1>
 
           <!-- Author bio -->
           {
-            author.bio && (
+            author.data.bio && (
               <div class="prose prose-lg max-w-none mb-6">
-                <PortableText value={author.bio} />
+                <Fragment set:html={author.data.bio} />
               </div>
             )
           }
 
           <!-- Author links -->
           {
-            author.links && author.links.length > 0 && (
+            author.data.links && author.data.links.length > 0 && (
               <div class="flex flex-wrap gap-3">
-                {author.links.map((link: any) => (
+                {author.data.links.map((link: any) => (
                   <a
                     href={link.url}
                     target="_blank"
@@ -149,19 +95,17 @@ const ogImageUrl = author.image
         <div>
           <h2 class="text-2xl mb-6 md:hidden">Articles</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-6">
-            {posts.map((post: SanityDocument) => (
+            {posts.map((post) => (
               <BlogItem
-                title={post.title}
-                description={post.description}
-                short_content={post.short_content}
-                mainImage={post.mainImage}
-                publishedAt={post.publishedAt}
-                external_link={post.external_link}
-                slug={post.slug}
+                title={post.data.title}
+                description={post.data.description}
+                mainImage={post.data.mainImage}
+                publishedAt={post.data.publishedAt.toISOString()}
+                external_link={post.data.external_link}
+                slug={post.id.replace(/\.md$/, "")}
                 is_art_only={
-                  post.categories &&
-                  post.categories.length === 1 &&
-                  post.categories[0].title.toLowerCase() === "art"
+                  post.data.categories.length === 1 &&
+                  post.data.categories[0] === "art"
                 }
               />
             ))}
@@ -174,7 +118,7 @@ const ogImageUrl = author.image
       posts.length === 0 && (
         <div class="text-center py-12">
           <p style="color: var(--color-text-muted)">
-            {author.name} hasn't published any posts yet.
+            {author.data.name} hasn't published any posts yet.
           </p>
         </div>
       )

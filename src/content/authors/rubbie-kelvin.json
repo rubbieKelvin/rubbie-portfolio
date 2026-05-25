@@ -1,0 +1,28 @@
+{
+  "name": "Rubbie Kelvin",
+  "slug": "rubbie-kelvin",
+  "image": "/images/5eadc03f9c22b5be8e90049744a265fc0683d093-1042x575.png",
+  "bio": "<p>i have internet.</p>",
+  "links": [
+    {
+      "title": "Github",
+      "url": "https://github.com/rubbiekelvin/"
+    },
+    {
+      "title": "X/Twttr",
+      "url": "http://x.com/kelvinRubbie/"
+    },
+    {
+      "title": "Youtube",
+      "url": "https://www.youtube.com/@rubbietheone"
+    },
+    {
+      "title": "Linkedin",
+      "url": "https://www.linkedin.com/in/rubbiekelvin/"
+    },
+    {
+      "title": "Instagram",
+      "url": "https://www.instagram.com/rubbie_kelvin/"
+    }
+  ]
+}
