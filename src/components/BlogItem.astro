@@ -2,6 +2,7 @@
 type Props = {
   title: string;
   description: string | null;
+  short_content?: string;
   mainImage: string | null;
   publishedAt: string;
   external_link?: string;
@@ -12,6 +13,7 @@ type Props = {
 const {
   title,
   description,
+  short_content,
   mainImage,
   publishedAt,
   external_link,
@@ -69,13 +71,14 @@ const isExternal = !!external_link;
     )
   }
 
+  <!-- short content -->
   {
-    !isArtOnly && (
+    !isArtOnly && short_content && (
       <p
         class="leading-relaxed mb-4 text-sm px-4 flex-grow line-clamp-3"
         style="color: var(--color-text-muted)"
       >
-        {description}
+        {short_content}
       </p>
     )
   }
