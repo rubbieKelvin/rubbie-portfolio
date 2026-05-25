@@ -5,30 +5,38 @@ import AppFooter from "@/components/AppFooter.astro";
 import Image from "@/components/Image.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("posts");
-  return posts.map((post) => ({
-    params: { slug: post.id.replace(/\.md$/, "") },
-    props: { post },
-  }));
+    const posts = await getCollection("posts");
+    return posts.map((post) => ({
+        params: { slug: post.id.replace(/\.md$/, "") },
+        props: { post },
+    }));
 }
 
 const { post } = Astro.props as { post: any };
 
 if (!post) {
-  return Astro.redirect("/404");
+    return Astro.redirect("/404");
 }
 
 const { Content } = await post.render();
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+    return new Date(dateString).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
 };
 
-const { title, description, publishedAt, mainImage, external_link, categories, author: authorSlug } = post.data;
+const {
+    title,
+    description,
+    publishedAt,
+    mainImage,
+    external_link,
+    categories,
+    author: authorSlug,
+} = post.data;
 
 const author = authorSlug ? await getEntry("authors", authorSlug) : null;
 
@@ -36,122 +44,126 @@ const ogImageUrl = mainImage || undefined;
 ---
 
 <Layout
-  title={title}
-  description={description ?? undefined}
-  image={ogImageUrl}
-  article={publishedAt ? { publishedAt: publishedAt.toISOString() } : undefined}
+    title={title}
+    description={description ?? undefined}
+    image={ogImageUrl}
+    article={publishedAt
+        ? { publishedAt: publishedAt.toISOString() }
+        : undefined}
 >
-  <div class="px-5 lg:px-0 pb-10">
-    <!-- Back to blog -->
-    <div class="py-5">
-      <a href="/blog" class="text-sm cursor-after-effect hidden lg:block"
-        >&larr; Back to Blog</a
-      >
-    </div>
-
-    <!-- Article header -->
-    <article class="md:max-w-3xl">
-      <header class="mb-8">
-        <h1 class="text-4xl lg:text-5xl mb-4 leading-tight">
-          {title}
-        </h1>
-
-        <div
-          class="flex flex-wrap items-center gap-4 text-sm mb-6"
-          style="color: var(--color-text-muted)"
-        >
-          {
-            publishedAt && (
-              <time datetime={publishedAt.toISOString()} title={publishedAt.toISOString()}>
-                {formatDate(publishedAt.toISOString())}
-              </time>
-            )
-          }
-
-          {
-            author && (
-              <div class="flex items-center gap-2">
-                {author.data.image && (
-                  <img
-                    src={author.data.image}
-                    alt={author.data.name}
-                    class="w-6 h-6 rounded-full"
-                  />
-                )}
-                <span>
-                  by
-                  <a
-                    href={`/author/${author.data.slug}`}
-                    class="cursor-underline-effect"
-                    style="color: var(--color-text)"
-                  >
-                    {author.data.name}
-                  </a>
-                </span>
-              </div>
-            )
-          }
-
-          {
-            categories && categories.length > 0 && (
-              <div class="flex gap-2">
-                {categories.map((category: string) => (
-                  <span
-                    class="px-2 py-1 rounded text-xs bg-accent-bg text-text"
-                  >
-                    {category}
-                  </span>
-                ))}
-              </div>
-            )
-          }
+    <div class="px-5 lg:px-0 pb-10">
+        <!-- Back to blog -->
+        <div class="py-5">
+            <a href="/blog" class="text-sm cursor-after-effect hidden lg:block"
+                >&larr; Back to Blog</a
+            >
         </div>
 
-        {
-          external_link && (
-            <div class="mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200 dark:bg-blue-900/40 dark:border-blue-500/20">
-              <p class="mb-2 text-text">
-                This post was originally published externally.
-              </p>
-              <a
-                href={external_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="font-medium text-sm text-blue-500 cursor-after-effect"
-              >
-                Read the original article &rarr;
-              </a>
+        <!-- Article header -->
+        <article class="md:max-w-2xl">
+            <header class="mb-8">
+                <h1 class="text-4xl lg:text-5xl mb-4 leading-tight">
+                    {title}
+                </h1>
+
+                <div
+                    class="flex flex-wrap items-center gap-4 text-sm mb-6"
+                    style="color: var(--color-text-muted)"
+                >
+                    {
+                        publishedAt && (
+                            <time
+                                datetime={publishedAt.toISOString()}
+                                title={publishedAt.toISOString()}
+                            >
+                                {formatDate(publishedAt.toISOString())}
+                            </time>
+                        )
+                    }
+
+                    {
+                        author && (
+                            <div class="flex items-center gap-2">
+                                {author.data.image && (
+                                    <img
+                                        src={author.data.image}
+                                        alt={author.data.name}
+                                        class="w-6 h-6 rounded-full"
+                                    />
+                                )}
+                                <span>
+                                    by
+                                    <a
+                                        href={`/author/${author.data.slug}`}
+                                        class="cursor-underline-effect"
+                                        style="color: var(--color-text)"
+                                    >
+                                        {author.data.name}
+                                    </a>
+                                </span>
+                            </div>
+                        )
+                    }
+
+                    {
+                        categories && categories.length > 0 && (
+                            <div class="flex gap-2">
+                                {categories.map((category: string) => (
+                                    <span class="px-2 py-1 rounded text-xs bg-accent-bg text-text">
+                                        {category}
+                                    </span>
+                                ))}
+                            </div>
+                        )
+                    }
+                </div>
+
+                {
+                    external_link && (
+                        <div class="mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200 dark:bg-blue-900/40 dark:border-blue-500/20">
+                            <p class="mb-2 text-text">
+                                This post was originally published externally.
+                            </p>
+                            <a
+                                href={external_link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="font-medium text-sm text-blue-500 cursor-after-effect"
+                            >
+                                Read the original article &rarr;
+                            </a>
+                        </div>
+                    )
+                }
+
+                {
+                    mainImage && (
+                        <div class="mb-8">
+                            <Image
+                                src={mainImage}
+                                alt={title}
+                                class="w-full h-64 lg:h-96 object-cover rounded-lg"
+                            />
+                        </div>
+                    )
+                }
+            </header>
+
+            <!-- Article content -->
+            <div class="prose prose-lg max-w-none">
+                <Content />
             </div>
-          )
-        }
+        </article>
 
-        {
-          mainImage && (
-            <div class="mb-8">
-              <Image
-                src={mainImage}
-                alt={title}
-                class="w-full h-64 lg:h-96 object-cover rounded-lg"
-              />
-            </div>
-          )
-        }
-      </header>
-
-      <!-- Article content -->
-      <div class="prose prose-lg max-w-none">
-        <Content />
-      </div>
-    </article>
-
-    <!-- Navigation footer -->
-    <div
-      class="mt-12 pt-8 pb-4"
-      style="border-top: 1px solid var(--color-border)"
-    >
-      <a href="/blog" class="text-sm cursor-after-effect">&larr; Back to blog</a
-      >
+        <!-- Navigation footer -->
+        <div
+            class="mt-12 pt-8 pb-4"
+            style="border-top: 1px solid var(--color-border)"
+        >
+            <a href="/blog" class="text-sm cursor-after-effect"
+                >&larr; Back to blog</a
+            >
+        </div>
+        <AppFooter />
     </div>
-    <AppFooter />
-  </div>
 </Layout>
