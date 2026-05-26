@@ -1,6 +1,6 @@
 ---
 title: "Humans not required"
-publishedAt: 2026-02-26
+publishedAt: 2026-05-26
 description:
 author: rubbie-kelvin
 categories:
