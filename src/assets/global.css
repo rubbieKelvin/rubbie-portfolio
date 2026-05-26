@@ -106,7 +106,7 @@ div.prose {
 
     p {
         color: var(--color-text-muted);
-        font-size: 0.9rem;
+        font-size: 1rem;
         font-family: "Google Sans", sans-serif;
         font-optical-sizing: auto;
         font-style: normal;
@@ -114,17 +114,17 @@ div.prose {
     }
 
     h1 {
-        @apply text-3xl;
+        @apply mt-10 text-3xl;
         color: var(--color-text);
     }
 
     h2 {
-        @apply text-2xl;
+        @apply mt-10 text-2xl;
         color: var(--color-text);
     }
 
     h3 {
-        @apply text-xl;
+        @apply mt-10 text-xl;
         color: var(--color-text);
     }
 
@@ -133,6 +133,13 @@ div.prose {
         border-color: var(--color-accent);
         background-color: var(--color-accent-bg);
         color: var(--color-text);
+        padding-top: 4px;
+        padding-bottom: 4px;
+
+        p {
+            font-family: "Google Sans Code", monospace;
+            font-size: 0.8rem;
+        }
     }
 
     ul {
