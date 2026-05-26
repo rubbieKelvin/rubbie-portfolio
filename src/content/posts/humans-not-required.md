@@ -22,7 +22,7 @@ I remember seeing this tweet when it dropped and I thought it was the coolest th
 
 Back then it felt like a toy. You'd ask it something dumb and it would give you a surprisingly coherent answer and you'd laugh and show your friends. It was novel, not threatening. Except for those that could see the future, nobody was talking about AGI or job displacement or the death of the web.
 
-Fast forward a couple years and that same toy is being shoved into everything. Your search engine, your documents, your photo library, your phones, your operating system, and your fridge... once someone figures out how. It stopped being a thing you choose to use and became a thing that must be there regardless of whether you wanted it to be or not. And with that shift, the vibe changed.
+Fast forward a couple years and that same toy is being shoved into everything. Your search engine, your documents, your photo library, your phones, your operating system, your girlfriend, and your fridge... once someone figures out how. It stopped being a thing you choose to use and became a thing that must be there regardless of whether you wanted it to be or not. And with that shift, the vibe changed.
 
 # AI is good
 
@@ -43,13 +43,6 @@ I'm not gonna say _"in the earlier days of the internet"_, because just 4 years 
 If you're an artist, writer or an expert in any creative field, you must have gotten this question for at least every piece of work you put out there. Somehow everyone seems to have developed mass amnesia and forgot that humans were capable of jaw dropping feats before the release of AI.
 
 It's now expected that every little thing has to hold a >90% stake in its creation. For something as little as writing an essay, a single well formed paragraph, or damn! a nice letter to your friend wishing him a happy birthday! It's beyond sickening, it's like we seem to be losing IQ points every single day. And this **NEVER** helps those who are learning, it's more damage than it's worth, because why learn X when AI can do X, Y, Z? The simple ability to reason is being offloaded to a third party tool you pay $20-$200/m for, sad.
-
-<!--## <span style="color: red;">**</span> Ai came to steal, to .. and to ..
-
-
-
-## <span style="color: red;">**</span> $20 for a penny-->
-
 
 
 # The Human factor
