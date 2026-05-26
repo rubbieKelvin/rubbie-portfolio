@@ -107,24 +107,24 @@ div.prose {
     p {
         color: var(--color-text-muted);
         font-size: 1rem;
-        font-family: "Google Sans", sans-serif;
+        font-family: "Google Sans Flex", sans-serif;
         font-optical-sizing: auto;
         font-style: normal;
         font-variation-settings: "GRAD" 0;
     }
 
     h1 {
-        @apply mt-10 text-3xl;
+        @apply mt-10 mb-5 text-5xl;
         color: var(--color-text);
     }
 
     h2 {
-        @apply mt-10 text-2xl;
+        @apply mt-10 mb-4 text-3xl;
         color: var(--color-text);
     }
 
     h3 {
-        @apply mt-10 text-xl;
+        @apply mt-10 mb-3 text-xl;
         color: var(--color-text);
     }
 
