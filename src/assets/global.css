@@ -154,4 +154,8 @@ div.prose {
         @apply text-sm;
         color: var(--color-text-muted);
     }
+
+    iframe {
+        width: stretch;
+    }
 }
