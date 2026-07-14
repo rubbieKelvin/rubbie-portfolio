@@ -47,7 +47,7 @@ It's now expected that every little thing has to hold a >90% stake in its creati
 
 # The Human factor
 
-Everybody says "AI won't replace you, but a person using AI will." or "AI wont replace you if you're good enough". But if we look closely at the trajectory of this technology, everywhere begins to "unblur". It's not just about job displacement, it's about a fundamental shift in what it means to be human. AI is not just a tool, it can't reason, but it seems to learn... at least by statistical inference and at a scale that no human can. If we blindly outsource every vital aspect of our existence to these systems, we aren't just upgrading our workflow, we are volunteering to become the ultimate training data.
+Everybody says "AI won't replace you, but a person using AI will." or "AI wont replace you if you're good enough". But if we look closely at the trajectory of this technology, everywhere begins to "unblur". and i'm not just about job displacement, i'm looking at a fundamental shift in what it means to be human. AI is not just a tool, it can't reason, but it seems to learn... at least by statistical inference and at a scale that no human can. If we blindly outsource every vital aspect of our existence to these systems, we aren't just upgrading our workflow, we are volunteering to become the ultimate training data.
 
 ## <span style="color: red;">**</span> The Atrophy of Thought
 
