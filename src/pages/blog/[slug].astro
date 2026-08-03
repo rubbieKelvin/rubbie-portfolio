@@ -1,6 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 import AppFooter from "@/components/AppFooter.astro";
 import Image from "@/components/Image.astro";
 
@@ -18,7 +18,7 @@ if (!post) {
     return Astro.redirect("/404");
 }
 
-const { Content } = await post.render();
+const { Content } = await render(post);
 
 const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
