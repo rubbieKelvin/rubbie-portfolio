@@ -1,0 +1,35 @@
+---
+type Plane = {
+  title: string;
+  desc: string;
+};
+
+type Props = {
+  planes: Plane[];
+};
+
+const { planes } = Astro.props;
+---
+
+<div class="my-6 flex flex-col md:flex-row items-stretch gap-2">
+  {
+    planes.map((plane, index) => (
+      <>
+        <div class="flex-1 border border-border/70 p-4">
+          <p class="text-sm font-semibold text-accent">{plane.title}</p>
+          <p class="mt-1 text-xs text-text-muted leading-relaxed">
+            {plane.desc}
+          </p>
+        </div>
+        {index < planes.length - 1 && (
+          <span
+            class="self-center text-accent rotate-90 md:rotate-0 shrink-0 px-1"
+            aria-hidden="true"
+          >
+            →
+          </span>
+        )}
+      </>
+    ))
+  }
+</div>

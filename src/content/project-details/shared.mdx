@@ -1,0 +1,39 @@
+---
+stack: [Django, Django REST Framework, Pydantic, pytest]
+description: >-
+  A shared Django library that kills boilerplate: API views with built-in
+  validation and exception handling, easy model serialization, and Postman
+  documentation generated from your views.
+links:
+  - label: github
+    url: https://github.com/rubbieKelvin/shared
+---
+
+import Callout from "../../components/mdx/Callout.astro";
+
+## The repetition problem
+
+Every new Django project starts with the same grind: repetitive API views, serializer classes, request validation, and documentation that drifts from the code. This library exists to make those parts consistent, boring, and shared across my projects.
+
+## What you get
+
+| Feature | What it kills |
+| --- | --- |
+| Seamless API views | endpoint boilerplate, with built-in exception handling and request-body validation |
+| Extended model features | serialization without writing custom serializer classes |
+| Postman doc generation | docs generated from your views, importable into a workspace |
+| Pydantic request validation | typed, declarative validation on the way in |
+
+The Postman piece is the one I'm proudest of: documentation *derived* from the code can't drift — when the view changes, the next generation reflects it.
+
+## How it's distributed
+
+Clone, submodule, or zip — deliberately low-ceremony. It's not on PyPI yet, and the README says why: it needs to be exercised across projects before it earns a stable release. The docs (`creating-endpoints.md`, `validating-request-body.md`, `defining-models.md`, `generating-docs.md`) are structured for that path.
+
+<Callout title="Stability, honestly">
+  The README opens with: "this library is unstable, everything works fine but changes are inevitable." For a personal library, that's the right contract — honest versioning beats fake stability, and consumers know what they're signing up for.
+</Callout>
+
+## Design thread
+
+Pydantic for validation, docs from code, serialization on the model — the through-line is *one source of truth*. Types are the contract, views declare what they accept, and documentation is an output, not a chore. That's the kind of DX I want to build with, so I built it.

@@ -52,10 +52,18 @@ const projects = defineCollection({
 });
 
 const projectDetails = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/project-details" }),
+  loader: glob({ pattern: "**/*.mdx", base: "./src/content/project-details" }),
   schema: z.object({
     stack: z.array(z.string()).default([]),
     description: z.string().optional(),
+    links: z
+      .array(
+        z.object({
+          label: z.string(),
+          url: z.string(),
+        }),
+      )
+      .default([]),
   }),
 });
 

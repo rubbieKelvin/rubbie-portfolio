@@ -1,0 +1,78 @@
+---
+stack: [Rust, WebAssembly, Edge Computing, Astro, Starlight]
+description: >-
+  Feature flags evaluated at the edge: a Rust → WASM evaluator running on edge
+  runtimes against a versioned manifest — deterministic, fail-closed, and no
+  round-trip to a vendor.
+links:
+  - label: live
+    url: https://f69.rubbietheone.com/
+  - label: docs
+    url: https://f69.rubbietheone.com/docs
+  - label: dashboard
+    url: https://dashboard.f69.rubbietheone.com
+---
+
+import Callout from "../../components/mdx/Callout.astro";
+import Planes from "../../components/mdx/Planes.astro";
+
+## The problem
+
+Most flag platforms evaluate centrally: your app calls a vendor endpoint with the user context, the vendor decides true/false, then you unblock the render. That works until the vendor is far away, slow, or down — and ~100 ms per decision is exactly the latency that causes UI flicker. f69 inverts the model: the manifest lives next to your code, and a small deterministic evaluator makes the call locally.
+
+## Why edge evaluation
+
+A Rust → WASM evaluator runs on your edge runtime against a versioned manifest synced globally. No network call in the render path — the same evaluator returns the same answer everywhere, byte-for-byte, in your edge worker, your server, or a CLI.
+
+<Callout title="The three promises">
+  **No flicker** — decisions are local, nothing to wait on. **Predictable rollouts** — a frozen bucket hash means a 10% rollout picks the same 10% on every runtime. **Fail-closed by default** — a malformed flag falls back to its declared default; one bad flag can't break the rest.
+</Callout>
+
+## The planes
+
+<Planes
+  planes={[
+    { title: "Control plane", desc: "The dashboard: author flags, manage environments, mint service-account tokens. Everything that changes workspace state happens here." },
+    { title: "Logic plane", desc: "A versioned manifest — rules, rollouts, segments — synced globally to every runtime." },
+    { title: "Edge plane", desc: "The WASM evaluator and the edge API your app calls every request." },
+  ]}
+/>
+
+## The edge contract
+
+| Endpoint | Purpose | Auth |
+| --- | --- | --- |
+| `POST /v1/identify` | register a user/entity for a workspace | service-account bearer token |
+| `POST /v1/evaluate` | evaluate flags for that entity | same token, scoped to one environment |
+
+The same Rust evaluator is also available as a library (and as WebAssembly), so SDKs can resolve flags fully offline with byte-for-byte identical results. The offline and online paths physically cannot disagree — they're the same code.
+
+## Determinism & safety
+
+Two properties do most of the work:
+
+- **Frozen bucket hashing.** Rollout math is deterministic across runtimes — no coordination needed between edge nodes to agree on who's in a rollout.
+- **Fail-closed evaluation.** Malformed flags degrade to their declared default instead of throwing. The safety path is the default path.
+
+<Callout title="A security posture, not a footnote">
+  The edge surface is read-only and authenticated by environment-scoped service accounts; the dashboard supports passkeys for teams that need them. The runtime surface stays tiny and auditable — the edge never mutates state.
+</Callout>
+
+## As a product
+
+Billing is metered on the axes that match actual usage: monthly tracked entities (MTEs), evaluations, and service accounts.
+
+| | Free | Standard |
+| --- | --- | --- |
+| Price | $0 / month | $40 / month base |
+| Tracked entities | 5,000 | 100,000, then usage-based |
+| Evaluations | 1M / month | 10M / month, then usage-based |
+| Environments | 2 | Unlimited |
+| Service accounts | 2 | 10 |
+| Targeting rules | Basic predicates | Advanced (%, rollouts, schedules) |
+
+Self-hosting is a documented path for teams that can't send flag state to a third party.
+
+## What's next
+
+The docs lay out the roadmap's shape: quickstart, core concepts (workspaces, environments, flags, segments, MTEs, evaluations), the rollout bucket contract, SDKs & API, self-hosting. The next axis is SDK coverage — more runtimes speaking the same WASM core.

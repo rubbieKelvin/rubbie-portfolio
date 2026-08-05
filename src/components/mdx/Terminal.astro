@@ -1,0 +1,36 @@
+---
+type Line = {
+  cmd: string;
+  out?: string[];
+};
+
+type Props = {
+  /** Optional directory-ish label shown above the block */
+  label?: string;
+  lines: Line[];
+};
+
+const { label, lines } = Astro.props;
+---
+
+<div class="my-6">
+  {label && (
+    <p class="mb-1 text-xs text-text-muted">-- {label} --</p>
+  )}
+  <div class="border border-border/70 p-4 text-sm overflow-x-auto">
+    {
+      lines.map((line) => (
+        <div class="whitespace-pre-wrap">
+          <p class="text-text">
+            <span class="text-accent">~ $ </span>
+            <span>{line.cmd}</span>
+            <span class="animate-blink text-accent">▋</span>
+          </p>
+          {line.out?.map((o) => (
+            <p class="text-text-muted">{o}</p>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>

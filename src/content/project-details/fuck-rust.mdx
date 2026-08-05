@@ -1,0 +1,50 @@
+---
+stack: [Rust]
+description: >-
+  A Brainfuck interpreter in Rust: all eight commands, file input, and an
+  optional debug mode that dumps raw byte output.
+links:
+  - label: github
+    url: https://github.com/rubbieKelvin/fuck-rust
+---
+
+import Callout from "../../components/mdx/Callout.astro";
+
+## Why brainfuck
+
+Brainfuck is a language with exactly eight commands, designed to challenge and amuse programmers. Building an interpreter for it is a compact way to practice parsers, tape semantics, and error handling in a new language — no framework, no dependencies, just the spec.
+
+## The whole spec
+
+| Command | What it does |
+| --- | --- |
+| `>` | move the pointer to the next cell |
+| `<` | move the pointer to the previous cell |
+| `+` | increase the value at the current cell by 1 |
+| `-` | decrease the value at the current cell by 1 |
+| `.` | output the ASCII representation of the current cell |
+| `,` | get a single byte of input from the user |
+| `[` | start a loop; execute if the current cell is non-zero |
+| `]` | end a loop; jump back if the current cell is non-zero |
+
+That table is the entire language. The interpreter's job is to make that table fast, correct, and debuggable — the interesting part of "trivial" languages is always the edge cases, not the happy path.
+
+## Loop semantics
+
+```brainfuck
+++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>.
+```
+
+Loops are bracket-matched: `[` enters only while the current cell is non-zero, `]` jumps back while non-zero. Getting the jump bookkeeping exactly right is where interpreters for minimal languages earn their keep — off-by-one in a jump target and every program after it is garbage.
+
+## Debug mode
+
+A `--debug` flag prints the raw output as a vector of bytes instead of ASCII — essential when a program manipulates values that aren't printable. The toy becomes a tool for verifying programs that work below the character layer.
+
+<Callout title="The honest edge case">
+  Invalid commands are validated and reported. Unmatched brackets are the documented gap: the README admits they "may produce unintended behavior" — the diagnostics story is the natural next step for this project.
+</Callout>
+
+## What's next
+
+Better diagnostics for unmatched brackets, and it's MIT-licensed if anyone wants to pick it up. For me it was the right-sized first Rust project: finishable in a weekend, testable, and it made the borrow checker earn its keep on a real — if small — program.

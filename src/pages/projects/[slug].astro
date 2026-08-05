@@ -22,14 +22,13 @@ if (!project) {
 
 const { Content } = await render(detail);
 
-const displayUrl = project.data.url;
-const domainOf = (url: string) => {
-  try {
-    return new URL(url).hostname.replace(/^www\./, "");
-  } catch {
-    return null;
-  }
-};
+// Links from the case study frontmatter, falling back to the project URL.
+const links =
+  detail.data.links.length > 0
+    ? detail.data.links
+    : project.data.url
+      ? [{ label: "view", url: project.data.url }]
+      : [];
 ---
 
 <Layout
@@ -52,6 +51,14 @@ const domainOf = (url: string) => {
           {project.data.title}
         </h1>
 
+        {
+          detail.data.description && (
+            <p class="mb-4 max-w-2xl leading-relaxed" style="color: var(--color-text-muted)">
+              {detail.data.description}
+            </p>
+          )
+        }
+
         <div
           class="flex flex-wrap items-center gap-2 text-sm"
           style="color: var(--color-text-muted)"
@@ -67,25 +74,18 @@ const domainOf = (url: string) => {
         </div>
 
         {
-          displayUrl && (
-            <div
-              class="mt-6 p-4 rounded-lg bg-blue-50 border border-blue-200 dark:bg-blue-900/40 dark:border-blue-500/20"
-            >
-              <p class="mb-2 text-text">
-                {domainOf(displayUrl) === "github.com" ? (
-                  <>Source code on GitHub</>
-                ) : (
-                  <>View the project</>
-                )}
-              </p>
-              <a
-                href={displayUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="font-medium text-sm text-blue-500 cursor-after-effect"
-              >
-                → {displayUrl.replace(/^https?:\/\//, "")}
-              </a>
+          links.length > 0 && (
+            <div class="mt-6 flex flex-wrap gap-2">
+              {links.map((link) => (
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="rounded-full border border-border/70 px-4 py-1.5 text-xs transition-colors hover:border-accent"
+                >
+                  → {link.label}
+                </a>
+              ))}
             </div>
           )
         }

@@ -1,0 +1,38 @@
+---
+stack: [Rust]
+description: >-
+  A minimal CLI task manager: add, check, uncheck, rename, and remove tasks by
+  stable ID, with a minimal output mode for the daily glance.
+links:
+  - label: github
+    url: https://github.com/rubbieKelvin/progress
+---
+
+import Terminal from "../../components/mdx/Terminal.astro";
+
+## Why a terminal task manager
+
+Task apps ship with windows, sync, and onboarding. I wanted one that lives in the shell — add, check, remove, and a glanceable daily view. `progress` is that tool, written in Rust.
+
+## A session
+
+<Terminal
+  label="a day with progress"
+  lines={[
+    { cmd: "progress --add \"Write case study\"", out: ["# TSK-1"] },
+    { cmd: "progress --add \"Review PR\"", out: ["# TSK-2"] },
+    { cmd: "progress --minimal", out: ["# essential info for today, pending tasks included"] },
+    { cmd: "progress --task TSK-1 --check", out: ["# done"] },
+    { cmd: "progress --task TSK-2 --remove", out: ["# gone"] },
+  ]}
+/>
+
+## Design choices
+
+- **Stable IDs, not indexes.** `TSK-1` is a handle, not a position — renames and reordering never break references. The same reason databases don't use row numbers as keys.
+- **Two output modes.** `--minimal` for the daily glance, detailed output when you need it — the CLI equivalent of collapsed vs. expanded.
+- **Commands that read like sentences.** `progress --task TSK-1 --check` is self-documenting in shell history and composes with everything else in a terminal.
+
+## Scope discipline
+
+The README keeps the surface deliberately small, and that's the point — it's a tool, not a platform. The ID-based command surface leaves room to grow (due dates, priorities, export) without reworking the core. Shipping a tool that stays a tool is a feature.
