@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getCollection, getEntry } from "astro:content";
-import BlogItem from "@/components/BlogItem.astro";
+import PostList from "@/components/PostList.astro";
 import AppFooter from "@/components/AppFooter.astro";
 
 export async function getStaticPaths() {
@@ -21,20 +21,6 @@ if (!author) {
 const posts = await getCollection("posts", ({ data }) => {
   return data.author === author.data.slug;
 });
-
-posts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
-
-function excerpt(body: string, len = 100) {
-  const plain = body
-    .replace(/^#+\s+.*$/gm, "")
-    .replace(/^```[\s\S]*?```$/gm, "")
-    .replace(/!\[.*?\]\(.*?\)/g, "")
-    .replace(/\[([^\]]*)\]\(.*?\)/g, "$1")
-    .replace(/[*_~`>#-]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-  return plain.length > len ? plain.slice(0, len).trimEnd() + "..." : plain;
-}
 
 const ogImageUrl = author.data.image || undefined;
 ---
@@ -105,24 +91,8 @@ const ogImageUrl = author.data.image || undefined;
     {
       posts.length > 0 && (
         <div>
-          <h2 class="text-2xl mb-6 md:hidden">Articles</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-6">
-            {posts.map((post) => (
-              <BlogItem
-                title={post.data.title}
-                description={post.data.description ?? ''}
-                short_content={excerpt(post.body || "")}
-                mainImage={post.data.mainImage}
-                publishedAt={post.data.publishedAt.toISOString()}
-                external_link={post.data.external_link}
-                slug={post.id.replace(/\.md$/, "")}
-                is_art_only={
-                  post.data.categories.length === 1 &&
-                  post.data.categories[0] === "art"
-                }
-              />
-            ))}
-          </div>
+          <h2 class="text-2xl mb-6">Articles</h2>
+          <PostList posts={posts} />
         </div>
       )
     }

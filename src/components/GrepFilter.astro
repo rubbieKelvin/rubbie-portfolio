@@ -1,0 +1,73 @@
+---
+type Props = {
+  prompt: string;
+  total: number;
+  unit: string;
+};
+
+const { prompt, total, unit } = Astro.props;
+---
+
+<div
+  class="mt-6 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 text-sm"
+>
+  <span class="text-text-muted shrink-0">{prompt}</span>
+  <input
+    id="grep-input"
+    type="text"
+    placeholder="type to filter…"
+    autocomplete="off"
+    autocapitalize="off"
+    spellcheck="false"
+    aria-label="Filter list"
+    class="flex-1 min-w-0 bg-transparent border-b border-border focus:border-accent outline-none py-0.5 caret-accent placeholder:text-text-muted/60 transition-colors"
+  />
+  <span id="file-count" data-unit={unit} class="text-text-muted text-xs shrink-0"
+    >{total} {unit}.</span
+  >
+</div>
+
+<slot />
+
+<p id="no-matches" class="hidden text-text-muted py-8">
+  no matches.<span class="animate-blink text-accent">▋</span>
+</p>
+
+<script>
+  // Live grep filter for any [data-item] list rendered inside this component.
+  const input = document.getElementById('grep-input');
+  const rows = Array.from(document.querySelectorAll('[data-item]'));
+  const groups = Array.from(document.querySelectorAll('[data-group]'));
+  const count = document.getElementById('file-count');
+  const noMatches = document.getElementById('no-matches');
+  const unit = count.dataset.unit;
+
+  function applyFilter() {
+    const q = input.value.trim().toLowerCase();
+    let visible = 0;
+    for (const row of rows) {
+      const hit = !q || row.dataset.search.includes(q);
+      row.classList.toggle('hidden', !hit);
+      if (hit) visible += 1;
+    }
+    for (const group of groups) {
+      group.classList.toggle(
+        'hidden',
+        !group.querySelector('[data-item]:not(.hidden)'),
+      );
+    }
+    count.textContent = `${visible} of ${rows.length} ${unit}`;
+    noMatches.classList.toggle('hidden', visible !== 0);
+  }
+
+  input.addEventListener('input', applyFilter);
+  applyFilter();
+
+  // '/' focuses the filter, like less/vim
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== input) {
+      e.preventDefault();
+      input.focus();
+    }
+  });
+</script>

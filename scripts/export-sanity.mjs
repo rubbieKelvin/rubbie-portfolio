@@ -272,6 +272,12 @@ function collectImageRefs(docs) {
         }
       }
     }
+
+    if (doc.projects && Array.isArray(doc.projects)) {
+      for (const p of doc.projects) {
+        if (p.mainImage?.asset?._ref) refs.add(p.mainImage.asset._ref);
+      }
+    }
   }
 
   return [...refs];
@@ -363,7 +369,7 @@ async function main() {
         `*[_type == "category"] { _id, title, is_project_category }`,
       ),
       client.fetch(
-        `*[_type == "project"] { _id, title, slug, description, url, categories[]->{_id,title} }`,
+        `*[_type == "project"] { _id, title, slug, description, mainImage, url, categories[]->{_id,title} }`,
       ),
       client.fetch(
         `*[_type == "link" && featured_contact_link == true] { _id, title, slug, url }`,
@@ -414,6 +420,9 @@ async function main() {
       title: proj.title,
       description: proj.description || "",
       url: proj.url || "",
+      mainImage: proj.mainImage?.asset?._ref
+        ? imageMap.get(proj.mainImage.asset._ref)
+        : null,
       categories: catSlugs,
     };
     fs.writeFileSync(

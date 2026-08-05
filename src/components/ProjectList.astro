@@ -1,0 +1,98 @@
+---
+import type { CollectionEntry } from "astro:content";
+import GrepFilter from "./GrepFilter.astro";
+
+type Props = {
+  groups: {
+    title: string;
+    projects: CollectionEntry<"projects">[];
+  }[];
+};
+
+const { groups } = Astro.props;
+
+const total = groups.reduce((n, g) => n + g.projects.length, 0);
+
+const domainOf = (url) => {
+  if (!url) return null;
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return null;
+  }
+};
+const searchFor = (project) =>
+  [
+    project.data.title,
+    project.data.description,
+    project.data.categories.join(" "),
+    project.data.url,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+---
+
+<GrepFilter
+  prompt="~ $ ls -la projects/ | grep"
+  total={total}
+  unit="projects"
+>
+  <!-- ls-style listing grouped by category -->
+  {
+    groups.map((group) => (
+      <section data-group>
+        <p class="mt-8 mb-2 text-sm text-text-muted">
+          -- {group.title} --
+        </p>
+        {
+          group.projects.map((project) => (
+            <a
+              href={project.data.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-item
+              data-search={searchFor(project)}
+              class="group/project flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-1.5 py-2.5 border-b border-border/40"
+            >
+              <span class="flex items-center gap-3 min-w-0">
+                {
+                  project.data.mainImage ? (
+                    <img
+                      src={project.data.mainImage}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      class="w-12 h-9 shrink-0 object-cover border border-border/60 grayscale group-hover/project:grayscale-0 transition"
+                    />
+                  ) : (
+                    <span
+                      class="w-12 h-9 shrink-0 border border-dashed border-border/60 flex items-center justify-center text-text-muted text-xs"
+                      >?</span
+                    >
+                  )
+                }
+                <span class="min-w-0">
+                  <span
+                    class="block text-text transition-colors group-hover/project:text-accent"
+                  >
+                    <span
+                      class="animate-blink hidden text-accent group-hover/project:inline"
+                      >▋</span
+                    >
+                    <span>{project.data.title}</span>
+                  </span>
+                  <span class="block mt-0.5 text-xs text-text-muted">
+                    {project.data.description ||
+                      (domainOf(project.data.url) &&
+                        `→ ${domainOf(project.data.url)}`)}
+                  </span>
+                </span>
+              </span>
+            </a>
+          ))
+        }
+      </section>
+    ))
+  }
+</GrepFilter>
