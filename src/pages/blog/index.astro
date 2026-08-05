@@ -4,9 +4,7 @@ import BlogItem from "@/components/BlogItem.astro";
 import AppFooter from "@/components/AppFooter.astro";
 import { getCollection } from "astro:content";
 
-const posts = await getCollection("posts", ({ data }) => {
-  return import.meta.env.PROD ? true : true;
-});
+const posts = await getCollection("posts");
 
 posts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
 
@@ -40,7 +38,7 @@ function excerpt(body: string, len = 100) {
 
     <!-- listing -->
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-6 mt-2 pb-10"
+      class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-6 mt-2 pb-10"
     >
       {
         posts.map((post) => {

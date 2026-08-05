@@ -37,26 +37,23 @@ const isExternal = !!external_link;
 
 <a
   href={blogUrl}
-  class="flex flex-col h-48 rounded-lg group/blog-item relative overflow-clip"
-  style="border: 1px solid var(--color-border); transition: border-color 0.2s ease"
-  onmouseover="this.style.borderColor='var(--color-accent)'"
-  onmouseout="this.style.borderColor='var(--color-border)'"
+  class="flex flex-col h-48 rounded-lg group/blog-item relative isolate overflow-clip border border-border hover:border-accent transition-colors duration-200"
 >
   {
     isArtOnly && (
       <img
         src={mainImage!}
         alt={title}
-        class="w-full h-full object-cover rounded-t-lg mb-4 absolute top-0 left-0 z-[-2]"
+        class="w-full h-full object-cover rounded-t-lg mb-4 absolute top-0 left-0 z-0"
       />
-      <div class="absolute top-0 left-0 w-full h-full bg-black/30 z-[-1]"/>
-      <p class=" bg-bg text-text-muted px-2 py-1 rounded-full text-xs w-max absolute top-4 left-4 z-10">Art</p>
+      <div class="absolute top-0 left-0 w-full h-full bg-black/30 z-10"/>
+      <p class=" bg-bg text-text-muted px-2 py-1 rounded-full text-xs w-max absolute top-4 left-4 z-20">Art</p>
       <div class="flex-grow"/>
     )
   }
 
   <h2
-    class={`text-xl leading-tight px-4 line-clamp-2 pt-4 ${isArtOnly ? "text-white" : "text-text"}`}
+    class={`text-xl leading-tight px-4 line-clamp-2 pt-4 relative z-20 ${isArtOnly ? "text-white" : "text-text"}`}
   >
     {title}
   </h2>
@@ -83,7 +80,7 @@ const isExternal = !!external_link;
     )
   }
 
-  <div class="flex items-center justify-between gap-2 px-4 pb-4">
+  <div class="flex items-center justify-between gap-2 px-4 pb-4 relative z-20">
     <p class={`text-xs ${isArtOnly ? "text-white" : "text-text-muted"}`}>
       {formatDate(publishedAt)}
     </p>

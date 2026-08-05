@@ -2,7 +2,6 @@
 type Props = {
   name: string;
   description: string;
-  image: string | null;
   url: string;
   categories: {
     title: string;
@@ -16,10 +15,7 @@ const { name, description, url, categories }: Props = Astro.props;
   href={url}
   target="_blank"
   rel="noopener noreferrer"
-  class="flex gap-4 rounded-lg overflow-hidden group/project-item flex-col h-[160px]"
-  style="border: 1px solid var(--color-border); transition: border-color 0.2s ease"
-  onmouseover="this.style.borderColor='var(--color-accent)'"
-  onmouseout="this.style.borderColor='var(--color-border)'"
+  class="flex gap-4 rounded-lg overflow-hidden group/project-item flex-col h-[160px] border border-border hover:border-accent transition-colors duration-200"
 >
   <div class="flex flex-col gap-2 p-4 flex-grow">
     <h2 class="text-lg" style="color: var(--color-text)">

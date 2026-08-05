@@ -18,6 +18,7 @@ const { title, description, image, article } = Astro.props;
 const pageTitle = title ? `${title} | Rubbie Kelvin` : "Rubbie Kelvin";
 const siteUrl = (Astro.site?.toString() || Astro.url.origin).replace(/\/$/, "");
 const imageUrl = image ? image : `${siteUrl}/rto.png`;
+const pathname = Astro.url.pathname;
 
 const navigationLinks = [
   {
@@ -50,10 +51,9 @@ const navigationLinks = [
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <link
-      href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Mozilla+Text:wght@200..700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Mozilla+Text:wght@200..700&display=swap"
       rel="stylesheet"
     />
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet">
 
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
@@ -95,42 +95,36 @@ const navigationLinks = [
 
     <meta id="theme-color-meta" name="theme-color" content="white" />
 
-    <script>
-      // I know this is a hack and there's a better way to do this.
-      // But let a boy dream.
-      function updateThemeColor() {
+    <script is:inline>
+      // Apply the theme before first paint so dark-mode users never see a
+      // white flash, and keep the browser chrome color in sync afterwards.
+      (function () {
+        let storedTheme = null;
+        try {
+          storedTheme = localStorage.getItem('theme');
+        } catch (e) {
+          /* storage unavailable (private mode, blocked cookies) */
+        }
+        const prefersDark = window.matchMedia(
+          '(prefers-color-scheme: dark)',
+        ).matches;
+        const theme = storedTheme || (prefersDark ? 'dark' : 'light');
+
         const html = document.documentElement;
-        const themeColorMeta = document.getElementById('theme-color-meta');
-        const currentTheme = html.getAttribute('data-theme') || 'light';
+        html.setAttribute('data-theme', theme);
+        html.style.colorScheme = theme;
 
-        // Set theme color based on current theme
-        const themeColor = currentTheme === 'dark' ? '#0a0a0f' : 'white';
-        themeColorMeta?.setAttribute('content', themeColor);
-      }
-
-      // Update on page load
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', updateThemeColor);
-      } else {
-        updateThemeColor();
-      }
-
-      // Update on theme changes
-      document.addEventListener('astro:page-load', updateThemeColor);
-
-      // Watch for theme attribute changes
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
-            updateThemeColor();
-          }
+        const meta = document.getElementById('theme-color-meta');
+        function syncThemeColor() {
+          const current = html.getAttribute('data-theme') || 'light';
+          meta?.setAttribute('content', current === 'dark' ? '#0a0a0f' : 'white');
+        }
+        syncThemeColor();
+        new MutationObserver(syncThemeColor).observe(html, {
+          attributes: true,
+          attributeFilter: ['data-theme'],
         });
-      });
-
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['data-theme']
-      });
+      })();
     </script>
   </head>
 
@@ -152,7 +146,11 @@ const navigationLinks = [
         {
           navigationLinks.map((link, index) => (
             <div class="lg:w-1/2">
-              <a class="cursor-underline-effect" href={link.url}>
+              <a
+                class="cursor-underline-effect"
+                href={link.url}
+                aria-current={pathname === link.url ? "page" : undefined}
+              >
                 <span class="hidden lg:inline">0{index + 1}.</span>
                 <span>{link.title}</span>
               </a>

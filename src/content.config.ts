@@ -46,7 +46,6 @@ const projects = defineCollection({
     title: z.string(),
     description: z.string().nullable().default(null),
     url: z.string().default(""),
-    mainImage: z.string().nullable().default(null),
     categories: z.array(z.string()).default([]),
   }),
 });

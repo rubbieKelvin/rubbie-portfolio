@@ -47,48 +47,42 @@
 </style>
 
 <script>
-  // Theme toggle functionality
-  function initializeTheme() {
-    const themeToggle = document.getElementById('theme-toggle');
-    const html = document.documentElement;
-    
-    // Get stored theme or default to light
-    const storedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
-    
-    // Apply initial theme
-    applyTheme(initialTheme);
-    
-    // Toggle theme on button click
-    themeToggle?.addEventListener('click', () => {
-      const currentTheme = html.getAttribute('data-theme') || 'light';
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      applyTheme(newTheme);
-      localStorage.setItem('theme', newTheme);
-    });
-    
-    // Listen for system theme changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      if (!localStorage.getItem('theme')) {
-        applyTheme(e.matches ? 'dark' : 'light');
-      }
-    });
+  // Theme toggle functionality. The initial theme is applied before first
+  // paint by the inline script in Layout.astro; this script owns
+  // interactions and system-preference changes only. This is a plain MPA
+  // (no view transitions), so the script runs once per page load and
+  // listeners attach directly at module scope.
+  function readStoredTheme() {
+    try {
+      return localStorage.getItem('theme');
+    } catch (e) {
+      return null; // storage unavailable (private mode, blocked cookies)
+    }
   }
-  
-  function applyTheme(theme: string) {
+
+  function applyTheme(theme) {
     const html = document.documentElement;
     html.setAttribute('data-theme', theme);
     html.style.colorScheme = theme;
   }
-  
-  // Initialize on page load
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeTheme);
-  } else {
-    initializeTheme();
-  }
-  
-  // Re-initialize on navigation (for SPA-like behavior)
-  document.addEventListener('astro:page-load', initializeTheme);
+
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle?.addEventListener('click', () => {
+    const currentTheme =
+      document.documentElement.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(newTheme);
+    try {
+      localStorage.setItem('theme', newTheme);
+    } catch (e) {
+      /* ignore: theme still applies for this session */
+    }
+  });
+
+  // Follow system theme changes only when the user hasn't chosen one.
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!readStoredTheme()) {
+      applyTheme(e.matches ? 'dark' : 'light');
+    }
+  });
 </script>

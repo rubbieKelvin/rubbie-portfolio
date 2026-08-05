@@ -44,7 +44,6 @@ const projectsByCategory = categories.map((cat) => {
                   return (
                     <ProjectItem
                       name={project.data.title}
-                      image={project.data.mainImage}
                       description={project.data.description}
                       url={project.data.url}
                       categories={project.data.categories.map((c) => ({ title: c }))}

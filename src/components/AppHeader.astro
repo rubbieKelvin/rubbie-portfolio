@@ -9,10 +9,10 @@ const { className } = Astro.props as Props;
 ---
 
 <div class:list={[className, "h-12 flex items-center justify-between"]}>
-  <h1>
+  <div>
     <a href="/">rubbiekelvin@localhost</a>
     <span style="color: var(--color-text-muted)">&nbsp;~ $</span>
     <span class="animate-blink">&nbsp;_</span>
-  </h1>
+  </div>
   <ThemeToggle />
 </div>
