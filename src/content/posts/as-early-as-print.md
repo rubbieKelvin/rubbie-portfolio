@@ -102,7 +102,7 @@ print("world")
 
 ## Packing and Unpacking
 
-This part isn't only common to the print function—arguments and keyword arguments can be packed into other functions too, but I thought I shouldn't leave this out.
+This part isn't only common to the print function; arguments and keyword arguments can be packed into other functions too, but I thought I shouldn't leave this out.
 
 Instead of looping through a list to print each element, we can unpack the list directly in print:
 

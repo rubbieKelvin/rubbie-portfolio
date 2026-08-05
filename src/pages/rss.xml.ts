@@ -32,7 +32,7 @@ export async function GET() {
   return rss({
     title: "Rubbie kelvin",
     description:
-      "Thoughts, tutorials, and insights from my development journey—sharing what I learnt along the way.",
+      "Thoughts, tutorials, and insights from my development journey, sharing what I learnt along the way.",
     site: SITE_URL,
     items,
     customData: `

@@ -24,16 +24,16 @@ Every new Django project starts with the same grind: repetitive API views, seria
 | Postman doc generation | docs generated from your views, importable into a workspace |
 | Pydantic request validation | typed, declarative validation on the way in |
 
-The Postman piece is the one I'm proudest of: documentation *derived* from the code can't drift — when the view changes, the next generation reflects it.
+The Postman piece is the one I'm proudest of: documentation *derived* from the code can't drift: when the view changes, the next generation reflects it.
 
 ## How it's distributed
 
-Clone, submodule, or zip — deliberately low-ceremony. It's not on PyPI yet, and the README says why: it needs to be exercised across projects before it earns a stable release. The docs (`creating-endpoints.md`, `validating-request-body.md`, `defining-models.md`, `generating-docs.md`) are structured for that path.
+Clone, submodule, or zip: deliberately low-ceremony. It's not on PyPI yet, and the README says why: it needs to be exercised across projects before it earns a stable release. The docs (`creating-endpoints.md`, `validating-request-body.md`, `defining-models.md`, `generating-docs.md`) are structured for that path.
 
 <Callout title="Stability, honestly">
-  The README opens with: "this library is unstable, everything works fine but changes are inevitable." For a personal library, that's the right contract — honest versioning beats fake stability, and consumers know what they're signing up for.
+  The README opens with: "this library is unstable, everything works fine but changes are inevitable." For a personal library, that's the right contract: honest versioning beats fake stability, and consumers know what they're signing up for.
 </Callout>
 
 ## Design thread
 
-Pydantic for validation, docs from code, serialization on the model — the through-line is *one source of truth*. Types are the contract, views declare what they accept, and documentation is an output, not a chore. That's the kind of DX I want to build with, so I built it.
+Pydantic for validation, docs from code, serialization on the model: the through-line is *one source of truth*. Types are the contract, views declare what they accept, and documentation is an output, not a chore. That's the kind of DX I want to build with, so I built it.

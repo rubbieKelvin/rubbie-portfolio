@@ -39,7 +39,7 @@ A workspace split so the core outlives the CLI:
 
 | Crate | Role |
 | --- | --- |
-| `nd-core` | request loading, template expansion, execution, the Rhai engine — usable as a library |
+| `nd-core` | request loading, template expansion, execution, the Rhai engine (usable as a library) |
 | `nd-generate` | OpenAPI 3.0.x → request file scaffolding |
 | `nd-web` | Axum server + JSON API + Vue 3 SPA, embedded with `rust-embed` |
 | `nd-cli` | the `nativedoctor` binary |
@@ -48,12 +48,12 @@ Embedding `nd-core` in your own Rust code is a first-class use case: `RequestFil
 
 ## Design decisions
 
-- **Scripts are declarative about side effects.** Locked-down Rhai means a script can't silently touch the network or the filesystem — every side effect is an explicit `invoke()` on a request file.
+- **Scripts are declarative about side effects.** Locked-down Rhai means a script can't silently touch the network or the filesystem; every side effect is an explicit `invoke()` on a request file.
 - **The SPA ships inside the binary.** `build.rs` runs `pnpm install` and `pnpm build` so the web UI is embedded; release CI pins pnpm and Node 20 and builds a four-target matrix (linux, windows, darwin aarch64/x86_64). No runtime assets to deploy.
 - **Deterministic expansion order.** Process env → `--env` files → Rhai `set` → overrides. Same input, same request, every time.
 
 <Callout title="Sharp edges, stated upfront">
-  OpenAPI 3.1 and some `$ref` patterns are rejected — generation is solid for 3.0.x and honest about the gap. And the web UI is a local development tool: anyone who can reach the bind address can trigger outbound HTTP and run configured Rhai. It binds loopback by default and the README documents the exposure.
+  OpenAPI 3.1 and some `$ref` patterns are rejected; generation is solid for 3.0.x and honest about the gap. And the web UI is a local development tool: anyone who can reach the bind address can trigger outbound HTTP and run configured Rhai. It binds loopback by default and the README documents the exposure.
 </Callout>
 
 ## What's next
