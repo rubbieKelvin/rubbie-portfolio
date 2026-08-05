@@ -10,6 +10,10 @@ const categories = await getCollection("categories", ({ data }) => {
 
 const projects = await getCollection("projects");
 
+const detailIds = new Set(
+  (await getCollection("projectDetails")).map((d) => d.id),
+);
+
 const projectsByCategory = categories.map((cat) => {
   return {
     title: cat.data.title,
@@ -32,7 +36,7 @@ const projectsByCategory = categories.map((cat) => {
       </h2>
     </div>
 
-    <ProjectList groups={projectsByCategory} />
+    <ProjectList groups={projectsByCategory} detailed={detailIds} />
 
     <AppFooter />
   </div>

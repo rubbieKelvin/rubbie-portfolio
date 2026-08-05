@@ -7,9 +7,10 @@ type Props = {
     title: string;
     projects: CollectionEntry<"projects">[];
   }[];
+  detailed: Set<string>;
 };
 
-const { groups } = Astro.props;
+const { groups, detailed } = Astro.props;
 
 const total = groups.reduce((n, g) => n + g.projects.length, 0);
 
@@ -46,11 +47,17 @@ const searchFor = (project) =>
           -- {group.title} --
         </p>
         {
-          group.projects.map((project) => (
+          group.projects.map((project) => {
+            const hasDetail = detailed.has(project.id);
+            return (
             <a
-              href={project.data.url}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={
+                hasDetail
+                  ? `/projects/${project.id}`
+                  : project.data.url
+              }
+              target={hasDetail ? undefined : "_blank"}
+              rel={hasDetail ? undefined : "noopener noreferrer"}
               data-item
               data-search={searchFor(project)}
               class="group/project flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-1.5 py-2.5 border-b border-border/40"
@@ -86,11 +93,13 @@ const searchFor = (project) =>
                     {project.data.description ||
                       (domainOf(project.data.url) &&
                         `→ ${domainOf(project.data.url)}`)}
+                    {hasDetail && " [notes]"}
                   </span>
                 </span>
               </span>
             </a>
-          ))
+            );
+          })
         }
       </section>
     ))
