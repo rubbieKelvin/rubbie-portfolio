@@ -1,7 +1,7 @@
 ---
 stack: [Rust, WebAssembly, Edge Computing, Astro, Starlight]
 description: >-
-  Feature flags evaluated at the edge: a Rust → WASM evaluator running on edge
+  Feature flags evaluated at the edge: a Rust -> WASM evaluator running on edge
   runtimes against a versioned manifest: deterministic, fail-closed, and no
   round-trip to a vendor.
 links:
@@ -22,7 +22,7 @@ Most flag platforms evaluate centrally: your app calls a vendor endpoint with th
 
 ## Why edge evaluation
 
-A Rust → WASM evaluator runs on your edge runtime against a versioned manifest synced globally. No network call in the render path: the same evaluator returns the same answer everywhere, byte-for-byte, in your edge worker, your server, or a CLI.
+A Rust -> WASM evaluator runs on your edge runtime against a versioned manifest synced globally. No network call in the render path: the same evaluator returns the same answer everywhere, byte-for-byte, in your edge worker, your server, or a CLI.
 
 <Callout title="The three promises">
   **No flicker**: decisions are local, nothing to wait on. **Predictable rollouts**: a frozen bucket hash means a 10% rollout picks the same 10% on every runtime. **Fail-closed by default**: a malformed flag falls back to its declared default; one bad flag can't break the rest.
@@ -72,7 +72,3 @@ Billing is metered on the axes that match actual usage: monthly tracked entities
 | Targeting rules | Basic predicates | Advanced (%, rollouts, schedules) |
 
 Self-hosting is a documented path for teams that can't send flag state to a third party.
-
-## What's next
-
-The docs lay out the roadmap's shape: quickstart, core concepts (workspaces, environments, flags, segments, MTEs, evaluations), the rollout bucket contract, SDKs & API, self-hosting. The next axis is SDK coverage: more runtimes speaking the same WASM core.

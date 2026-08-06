@@ -39,12 +39,8 @@ Loops are bracket-matched: `[` enters only while the current cell is non-zero, `
 
 ## Debug mode
 
-A `--debug` flag prints the raw output as a vector of bytes instead of ASCII, which is essential when a program manipulates values that aren't printable. The toy becomes a tool for verifying programs that work below the character layer.
-
 <Callout title="The honest edge case">
-  Invalid commands are validated and reported. Unmatched brackets are the documented gap: the README admits they "may produce unintended behavior." The diagnostics story is the natural next step for this project.
+  Invalid commands are validated and reported. Unmatched brackets are the documented gap
 </Callout>
 
-## What's next
-
-Better diagnostics for unmatched brackets, and it's MIT-licensed if anyone wants to pick it up. For me it was the right-sized first Rust project: finishable in a weekend, testable, and it made the borrow checker earn its keep on a real, if small, program.
+A `--debug` flag prints the raw output as a vector of bytes instead of ASCII, which is essential when a program manipulates values that aren't printable. The toy becomes a tool for verifying programs that work below the character layer.

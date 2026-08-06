@@ -12,12 +12,10 @@ In 4 days i'll start my new role at [Colabra](https://www.colabra.ai/), and hone
 
 I've been looking for a company that's working on something that actually matters, and Colabra feels like that. They're building tools to help scientists collaborate better... which sounds simple but is actually a huge problem. Most researchers are still stuck with tools that feel like they're from the 90s.
 
-The welcome email they sent was... intense. In a good way? It's clear they've thought a lot about how to work as a remote team and go async first in communication. Some highlights that caught my attention:
+The welcome email they sent was... intense. In a good way? It's clear they've thought a lot about how to work as a remote team and go async first in communication.
 
 - "Do what adds value to the team, not what you're used to". I like this pragmatic approach
-
 - Assume good intentions when things go wrong (revolutionary, I know)
-
 - Everything gets documented, which as a someone who's going to jump into a gigantic codebase, I deeply appreciate
 
 The tech stack looks fun too. They're using Vue.js *(i picked vue sometime 2yrs ago)* and some interesting collaborative editing tech Y.js for realtime collaboration and tiptap for rich text. It's the kind of stuff that makes building a collaborative platform for scientists actually possible.

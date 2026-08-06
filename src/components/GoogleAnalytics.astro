@@ -1,25 +1,29 @@
 ---
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 if (!gaMeasurementId) {
-  console.warn("Missing PUBLIC_GA_MEASUREMENT_ID → Google Analytics disabled");
+    console.warn(
+        "Missing PUBLIC_GA_MEASUREMENT_ID -> Google Analytics disabled",
+    );
 }
 ---
 
 {
-  gaMeasurementId && (
-    <>
-      <script
-        async
-        src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
-      ></script>
-      <script set:html={`
+    gaMeasurementId && (
+        <>
+            <script
+                async
+                src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+            />
+            <script
+                set:html={`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', '${gaMeasurementId}', {
           send_page_view: true
         });
-      `}></script>
-    </>
-  )
+      `}
+            />
+        </>
+    )
 }

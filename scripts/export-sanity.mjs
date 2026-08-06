@@ -59,7 +59,7 @@ async function downloadFile(url, filepath) {
           return;
         }
         if (res.statusCode !== 200) {
-          console.error(`  FAILED ${url} → ${res.statusCode}`);
+          console.error(`  FAILED ${url} -> ${res.statusCode}`);
           resolve(null);
           return;
         }
@@ -311,7 +311,7 @@ async function downloadImages(imageRefs) {
       count++;
       if (count % 5 === 0) console.log(`  ${count}/${imageRefs.length}`);
     } catch (e) {
-      console.error(`  Failed: ${url} → ${e.message}`);
+      console.error(`  Failed: ${url} -> ${e.message}`);
     }
   }
 
