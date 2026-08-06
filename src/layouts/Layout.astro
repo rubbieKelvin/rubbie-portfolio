@@ -93,7 +93,18 @@ const navigationLinks = [
       )
     }
 
-    <meta id="theme-color-meta" name="theme-color" content="white" />
+    <meta
+      id="theme-color-meta-dark"
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#0a0a0f"
+    />
+    <meta
+      id="theme-color-meta-light"
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="white"
+    />
 
     <script is:inline>
       // Apply the theme before first paint so dark-mode users never see a
@@ -114,10 +125,15 @@ const navigationLinks = [
         html.setAttribute('data-theme', theme);
         html.style.colorScheme = theme;
 
-        const meta = document.getElementById('theme-color-meta');
+        const metaDark = document.getElementById('theme-color-meta-dark');
+        const metaLight = document.getElementById('theme-color-meta-light');
         function syncThemeColor() {
           const current = html.getAttribute('data-theme') || 'light';
-          meta?.setAttribute('content', current === 'dark' ? '#0a0a0f' : 'white');
+          const color = current === 'dark' ? '#0a0a0f' : 'white';
+          // Update both variants so the one matching the OS preference
+          // carries the current choice; the browser picks by media query.
+          metaDark?.setAttribute('content', color);
+          metaLight?.setAttribute('content', color);
         }
         syncThemeColor();
         new MutationObserver(syncThemeColor).observe(html, {
