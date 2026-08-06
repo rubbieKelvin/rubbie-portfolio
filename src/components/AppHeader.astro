@@ -8,7 +8,7 @@ interface Props {
 const { className } = Astro.props as Props;
 ---
 
-<div class:list={[className, "h-12 flex items-center justify-between"]}>
+<div class:list={[className, "h-12 flex items-center justify-between max-[359px]:text-xs max-[359px]:px-3"]}>
   <div>
     <a href="/">rubbiekelvin@localhost</a>
     <span style="color: var(--color-text-muted)">&nbsp;~ $</span>
