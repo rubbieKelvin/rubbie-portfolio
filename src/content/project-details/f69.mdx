@@ -49,26 +49,11 @@ The same Rust evaluator is also available as a library (and as WebAssembly), so 
 
 ## Determinism & safety
 
-Two properties do most of the work:
-
-- **Frozen bucket hashing.** Rollout math is deterministic across runtimes, so no coordination is needed between edge nodes to agree on who's in a rollout.
-- **Fail-closed evaluation.** Malformed flags degrade to their declared default instead of throwing. The safety path is the default path.
-
 <Callout title="A security posture, not a footnote">
   The edge surface is read-only and authenticated by environment-scoped service accounts; the dashboard supports passkeys for teams that need them. The runtime surface stays tiny and auditable: the edge never mutates state.
 </Callout>
 
-## As a product
+Two properties do most of the work:
 
-Billing is metered on the axes that match actual usage: monthly tracked entities (MTEs), evaluations, and service accounts.
-
-| | Free | Standard |
-| --- | --- | --- |
-| Price | $0 / month | $40 / month base |
-| Tracked entities | 5,000 | 100,000, then usage-based |
-| Evaluations | 1M / month | 10M / month, then usage-based |
-| Environments | 2 | Unlimited |
-| Service accounts | 2 | 10 |
-| Targeting rules | Basic predicates | Advanced (%, rollouts, schedules) |
-
-Self-hosting is a documented path for teams that can't send flag state to a third party.
+- **Frozen bucket hashing.** Rollout math is deterministic across runtimes, so no coordination is needed between edge nodes to agree on who's in a rollout.
+- **Fail-closed evaluation.** Malformed flags degrade to their declared default instead of throwing. The safety path is the default path.
