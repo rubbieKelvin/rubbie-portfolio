@@ -82,6 +82,6 @@ We're just getting started. The foundation is solid, but the possibilities are e
 
 The future of meeting intelligence isn't just about recording what was said, it's about understanding what was meant, what was decided, and what needs to happen next.
 
-Building Colabra's transcript feature has been one of those projects that reminds you why you became a developer in the first place. It's not just about writing code... it's about solving real problems for real people in ways that feel almost magical.
+Building Colabra's transcription feature has been one of those projects that reminds you why you became a developer in the first place.
 
 And the best part? This is just the beginning, and i love that i get to be a part of this! Cheers 🥂
