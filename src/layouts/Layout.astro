@@ -1,8 +1,8 @@
 ---
 import "@/assets/global.css";
 import AppHeader from "@/components/AppHeader.astro";
+import AppFooter from "@/components/AppFooter.astro";
 import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
-import contactLinks from "@/data/links.json";
 
 type Props = {
   title?: string;
@@ -18,29 +18,6 @@ const { title, description, image, article } = Astro.props;
 const pageTitle = title ? `${title} | Rubbie Kelvin` : "Rubbie Kelvin";
 const siteUrl = (Astro.site?.toString() || Astro.url.origin).replace(/\/$/, "");
 const imageUrl = image ? image : `${siteUrl}/rto.png`;
-const pathname = Astro.url.pathname;
-
-const navigationLinks = [
-  {
-    title: "~",
-    url: "/",
-  },
-
-  {
-    title: "Projects",
-    url: "/projects",
-  },
-
-  {
-    title: "Blog",
-    url: "/blog",
-  },
-
-  {
-    title: "WDYPLP?",
-    url: "/why-does-your-portfolio-look-plain",
-  },
-];
 ---
 
 <!doctype html>
@@ -51,10 +28,15 @@ const navigationLinks = [
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <link
-      href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Mozilla+Text:wght@200..700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <script is:inline defer src="https://scripts.brimble.io/analytics/brimble.js" data-website-id="aebe9b72-87d4-4d0d-889a-03b6ceba20ff"></script>
+    <script
+      is:inline
+      defer
+      src="https://scripts.brimble.io/analytics/brimble.js"
+      data-website-id="aebe9b72-87d4-4d0d-889a-03b6ceba20ff"
+    ></script>
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Rubbie Kelvin" />
@@ -76,8 +58,6 @@ const navigationLinks = [
     <meta property="og:image:alt" content={pageTitle} />
     <meta property="og:image:width" content="1042" />
     <meta property="og:image:height" content="630" />
-
-    <!-- Twitter Card meta tags -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
@@ -85,11 +65,13 @@ const navigationLinks = [
     <meta name="twitter:creator" content="@rubbiekelvin" />
     {
       article && (
-        <meta property="article:author" content="Rubbie Kelvin" />
-        <meta
-          property="article:published_time"
-          content={article.publishedAt}
-        />
+        <>
+          <meta property="article:author" content="Rubbie Kelvin" />
+          <meta
+            property="article:published_time"
+            content={article.publishedAt}
+          />
+        </>
       )
     }
 
@@ -97,102 +79,51 @@ const navigationLinks = [
       id="theme-color-meta-dark"
       name="theme-color"
       media="(prefers-color-scheme: dark)"
-      content="#0a0a0f"
+      content="#080808"
     />
     <meta
       id="theme-color-meta-light"
       name="theme-color"
       media="(prefers-color-scheme: light)"
-      content="white"
+      content="#ffffff"
     />
 
     <script is:inline>
-      // Apply the theme before first paint so dark-mode users never see a
-      // white flash, and keep the browser chrome color in sync afterwards.
       (function () {
         let storedTheme = null;
         try {
-          storedTheme = localStorage.getItem('theme');
-        } catch (e) {
-          /* storage unavailable (private mode, blocked cookies) */
-        }
+          storedTheme = localStorage.getItem("theme");
+        } catch (e) {}
         const prefersDark = window.matchMedia(
-          '(prefers-color-scheme: dark)',
+          "(prefers-color-scheme: dark)",
         ).matches;
-        const theme = storedTheme || (prefersDark ? 'dark' : 'light');
-
+        const theme = storedTheme || (prefersDark ? "dark" : "light");
         const html = document.documentElement;
-        html.setAttribute('data-theme', theme);
+        html.setAttribute("data-theme", theme);
         html.style.colorScheme = theme;
-
-        const metaDark = document.getElementById('theme-color-meta-dark');
-        const metaLight = document.getElementById('theme-color-meta-light');
+        const metaDark = document.getElementById("theme-color-meta-dark");
+        const metaLight = document.getElementById("theme-color-meta-light");
         function syncThemeColor() {
-          const current = html.getAttribute('data-theme') || 'light';
-          const color = current === 'dark' ? '#0a0a0f' : 'white';
-          // Update both variants so the one matching the OS preference
-          // carries the current choice; the browser picks by media query.
-          metaDark?.setAttribute('content', color);
-          metaLight?.setAttribute('content', color);
+          const current = html.getAttribute("data-theme") || "light";
+          const color = current === "dark" ? "#080808" : "#ffffff";
+          metaDark?.setAttribute("content", color);
+          metaLight?.setAttribute("content", color);
         }
         syncThemeColor();
         new MutationObserver(syncThemeColor).observe(html, {
           attributes: true,
-          attributeFilter: ['data-theme'],
+          attributeFilter: ["data-theme"],
         });
       })();
     </script>
   </head>
 
-  <body class="h-full flex flex-col max-h-full">
-    <!-- Header -->
-    <div class="flex-row flex">
-      <div class="flex-[20%] hidden lg:block"></div>
-      <AppHeader className="flex-[60%] px-5 lg:px-0" />
-      <div class="flex-[20%] hidden lg:block"></div>
-    </div>
-    <!-- Main Content -->
-    <div
-      class="flex-grow flex h-0 overflow-y-auto flex-col lg:flex-row-reverse"
-    >
-      <!-- Navigation Links -->
-      <div
-        class="lg:flex-[20%] flex lg:flex-col gap-4 items-center justify-around lg:justify-center sticky top-0 px-5 py-2 lg:p-0 z-10 bg-bg"
-      >
-        {
-          navigationLinks.map((link, index) => (
-            <div class="lg:w-1/2">
-              <a
-                class="cursor-underline-effect"
-                href={link.url}
-                aria-current={pathname === link.url ? "page" : undefined}
-              >
-                <span class="hidden lg:inline">0{index + 1}.</span>
-                <span>{link.title}</span>
-              </a>
-            </div>
-          ))
-        }
-      </div>
-      <div class="lg:flex-[60%] flex-grow">
-        <slot />
-      </div>
-      <!-- Contact Links -->
-      <div
-        class="lg:flex-[20%] flex flex-wrap lg:flex-col gap-4 items-center justify-center lg:sticky top-0 px-5 py-2 lg:p-0"
-      >
-        {
-          contactLinks.map((link) => (
-            <div class="lg:w-1/2">
-              <a class="cursor-underline-effect" href={link.url}>
-                <span>{link.title}</span>
-              </a>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-
+  <body class="min-h-full flex flex-col">
+    <AppHeader />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <AppFooter />
     <GoogleAnalytics />
   </body>
 </html>

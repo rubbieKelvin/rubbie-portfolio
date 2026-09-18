@@ -1,71 +1,80 @@
 ---
 type Props = {
-  prompt: string;
   total: number;
   unit: string;
 };
 
-const { prompt, total, unit } = Astro.props;
+const { total, unit } = Astro.props;
 ---
 
 <div
-  class="mt-6 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 text-sm"
+  class="mb-8 flex flex-col sm:flex-row sm:items-center gap-3 border-b-2 pb-4"
+  style="border-color: var(--color-border)"
 >
-  <span class="text-text-muted shrink-0">{prompt}</span>
+  <label
+    for="grep-input"
+    class="text-xs uppercase tracking-widest font-semibold text-text-muted shrink-0"
+  >
+    Filter
+  </label>
   <input
     id="grep-input"
     type="text"
-    placeholder="type to filter…"
+    placeholder="Search..."
     autocomplete="off"
     autocapitalize="off"
     spellcheck="false"
     aria-label="Filter list"
-    class="flex-1 min-w-0 bg-transparent border-b border-border focus:border-accent outline-none py-0.5 caret-accent placeholder:text-text-muted/60 transition-colors"
+    class="flex-1 min-w-0 bg-transparent outline-none py-1 text-sm placeholder:text-text-muted/50 caret-accent"
+    style="color: var(--color-text)"
   />
-  <span id="file-count" data-unit={unit} class="text-text-muted text-xs shrink-0"
-    >{total} {unit}.</span
+  <span
+    id="file-count"
+    data-unit={unit}
+    class="text-xs text-text-muted shrink-0 font-medium"
   >
+    {total}
+    {unit}
+  </span>
 </div>
 
 <slot />
 
-<p id="no-matches" class="hidden text-text-muted py-8">
-  no matches.<span class="animate-blink text-accent">▋</span>
+<p id="no-matches" class="hidden text-text-muted py-12 text-sm">
+  No results for that search.
 </p>
 
 <script>
-  // Live grep filter for any [data-item] list rendered inside this component.
-  const input = document.getElementById('grep-input');
-  const rows = Array.from(document.querySelectorAll('[data-item]'));
-  const groups = Array.from(document.querySelectorAll('[data-group]'));
-  const count = document.getElementById('file-count');
-  const noMatches = document.getElementById('no-matches');
+  const input = document.getElementById("grep-input") as HTMLInputElement;
+  const rows = Array.from(document.querySelectorAll("[data-item]"));
+  const groups = Array.from(document.querySelectorAll("[data-group]"));
+  const count = document.getElementById("file-count") as HTMLElement;
+  const noMatches = document.getElementById("no-matches") as HTMLElement;
   const unit = count.dataset.unit;
 
   function applyFilter() {
     const q = input.value.trim().toLowerCase();
     let visible = 0;
     for (const row of rows) {
-      const hit = !q || row.dataset.search.includes(q);
-      row.classList.toggle('hidden', !hit);
+      const hit = !q || (row as HTMLElement).dataset.search?.includes(q);
+      row.classList.toggle("hidden", !hit);
       if (hit) visible += 1;
     }
     for (const group of groups) {
       group.classList.toggle(
-        'hidden',
-        !group.querySelector('[data-item]:not(.hidden)'),
+        "hidden",
+        !group.querySelector("[data-item]:not(.hidden)"),
       );
     }
     count.textContent = `${visible} of ${rows.length} ${unit}`;
-    noMatches.classList.toggle('hidden', visible !== 0);
+    noMatches.classList.toggle("hidden", visible !== 0);
   }
 
-  input.addEventListener('input', applyFilter);
+  input.addEventListener("input", applyFilter);
   applyFilter();
 
-  // '/' focuses the filter, like less/vim
-  document.addEventListener('keydown', (e) => {
-    if (e.key === '/' && document.activeElement !== input) {
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "/" && document.activeElement !== input) {
       e.preventDefault();
       input.focus();
     }

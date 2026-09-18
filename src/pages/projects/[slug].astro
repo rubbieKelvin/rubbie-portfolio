@@ -1,6 +1,5 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import AppFooter from "@/components/AppFooter.astro";
 import Image from "@/components/Image.astro";
 import { getCollection, getEntry, render } from "astro:content";
 
@@ -13,7 +12,6 @@ export async function getStaticPaths() {
 }
 
 const { detail } = Astro.props as { detail: any };
-
 const project = await getEntry("projects", detail.id);
 
 if (!project) {
@@ -22,12 +20,11 @@ if (!project) {
 
 const { Content } = await render(detail);
 
-// Links from the case study frontmatter, falling back to the project URL.
 const links =
   detail.data.links.length > 0
     ? detail.data.links
     : project.data.url
-      ? [{ label: "view", url: project.data.url }]
+      ? [{ label: "View project", url: project.data.url }]
       : [];
 ---
 
@@ -36,85 +33,108 @@ const links =
   description={detail.data.description ?? project.data.description ?? undefined}
   image={project.data.mainImage ?? undefined}
 >
-  <div class="px-5 lg:px-0 pb-10">
-    <!-- Back to projects -->
-    <div class="py-5">
-      <a href="/projects" class="text-sm cursor-after-effect hidden lg:block"
-        >&larr; Back to Projects</a
+  <div class="max-w-5xl mx-auto px-6">
+    <!-- Back link -->
+    <div class="pt-8 pb-2">
+      <a
+        href="/projects"
+        class="text-xs font-semibold uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
       >
+        ← Back to Projects
+      </a>
     </div>
 
-    <!-- Project header -->
-    <article class="md:max-w-3xl">
-      <header class="mb-8">
-        <h1 class="text-4xl lg:text-5xl mb-4 leading-tight">
+    <article class="pb-16">
+      <!-- Header -->
+      <header
+        class="pt-8 pb-10 border-b-2"
+        style="border-color: var(--color-border)"
+      >
+        <h1
+          class="font-display font-black uppercase text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight mb-4"
+          style="color: var(--color-text)"
+        >
           {project.data.title}
         </h1>
 
         {
           detail.data.description && (
-            <p class="mb-4 max-w-2xl leading-relaxed" style="color: var(--color-text-muted)">
+            <p class="mb-6 max-w-2xl leading-relaxed text-text-muted">
               {detail.data.description}
             </p>
           )
         }
 
-        <div
-          class="flex flex-wrap items-center gap-2 text-sm"
-          style="color: var(--color-text-muted)"
-        >
-          {project.data.categories.map((category: string) => (
-            <span class="px-2 py-1 rounded text-xs bg-accent-bg text-text">
-              {category}
-            </span>
-          ))}
-          {detail.data.stack.length > 0 && (
-            <span class="text-xs">{detail.data.stack.join(" · ")}</span>
-          )}
+        <div class="flex flex-wrap items-center gap-3">
+          {
+            project.data.categories.map((category: string) => (
+              <span
+                class="border px-2 py-0.5 text-xs uppercase tracking-wide"
+                style="border-color: var(--color-border-muted); color: var(--color-text-muted)"
+              >
+                {category}
+              </span>
+            ))
+          }
+          {
+            detail.data.stack.length > 0 && (
+              <span class="text-xs text-text-muted">
+                {detail.data.stack.join(" · ")}
+              </span>
+            )
+          }
         </div>
 
         {
           links.length > 0 && (
-            <div class="mt-6 flex flex-wrap gap-2">
-              {links.map((link) => (
+            <div class="mt-6 flex flex-wrap gap-3">
+              {links.map((link: { label: string; url: string }) => (
                 <a
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="rounded-full border border-border/70 px-4 py-1.5 text-xs transition-colors hover:border-accent"
+                  class="inline-block border-2 px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors hover:bg-[var(--color-text)] hover:text-[var(--color-bg)]"
+                  style="border-color: var(--color-border)"
                 >
-                  -> {link.label}
+                  {link.label} →
                 </a>
               ))}
             </div>
           )
         }
-
-        {
-          project.data.mainImage && (
-            <div class="mt-8 mb-8">
-              <Image
-                src={project.data.mainImage}
-                alt={project.data.title}
-                class="w-full h-64 lg:h-96 object-cover rounded-lg"
-              />
-            </div>
-          )
-        }
       </header>
 
-      <!-- Case study -->
-      <div class="prose prose-lg max-w-none">
+      <!-- Main image -->
+      {
+        project.data.mainImage && (
+          <div class="mt-8 mb-10">
+            <Image
+              src={project.data.mainImage}
+              alt={project.data.title}
+              class="w-full h-64 lg:h-96 object-cover"
+              style="border: 2px solid var(--color-border-muted)"
+            />
+          </div>
+        )
+      }
+
+      <!-- Case study content -->
+      <div class="prose max-w-none mt-10">
         <Content />
       </div>
     </article>
 
-    <!-- Navigation footer -->
-    <div class="mt-12 pt-8 pb-4">
-      <a href="/projects" class="text-sm cursor-after-effect">
-        &larr; Back to projects
+    <!-- Bottom nav -->
+    <div
+      class="py-8 border-t-2"
+      style="border-color: var(--color-border-muted)"
+    >
+      <a
+        href="/projects"
+        class="text-xs font-semibold uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
+      >
+        ← Back to Projects
       </a>
     </div>
-    <AppFooter />
   </div>
 </Layout>

@@ -1,33 +1,73 @@
 ---
-import AppFooter from "@/components/AppFooter.astro";
 import Layout from "@/layouts/Layout.astro";
 ---
 
 <Layout title="Why does your portfolio look plain?">
-  <div class="flex flex-col h-full px-5 lg:px-0">
-    <div class="flex-grow flex flex-col lg:justify-center">
-      <div class="pt-10 py-15">
-        <h1 class="text-5xl">
-          <span style="color: var(--color-text-muted)" class="animate-pulse">&gt;</span>Design choice
-        </h1>
-        <p class="mt-6 2xl:max-w-[70%] xl:max-w-[80%] lg:max-w-[90%]" style="color: var(--color-text-muted)">
-          This portfolio uses a minimalistic, text-focused design inspired by
-          old typewritten newspapers and Keita Yamada's clean aesthetic. The
-          goal is to keep things simple, clear, and focused on content. I
-          believe good design doesn't need to be flashy, it should be
-          functional, intentional, and easy to navigate. This approach reflects
-          my preference for substance over unnecessary style.
+  <div class="max-w-5xl mx-auto px-6">
+    <section
+      class="pt-14 pb-10 border-b-2"
+      style="border-color: var(--color-border)"
+    >
+      <p
+        class="text-xs uppercase tracking-widest font-semibold text-text-muted mb-3"
+      >
+        Design Choice
+      </p>
+      <h1
+        class="font-display font-black uppercase text-4xl md:text-5xl leading-tight tracking-tight"
+        style="color: var(--color-text)"
+      >
+        Why does your portfolio<br />look like this?
+      </h1>
+    </section>
+
+    <div class="pt-10 pb-16 max-w-2xl space-y-10">
+      <div>
+        <h2
+          class="font-display font-bold uppercase text-xs tracking-widest mb-4"
+          style="color: var(--color-text)"
+        >
+          Intentional
+        </h2>
+        <p class="text-text-muted leading-relaxed">
+          Brutalist design strips everything back to what matters — structure,
+          hierarchy, content. No gradients to hide weak ideas. No carousels to
+          distract from bad work. What you see is what there is: bold type,
+          strong borders, and the actual work.
         </p>
-        <h2 class="mt-10 mb-4 text-3xl">Copycats</h2>
-        <p class="2xl:max-w-[70%] xl:max-w-[80%] lg:max-w-[90%]" style="color: var(--color-text-muted)">
-          Inspiration drives creativity, I've refined my skills by
-          learning from the work of others, and I welcome anyone who finds value
-          in what I create. However, there's a clear line between drawing
-          inspiration and outright copying. Blatantly replicating and claiming
-          someone else's work as your own is unacceptable.
+      </div>
+
+      <div>
+        <h2
+          class="font-display font-bold uppercase text-xs tracking-widest mb-4"
+          style="color: var(--color-text)"
+        >
+          Builder First
+        </h2>
+        <p class="text-text-muted leading-relaxed">
+          I'm a builder. The most important thing on this site is what I'm
+          building right now, and what I've built. The design reflects that
+          priority — no decorative clutter between you and the work. If
+          something doesn't help you understand who I am or what I build, it
+          doesn't belong here.
+        </p>
+      </div>
+
+      <div>
+        <h2
+          class="font-display font-bold uppercase text-xs tracking-widest mb-4"
+          style="color: var(--color-text)"
+        >
+          Copycats
+        </h2>
+        <p class="text-text-muted leading-relaxed">
+          Inspiration drives creativity. I've refined my skills by learning
+          from the work of others, and I welcome anyone who finds value in what
+          I create. There's a clear line between drawing inspiration and
+          outright copying. Blatantly replicating and claiming someone else's
+          work as your own is unacceptable.
         </p>
       </div>
     </div>
-    <AppFooter />
   </div>
 </Layout>

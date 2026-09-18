@@ -1,34 +1,122 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import AppFooter from "@/components/AppFooter.astro";
 import CurrentlyBuilding from "@/components/CurrentlyBuilding.astro";
+import { getCollection } from "astro:content";
 import introData from "@/data/intro.json";
+import contactLinks from "@/data/links.json";
+
+const posts = await getCollection("posts");
+const recentPosts = [...posts]
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .slice(0, 5);
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+const blogUrl = (post: any) => `/blog/${post.id.replace(/\.md$/, "")}`;
 ---
 
 <Layout>
-    <div class="flex flex-col justify-center h-full px-5 lg:px-0">
-        <div class="flex flex-col gap-4 flex-grow justify-center">
-            <h2 class="text-sm">{introData.subtitle}</h2>
-            <h1 class="text-5xl md:text-7xl max-[359px]:text-4xl">
-                <span>{introData.title}</span><span class="text-accent"
-                    >.</span
-                >
-            </h1>
-            <div
-                class="2xl:max-w-[70%] xl:max-w-[80%] lg:max-w-[90%]"
-                style="color: var(--color-text-muted)"
+  <div class="max-w-5xl mx-auto px-6">
+    <!-- Hero -->
+    <section
+      class="pt-16 pb-14 border-b-2"
+      style="border-color: var(--color-border)"
+    >
+      <p
+        class="text-xs uppercase tracking-widest font-semibold text-text-muted mb-6"
+      >
+        Software Developer &nbsp;·&nbsp; Nigeria
+      </p>
+      <h1
+        class="font-display font-black uppercase leading-none tracking-tight mb-8"
+        style="font-size: clamp(3.5rem, 12vw, 8rem); color: var(--color-text)"
+      >
+        Rubbie<br />Kelvin<span style="color: var(--color-accent)">.</span>
+      </h1>
+      <p
+        class="text-text-muted max-w-xl leading-relaxed mb-10 text-base"
+      >
+        I build tools, systems, and interfaces. From low-level systems to
+        beautiful UIs. Core expertise in <strong
+          style="color: var(--color-text)">Python</strong
+        >, <strong style="color: var(--color-text)">C++</strong>, and <strong
+          style="color: var(--color-text)">TypeScript</strong
+        >. Currently deep in <strong style="color: var(--color-text)"
+          >Rust</strong
+        >.
+      </p>
+      <div class="flex items-center gap-5 flex-wrap">
+        <a
+          href={introData.action_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block border-2 px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors hover:bg-[var(--color-text)] hover:text-[var(--color-bg)]"
+          style="border-color: var(--color-border)"
+        >
+          Resume →
+        </a>
+        {
+          contactLinks.slice(0, 3).map((link) => (
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-xs text-text-muted uppercase tracking-widest font-semibold hover:text-accent transition-colors"
             >
-                <Fragment set:html={introData.description} />
-            </div>
-            <div>
-                <a href={introData.action_url} class="cursor-after-effect">
-                    {introData.action_text}
-                </a>
-            </div>
-        </div>
+              {link.title} ↗
+            </a>
+          ))
+        }
+      </div>
+    </section>
 
-        <CurrentlyBuilding />
+    <!-- Currently Building -->
+    <CurrentlyBuilding />
 
-        <AppFooter />
-    </div>
+    <!-- Recent Writing -->
+    <section class="mt-16">
+      <div
+        class="flex items-baseline justify-between mb-6 border-b-2 pb-3"
+        style="border-color: var(--color-border)"
+      >
+        <h2
+          class="font-display font-bold text-xs uppercase tracking-widest"
+          style="color: var(--color-text)"
+        >
+          Recent Writing
+        </h2>
+        <a
+          href="/blog"
+          class="text-xs uppercase tracking-widest text-text-muted hover:text-accent transition-colors font-semibold"
+        >
+          All Posts →
+        </a>
+      </div>
+      <div>
+        {
+          recentPosts.map((post) => (
+            <a
+              href={blogUrl(post)}
+              class="group flex items-center justify-between gap-4 py-3.5 border-b transition-colors hover:border-[var(--color-border)]"
+              style="border-color: var(--color-border-muted)"
+            >
+              <span
+                class="font-semibold group-hover:text-accent transition-colors"
+              >
+                {post.data.title}
+              </span>
+              <span class="text-xs text-text-muted shrink-0 font-medium">
+                {fmtDate(post.data.publishedAt)}
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
 </Layout>

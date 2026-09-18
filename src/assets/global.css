@@ -7,134 +7,110 @@ body {
 }
 
 body {
-    @apply antialiased font-display;
+    @apply antialiased;
     background-color: var(--color-bg);
     color: var(--color-text);
+    font-family: "Space Grotesk", sans-serif;
 }
 
 @theme {
-    --font-display: "Google Sans Code", "monospace";
-    --animate-blink: blink 1s step-end infinite;
+    --font-display: "Syne", sans-serif;
 
-    /* Color scheme variables */
-    --color-bg: light-dark(white, #0a0a0f);
-    --color-text: light-dark(black, #e2e8f0);
-    --color-text-muted: light-dark(#323437, #bdbdbd);
-    --color-accent: light-dark(#fbbf24, #fcd34d);
-    --color-accent-bg: light-dark(#fef3c7, #1e1b3a);
-    --color-border: light-dark(#d1d5db, #2d3748);
-
-    @keyframes blink {
-        0%,
-        50% {
-            opacity: 1;
-        }
-        51%,
-        100% {
-            opacity: 0;
-        }
-    }
+    --color-bg: light-dark(#ffffff, #080808);
+    --color-text: light-dark(#0d0d0d, #f0f0f0);
+    --color-text-muted: light-dark(#555555, #888888);
+    --color-accent: light-dark(#cc3a00, #ff5533);
+    --color-surface: light-dark(#f2f2f2, #141414);
+    --color-border: light-dark(#0d0d0d, #f0f0f0);
+    --color-border-muted: light-dark(#d4d4d4, #2a2a2a);
 }
 
 :root {
     font-optical-sizing: auto;
 }
 
-.cursor-underline-effect {
-    position: relative;
-    color: var(--color-text);
-}
-
-.cursor-underline-effect:hover::before {
-    content: "⸺";
-    position: absolute;
-    top: 0.6em;
-    animation: var(--animate-blink);
-    color: var(--color-accent);
-}
-
-.cursor-after-effect:hover::after {
-    content: "_";
-    animation: var(--animate-blink);
-    color: var(--color-accent);
-}
-
-/* Slanted image edge effect */
 div.prose {
-    @apply space-y-4;
+    @apply space-y-5;
 
     a {
-        @apply text-blue-500 underline;
+        color: var(--color-accent);
+        @apply underline underline-offset-2;
     }
 
     p {
         color: var(--color-text-muted);
-        font-size: 1rem;
-        font-family: "Google Sans Flex", sans-serif;
-        font-optical-sizing: auto;
-        font-style: normal;
-        font-variation-settings: "GRAD" 0;
+        font-size: 1.05rem;
+        line-height: 1.85;
     }
 
     h1 {
-        @apply mt-10 mb-5 text-5xl;
+        @apply mt-12 mb-4;
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 2.5rem;
         color: var(--color-text);
     }
 
     h2 {
-        @apply mt-10 mb-4 text-3xl;
+        @apply mt-10 mb-3;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 1.75rem;
         color: var(--color-text);
+        border-bottom: 2px solid var(--color-border-muted);
+        padding-bottom: 0.4rem;
     }
 
     h3 {
-        @apply mt-10 mb-3 text-xl;
+        @apply mt-8 mb-2;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 1.2rem;
         color: var(--color-text);
     }
 
     blockquote {
-        @apply border-l-4 pl-4;
+        @apply border-l-4 pl-5 py-1 my-6;
         border-color: var(--color-accent);
-        background-color: var(--color-accent-bg);
-        color: var(--color-text);
-        padding-top: 4px;
-        padding-bottom: 4px;
+        background-color: var(--color-surface);
 
         p {
-            font-family: "Google Sans Code", monospace;
-            font-size: 0.8rem;
+            font-size: 1rem;
+            color: var(--color-text);
         }
     }
 
     ul {
-        @apply list-disc list-inside;
+        @apply list-disc list-inside space-y-1;
     }
 
     ol {
-        @apply list-decimal list-inside;
+        @apply list-decimal list-inside space-y-1;
     }
 
     li {
-        @apply text-sm;
         color: var(--color-text-muted);
+        font-size: 1rem;
     }
 
     iframe {
         width: stretch;
+        @apply my-6;
     }
 
     pre {
-        padding: 1rem;
-        overflow-x: auto;
-        background-color: var(--color-accent-bg);
-        border: 1px solid var(--color-border);
+        @apply p-5 overflow-x-auto my-6;
+        background-color: var(--color-surface);
+        border: 2px solid var(--color-border-muted);
     }
 
     code {
-        font-size: 0.85em;
+        font-size: 0.875em;
+        font-family: "JetBrains Mono", "Courier New", monospace;
     }
 
     pre code {
-        font-size: 0.8rem;
+        font-size: 0.8125rem;
     }
 
     table {
@@ -143,32 +119,50 @@ div.prose {
 
     th,
     td {
-        @apply border border-border/60 px-3 py-2 text-left align-top;
+        @apply border px-4 py-2 text-left align-top;
+        border-color: var(--color-border-muted);
     }
 
     th {
         color: var(--color-text);
+        font-weight: 600;
+        background-color: var(--color-surface);
     }
 
     td {
         color: var(--color-text-muted);
     }
+
+    img {
+        @apply my-6;
+        border: 2px solid var(--color-border-muted);
+    }
+
+    hr {
+        @apply my-8;
+        border-color: var(--color-border-muted);
+        border-top-width: 2px;
+    }
 }
 
-/* Persistent cursor on the active nav link */
-.cursor-underline-effect[aria-current="page"]::after {
-    content: "_";
-    animation: var(--animate-blink);
-    color: var(--color-accent);
+@keyframes blink {
+    0%,
+    50% {
+        opacity: 1;
+    }
+    51%,
+    100% {
+        opacity: 0;
+    }
 }
 
-/* Respect users who prefer reduced motion */
+.animate-blink {
+    animation: blink 1s step-end infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .animate-blink,
-    .animate-pulse,
-    .cursor-underline-effect:hover::before,
-    .cursor-after-effect:hover::after,
-    .cursor-underline-effect[aria-current="page"]::after {
-        animation: none;
+    * {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
     }
 }

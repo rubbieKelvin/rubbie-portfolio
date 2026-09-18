@@ -3,108 +3,90 @@ import type { CollectionEntry } from "astro:content";
 import GrepFilter from "./GrepFilter.astro";
 
 type Props = {
-    posts: CollectionEntry<"posts">[];
+  posts: CollectionEntry<"posts">[];
 };
 
 const { posts } = Astro.props;
 
 const sorted = [...posts].sort(
-    (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
 );
 
-const years = [...new Set(sorted.map((p) => p.data.publishedAt.getFullYear()))];
+const years = [
+  ...new Set(sorted.map((p) => p.data.publishedAt.getFullYear())),
+];
 
-const blogUrl = (post) => `/blog/${post.id.replace(/\.md$/, "")}`;
-const fmtDate = (d) =>
-    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
-        d.getDate(),
-    ).padStart(2, "0")}`;
-const domainOf = (url) => {
-    if (!url) return null;
-    try {
-        return new URL(url).hostname.replace(/^www\./, "");
-    } catch {
-        return null;
-    }
+const blogUrl = (post: CollectionEntry<"posts">) =>
+  `/blog/${post.id.replace(/\.md$/, "")}`;
+
+const fmtShortDate = (d: Date) =>
+  d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+const domainOf = (url?: string | null) => {
+  if (!url) return null;
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return null;
+  }
 };
-const isArt = (post) =>
-    post.data.categories.length === 1 &&
-    post.data.categories[0] === "art" &&
-    !!post.data.mainImage;
-const tags = (post) => post.data.categories.map((c) => `#${c}`).join(" ");
-const searchFor = (post) =>
-    [
-        post.data.title,
-        post.data.description,
-        post.data.categories.join(" "),
-        fmtDate(post.data.publishedAt),
-        domainOf(post.data.external_link),
-    ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
+
+const searchFor = (post: CollectionEntry<"posts">) =>
+  [
+    post.data.title,
+    post.data.description,
+    post.data.categories.join(" "),
+    post.data.publishedAt.getFullYear().toString(),
+    domainOf(post.data.external_link),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
 ---
 
-<GrepFilter
-    prompt="~ $ ls -la posts/ | grep"
-    total={sorted.length}
-    unit="files"
->
-    <!-- ls-style listing grouped by year -->
-    {
-        years.map((year) => {
-            const yearPosts = sorted.filter(
-                (p) => p.data.publishedAt.getFullYear() === year,
-            );
-            return (
-                <section data-group>
-                    <p class="mt-8 mb-2 text-sm text-text-muted">
-                        -- {year} --
-                    </p>
-                    {yearPosts.map((post) => (
-                        <a
-                            href={blogUrl(post)}
-                            data-item
-                            data-search={searchFor(post)}
-                            class="group/post flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-1.5 py-2.5 border-b border-border/40"
-                        >
-                            <span class="text-xs text-text-muted sm:w-24 shrink-0">
-                                {fmtDate(post.data.publishedAt)}
-                            </span>
-                            <span class="flex items-center gap-3 min-w-0">
-                                {post.data.mainImage ? (
-                                    <img
-                                        src={post.data.mainImage}
-                                        alt=""
-                                        loading="lazy"
-                                        decoding="async"
-                                        class="w-12 h-9 shrink-0 object-cover border border-border/60 grayscale group-hover/post:grayscale-0 transition"
-                                    />
-                                ) : (
-                                    <span class="w-12 h-9 shrink-0 border border-dashed border-border/60 flex items-center justify-center text-text-muted text-xs">
-                                        ?
-                                    </span>
-                                )}
-                                <span class="min-w-0">
-                                    <span class="block text-text transition-colors group-hover/post:text-accent">
-                                        <span class="animate-blink hidden text-accent group-hover/post:inline">
-                                            ▋
-                                        </span>
-                                        <span>{post.data.title}</span>
-                                    </span>
-                                    <span class="block mt-0.5 text-xs text-text-muted">
-                                        {post.data.categories.length > 0 &&
-                                            `${tags(post)} `}
-                                        {isArt(post) && "[art]"}
-                                        {domainOf(post.data.external_link) &&
-                                            `-> ${domainOf(post.data.external_link)}`}
-                                    </span>
-                                </span>
-                            </span>
-                        </a>
-                    ))}
-                </section>
-            );
-        })
-    }
+<GrepFilter total={sorted.length} unit="posts">
+  {
+    years.map((year) => {
+      const yearPosts = sorted.filter(
+        (p) => p.data.publishedAt.getFullYear() === year,
+      );
+      return (
+        <section data-group class="mb-10">
+          <p class="mb-3 text-xs uppercase tracking-widest font-semibold text-text-muted">
+            {year}
+          </p>
+          {yearPosts.map((post, i) => (
+            <a
+              href={blogUrl(post)}
+              data-item
+              data-search={searchFor(post)}
+              class="group flex items-center justify-between gap-4 py-3.5 border-b transition-colors hover:border-[var(--color-border)]"
+              style="border-color: var(--color-border-muted)"
+            >
+              <div class="flex items-center gap-4 min-w-0">
+                <span class="text-xs text-text-muted font-mono shrink-0 w-5 text-right select-none">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span class="min-w-0">
+                  <span class="block font-semibold group-hover:text-accent transition-colors truncate">
+                    {post.data.title}
+                  </span>
+                  {post.data.categories.length > 0 && (
+                    <span class="block mt-0.5 text-xs text-text-muted">
+                      {post.data.categories.map((c: string) => `#${c}`).join(" ")}
+                      {domainOf(post.data.external_link) &&
+                        ` → ${domainOf(post.data.external_link)}`}
+                    </span>
+                  )}
+                </span>
+              </div>
+              <span class="text-xs text-text-muted shrink-0 font-medium">
+                {fmtShortDate(post.data.publishedAt)}
+              </span>
+            </a>
+          ))}
+        </section>
+      );
+    })
+  }
 </GrepFilter>

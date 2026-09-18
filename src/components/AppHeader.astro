@@ -1,18 +1,48 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro";
 
-interface Props {
-  className?: string;
-}
+const pathname = Astro.url.pathname;
 
-const { className } = Astro.props as Props;
+const navLinks = [
+  { title: "Blog", url: "/blog" },
+  { title: "Projects", url: "/projects" },
+];
 ---
 
-<div class:list={[className, "h-12 flex items-center justify-between max-[359px]:text-xs max-[359px]:px-3"]}>
-  <div>
-    <a href="/">rubbiekelvin@localhost</a>
-    <span style="color: var(--color-text-muted)">&nbsp;~ $</span>
-    <span class="animate-blink">&nbsp;_</span>
+<header
+  class="sticky top-0 z-50 bg-bg border-b-2"
+  style="border-color: var(--color-border)"
+>
+  <div
+    class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between"
+  >
+    <a
+      href="/"
+      class="font-display font-bold text-sm tracking-widest uppercase hover:text-accent transition-colors"
+      style="color: var(--color-text)"
+    >
+      Rubbie Kelvin
+    </a>
+    <nav class="flex items-center gap-6 text-sm">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.url}
+            class:list={[
+              "uppercase tracking-wide font-semibold text-xs transition-colors hover:text-accent",
+              pathname.startsWith(link.url)
+                ? "text-accent"
+                : "text-text-muted",
+            ]}
+            aria-current={
+              pathname.startsWith(link.url) ? "page" : undefined
+            }
+          >
+            {link.title}
+          </a>
+        ))
+      }
+      <ThemeToggle />
+    </nav>
   </div>
-  <ThemeToggle />
-</div>
+</header>

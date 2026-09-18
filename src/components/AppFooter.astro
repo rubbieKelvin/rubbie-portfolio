@@ -1,4 +1,32 @@
-<div class="lg:h-24 pb-2 lg:pb-0 flex flex-col lg:flex-row lg:items-center lg:justify-between">
-  <div class="text-xs text-text-muted/70">Rubbie kelvin &copy; {new Date().getFullYear()} Made with love & astro</div>
-  <a class="cursor-underline-effect text-xs" href="/why-does-your-portfolio-look-plain"><span class="text-text-muted/70">Why does your portfolio look plain?</span></a>
-</div>
+---
+import contactLinks from "@/data/links.json";
+---
+
+<footer
+  class="border-t-2 mt-24"
+  style="border-color: var(--color-border)"
+>
+  <div class="max-w-5xl mx-auto px-6 py-10">
+    <div
+      class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+    >
+      <div class="flex items-center gap-6 flex-wrap">
+        {
+          contactLinks.map((link) => (
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-xs uppercase tracking-widest font-semibold text-text-muted hover:text-accent transition-colors"
+            >
+              {link.title}
+            </a>
+          ))
+        }
+      </div>
+      <p class="text-xs text-text-muted font-medium">
+        Rubbie Kelvin &copy; {new Date().getFullYear()}
+      </p>
+    </div>
+  </div>
+</footer>
