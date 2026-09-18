@@ -34,16 +34,6 @@ const links =
   image={project.data.mainImage ?? undefined}
 >
   <div class="max-w-5xl mx-auto px-6">
-    <!-- Back link -->
-    <div class="pt-8 pb-2">
-      <a
-        href="/projects"
-        class="text-xs font-semibold uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
-      >
-        ← Back to Projects
-      </a>
-    </div>
-
     <article class="pb-16">
       <!-- Header -->
       <header
@@ -96,7 +86,7 @@ const links =
                   class="inline-block border-2 px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors hover:bg-[var(--color-text)] hover:text-[var(--color-bg)]"
                   style="border-color: var(--color-border)"
                 >
-                  {link.label} →
+                  {link.label}
                 </a>
               ))}
             </div>
@@ -124,17 +114,5 @@ const links =
       </div>
     </article>
 
-    <!-- Bottom nav -->
-    <div
-      class="py-8 border-t-2"
-      style="border-color: var(--color-border-muted)"
-    >
-      <a
-        href="/projects"
-        class="text-xs font-semibold uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
-      >
-        ← Back to Projects
-      </a>
-    </div>
   </div>
 </Layout>

@@ -1,44 +1,136 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import PostList from "@/components/PostList.astro";
 import { getCollection } from "astro:content";
 
 const posts = await getCollection("posts");
+const sorted = [...posts].sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+);
+
+const [featured, ...rest] = sorted;
+
+const blogUrl = (post: any) => `/blog/${post.id.replace(/\.md$/, "")}`;
+
+const fmtLong = (d: Date) =>
+  d.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+
+const fmtShort = (d: Date) =>
+  d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 ---
 
 <Layout title="Blog">
   <div class="max-w-5xl mx-auto px-6">
+    <!-- Page header -->
     <section
       class="pt-14 pb-10 border-b-2"
       style="border-color: var(--color-border)"
     >
-      <p
-        class="text-xs uppercase tracking-widest font-semibold text-text-muted mb-3"
-      >
-        Writing
-      </p>
-      <h1
-        class="font-display font-black uppercase text-5xl md:text-6xl leading-none tracking-tight mb-5"
-        style="color: var(--color-text)"
-      >
-        Blog
-      </h1>
-      <div class="flex items-center justify-between gap-4">
-        <p class="text-text-muted text-sm max-w-lg">
-          Thoughts, tutorials, and insights from my development journey —
-          things I learn and create along the way.
-        </p>
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <p
+            class="text-xs uppercase tracking-widest font-semibold text-text-muted mb-3"
+          >
+            Writing
+          </p>
+          <h1
+            class="font-display uppercase leading-none tracking-tight"
+            style="font-size: clamp(2.5rem, 8vw, 5rem); color: var(--color-text)"
+          >
+            Blog
+          </h1>
+        </div>
         <a
           href="/rss.xml"
-          class="text-xs font-semibold uppercase tracking-widest text-text-muted hover:text-accent transition-colors shrink-0"
+          class="text-xs font-semibold uppercase tracking-widest text-text-muted hover:text-accent transition-colors shrink-0 pb-1"
         >
-          RSS →
+          RSS
         </a>
       </div>
     </section>
 
-    <div class="pt-10">
-      <PostList posts={posts} />
-    </div>
+    <!-- Featured post -->
+    {
+      featured && (
+        <a
+          href={blogUrl(featured)}
+          class="group block pt-12 pb-12 border-b-2"
+          style="border-color: var(--color-border)"
+        >
+          <p class="text-xs uppercase tracking-widest font-semibold text-text-muted mb-6">
+            Latest
+          </p>
+
+          {featured.data.mainImage && (
+            <div class="mb-8 overflow-hidden">
+              <img
+                src={featured.data.mainImage}
+                alt={featured.data.title}
+                class="w-full h-64 md:h-[28rem] object-cover transition-transform duration-500 group-hover:scale-[1.01]"
+                style="border: 2px solid var(--color-border-muted)"
+              />
+            </div>
+          )}
+
+          <h2
+            class="font-display font-black uppercase leading-tight group-hover:text-accent transition-colors mb-5"
+            style="font-size: clamp(2rem, 6vw, 4rem); color: var(--color-text)"
+          >
+            {featured.data.title}
+          </h2>
+
+          {featured.data.description && (
+            <p class="text-text-muted leading-relaxed max-w-2xl mb-5 text-base">
+              {featured.data.description}
+            </p>
+          )}
+
+          <p class="text-xs font-semibold uppercase tracking-widest text-text-muted">
+            {fmtLong(featured.data.publishedAt)}
+            {featured.data.categories.length > 0 &&
+              ` · ${featured.data.categories.map((c: string) => `#${c}`).join(" ")}`}
+          </p>
+        </a>
+      )
+    }
+
+    <!-- Remaining posts -->
+    {
+      rest.length > 0 && (
+        <section class="pt-10 pb-16">
+          <p class="text-xs uppercase tracking-widest font-semibold text-text-muted mb-2">
+            More
+          </p>
+          {rest.map((post) => (
+            <a
+              href={blogUrl(post)}
+              class="group flex items-baseline justify-between gap-6 py-4 border-b transition-colors hover:border-[var(--color-border)]"
+              style="border-color: var(--color-border-muted)"
+            >
+              <div class="min-w-0">
+                <span class="block font-semibold group-hover:text-accent transition-colors truncate">
+                  {post.data.title}
+                </span>
+                {post.data.categories.length > 0 && (
+                  <span class="block mt-0.5 text-xs text-text-muted">
+                    {post.data.categories.map((c: string) => `#${c}`).join(" ")}
+                  </span>
+                )}
+              </div>
+              <span class="text-xs text-text-muted shrink-0 font-medium">
+                {fmtShort(post.data.publishedAt)}
+              </span>
+            </a>
+          ))}
+        </section>
+      )
+    }
   </div>
 </Layout>

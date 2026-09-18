@@ -26,16 +26,6 @@ const ogImageUrl = author.data.image || undefined;
 
 <Layout title={`${author.data.name}`} image={ogImageUrl}>
   <div class="max-w-5xl mx-auto px-6">
-    <!-- Back link -->
-    <div class="pt-8 pb-2">
-      <a
-        href="/blog"
-        class="text-xs font-semibold uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
-      >
-        ← Back to Blog
-      </a>
-    </div>
-
     <!-- Author header -->
     <section
       class="pt-8 pb-10 border-b-2"
@@ -89,7 +79,7 @@ const ogImageUrl = author.data.image || undefined;
                       rel="noopener noreferrer"
                       class="text-xs font-semibold uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
                     >
-                      {link.title} ↗
+                      {link.title}
                     </a>
                   ))}
                 </div>

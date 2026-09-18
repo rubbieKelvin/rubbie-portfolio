@@ -10,11 +10,11 @@ body {
     @apply antialiased;
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-family: "Space Grotesk", sans-serif;
+    font-family: "Archivo", sans-serif;
 }
 
 @theme {
-    --font-display: "Syne", sans-serif;
+    --font-display: "Archivo Black", sans-serif;
 
     --color-bg: light-dark(#ffffff, #080808);
     --color-text: light-dark(#0d0d0d, #f0f0f0);
@@ -45,16 +45,14 @@ div.prose {
 
     h1 {
         @apply mt-12 mb-4;
-        font-family: "Syne", sans-serif;
-        font-weight: 800;
+        font-family: "Archivo Black", sans-serif;
         font-size: 2.5rem;
         color: var(--color-text);
     }
 
     h2 {
         @apply mt-10 mb-3;
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
+        font-family: "Archivo Black", sans-serif;
         font-size: 1.75rem;
         color: var(--color-text);
         border-bottom: 2px solid var(--color-border-muted);
@@ -63,8 +61,7 @@ div.prose {
 
     h3 {
         @apply mt-8 mb-2;
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
+        font-family: "Archivo Black", sans-serif;
         font-size: 1.2rem;
         color: var(--color-text);
     }

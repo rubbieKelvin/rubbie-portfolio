@@ -75,7 +75,7 @@ const searchFor = (post: CollectionEntry<"posts">) =>
                     <span class="block mt-0.5 text-xs text-text-muted">
                       {post.data.categories.map((c: string) => `#${c}`).join(" ")}
                       {domainOf(post.data.external_link) &&
-                        ` → ${domainOf(post.data.external_link)}`}
+                        ` ${domainOf(post.data.external_link)}`}
                     </span>
                   )}
                 </span>

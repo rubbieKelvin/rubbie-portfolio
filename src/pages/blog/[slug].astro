@@ -1,7 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getCollection, getEntry, render } from "astro:content";
-import Image from "@/components/Image.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -45,132 +44,179 @@ const author = authorSlug ? await getEntry("authors", authorSlug) : null;
   image={mainImage ?? undefined}
   article={publishedAt ? { publishedAt: publishedAt.toISOString() } : undefined}
 >
-  <div class="max-w-5xl mx-auto px-6">
-    <!-- Back link -->
-    <div class="pt-8 pb-2">
-      <a
-        href="/blog"
-        class="text-xs font-semibold uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
+  <!-- Hero -->
+  {
+    mainImage ? (
+      <div
+        class="relative w-full overflow-hidden cursor-zoom-in"
+        style="height: clamp(360px, 65vh, 680px)"
+        id="hero-image-trigger"
+        role="button"
+        tabindex="0"
+        aria-label="Click to enlarge image"
       >
-        ← Back to Blog
-      </a>
-    </div>
-
-    <!-- Article -->
-    <article class="pb-16">
-      <!-- Header -->
-      <header class="pt-8 pb-10 border-b-2" style="border-color: var(--color-border)">
-        <h1
-          class="font-display font-black uppercase text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight mb-6"
-          style="color: var(--color-text)"
-        >
-          {title}
-        </h1>
-
-        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-medium text-text-muted">
-          {
-            publishedAt && (
+        <img
+          src={mainImage}
+          alt={title}
+          id="hero-img"
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+        <div
+          class="absolute inset-0"
+          style="background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.88) 100%)"
+        />
+        <div class="absolute inset-x-0 bottom-0 max-w-5xl mx-auto px-6 pb-10">
+          {categories && categories.length > 0 && (
+            <div class="flex gap-2 flex-wrap mb-4">
+              {categories.map((cat: string) => (
+                <span class="text-xs font-semibold uppercase tracking-widest opacity-70 text-white">
+                  #{cat}
+                </span>
+              ))}
+            </div>
+          )}
+          <h1
+            class="font-display font-black uppercase leading-tight tracking-tight text-white mb-4"
+            style="font-size: clamp(2rem, 6vw, 4.5rem)"
+          >
+            {title}
+          </h1>
+          <div class="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs font-semibold uppercase tracking-widest text-white/60">
+            {publishedAt && (
               <time datetime={publishedAt.toISOString()}>
                 {formatDate(publishedAt.toISOString())}
               </time>
-            )
-          }
-
-          {
-            author && (
-              <span class="flex items-center gap-2">
-                {author.data.image && (
-                  <img
-                    src={author.data.image}
-                    alt={author.data.name}
-                    class="w-5 h-5 rounded-full"
-                  />
-                )}
-                <span>
-                  by{" "}
-                  <a
-                    href={`/author/${author.data.slug}`}
-                    class="hover:text-accent transition-colors font-semibold"
-                    style="color: var(--color-text-muted)"
-                  >
-                    {author.data.name}
-                  </a>
-                </span>
+            )}
+            {author && (
+              <span>
+                by{" "}
+                <a
+                  href={`/author/${author.data.slug}`}
+                  class="hover:text-white transition-colors"
+                >
+                  {author.data.name}
+                </a>
               </span>
-            )
-          }
-
-          {
-            categories && categories.length > 0 && (
-              <div class="flex gap-2 flex-wrap">
-                {categories.map((category: string) => (
-                  <span
-                    class="border px-2 py-0.5 text-xs uppercase tracking-wide"
-                    style="border-color: var(--color-border-muted); color: var(--color-text-muted)"
-                  >
-                    {category}
-                  </span>
-                ))}
-              </div>
-            )
-          }
+            )}
+          </div>
         </div>
-      </header>
-
-      <!-- External link notice -->
-      {
-        external_link && (
-          <div
-            class="my-8 p-5 border-l-4"
-            style="border-color: var(--color-accent); background-color: var(--color-surface)"
-          >
-            <p class="text-sm mb-2" style="color: var(--color-text)">
-              This post was originally published externally.
-            </p>
-            <a
-              href={external_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors"
-              style="color: var(--color-text-muted)"
-            >
-              Read the original →
-            </a>
-          </div>
-        )
-      }
-
-      <!-- Main image -->
-      {
-        mainImage && (
-          <div class="mt-8 mb-10">
-            <Image
-              src={mainImage}
-              alt={title}
-              class="w-full h-64 lg:h-96 object-cover"
-              style="border: 2px solid var(--color-border-muted)"
-            />
-          </div>
-        )
-      }
-
-      <!-- Content -->
-      <div class="prose max-w-none mt-10">
-        <Content />
       </div>
-    </article>
-
-    <!-- Bottom nav -->
-    <div
-      class="py-8 border-t-2"
-      style="border-color: var(--color-border-muted)"
-    >
-      <a
-        href="/blog"
-        class="text-xs font-semibold uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
+    ) : (
+      <div
+        class="max-w-5xl mx-auto px-6 pt-14 pb-12 border-b-2"
+        style="border-color: var(--color-border)"
       >
-        ← Back to Blog
-      </a>
+        {categories && categories.length > 0 && (
+          <div class="flex gap-2 flex-wrap mb-4">
+            {categories.map((cat: string) => (
+              <span class="text-xs font-semibold uppercase tracking-widest text-text-muted">
+                #{cat}
+              </span>
+            ))}
+          </div>
+        )}
+        <h1
+          class="font-display font-black uppercase leading-tight tracking-tight mb-6"
+          style="font-size: clamp(2rem, 6vw, 4.5rem); color: var(--color-text)"
+        >
+          {title}
+        </h1>
+        <div class="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs font-semibold uppercase tracking-widest text-text-muted">
+          {publishedAt && (
+            <time datetime={publishedAt.toISOString()}>
+              {formatDate(publishedAt.toISOString())}
+            </time>
+          )}
+          {author && (
+            <span>
+              by{" "}
+              <a
+                href={`/author/${author.data.slug}`}
+                class="hover:text-accent transition-colors"
+              >
+                {author.data.name}
+              </a>
+            </span>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  <!-- Article body -->
+  <div class="max-w-3xl mx-auto px-6 pt-12 pb-20">
+    {
+      external_link && (
+        <div
+          class="mb-10 p-5 border-l-4"
+          style="border-color: var(--color-accent); background-color: var(--color-surface)"
+        >
+          <p class="text-sm mb-2" style="color: var(--color-text)">
+            Originally published externally.
+          </p>
+          <a
+            href={external_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors"
+            style="color: var(--color-text-muted)"
+          >
+            Read the original
+          </a>
+        </div>
+      )
+    }
+
+    <div class="prose max-w-none">
+      <Content />
     </div>
   </div>
 </Layout>
+
+{
+  mainImage && (
+    <>
+      <div
+        id="lightbox"
+        class="fixed inset-0 z-50 hidden items-center justify-center cursor-zoom-out"
+        style="background: rgba(0,0,0,0.92)"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Image lightbox"
+      >
+        <img
+          id="lightbox-img"
+          src={mainImage}
+          alt={title}
+          class="w-[85vw] h-[75vh] object-contain select-none"
+        />
+      </div>
+
+      <script>
+        const trigger = document.getElementById("hero-image-trigger");
+        const lightbox = document.getElementById("lightbox");
+
+        function open() {
+          lightbox.classList.remove("hidden");
+          lightbox.classList.add("flex");
+          document.body.style.overflow = "hidden";
+        }
+
+        function close() {
+          lightbox.classList.add("hidden");
+          lightbox.classList.remove("flex");
+          document.body.style.overflow = "";
+        }
+
+        trigger?.addEventListener("click", open);
+        trigger?.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") open();
+        });
+        lightbox?.addEventListener("click", close);
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") close();
+        });
+      </script>
+    </>
+  )
+}
