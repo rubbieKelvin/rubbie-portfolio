@@ -64,7 +64,7 @@ The real satisfaction came from seeing how naturally it integrated with existing
 
 ## Stuff I learnt along the way
 
-Building this feature taught me that the best technology is invisible technology. Users don't want to think about AI models or processing pipelines or webhook integrations. They want to have a meeting, and then they want that meeting to be useful later. Everything else is just implementation & details.
+Building this feature taught me that the best technology is invisible technology. Users don't want to think about AI models or processing pipelines or webhook integrations. They want to have a meeting, and then they want that meeting to be useful later.
 
 I learnt that automation is only as good as its failure modes. What happens when the AI can't process a transcript? What if the notetaker fails to join? When the internet cuts out mid meeting? The mark of good software isn't that it never fails, it's that it fails **gracefully** and recovers elegantly.
 
@@ -77,8 +77,6 @@ It's one of those features that starts as a nice to have and quickly becomes ind
 ## What's next?
 
 We're just getting started. The foundation is solid, but the possibilities are endless. Imagine transcripts that automatically generate follow up tasks, or AI that can identify when a meeting goes off track and gently nudge it back on course. Picture a system that can analyze communication patterns across your entire organization and suggest ways to improve collaboration.
-
-The future of meeting intelligence isn't just about recording what was said, it's about understanding what was meant, what was decided, and what needs to happen next.
 
 Building Colabra's transcription feature has been one of those projects that reminds you why you became a developer in the first place.
 
