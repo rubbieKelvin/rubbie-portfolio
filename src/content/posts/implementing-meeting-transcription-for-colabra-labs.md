@@ -30,8 +30,6 @@ So I built what I like to call the "domain detective"... a system that looks at 
 
 But here's where things got really fun. Raw meeting transcripts are like uncut diamonds... valuable, but rough around the edges. Speaker labels are inconsistent, timestamps are all over the place, and don't even get me started on the creative ways people pronounce technical terms.
 
-I spent weeks teaching our system to take messy, real world transcripts and turn them into something actually useful. The AI doesn't just clean up the text, it extracts key insights, identifies action items, and even generates meeting summaries. It's like having a really good assistant who never gets tired and doesn't judge you for saying "um" forty seven times in one sentence.
-
 The tricky part was handling the sheer variety of input formats. Some users wanted to paste transcripts from Fireflies, others had JSON files from Granola, and a few brave souls were drag and dropping plain text files. Our system needed to be like a linguistic chameleon, adapting to whatever format users threw at it.
 
 ## The UX Puzzle
