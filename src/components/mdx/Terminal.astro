@@ -17,14 +17,14 @@ const { label, lines } = Astro.props;
   {label && (
     <p class="mb-1 text-xs text-text-muted">-- {label} --</p>
   )}
-  <div class="border border-border/70 p-4 text-sm overflow-x-auto">
+  <div class="border border-border p-4 text-xs overflow-x-auto">
     {
       lines.map((line) => (
         <div class="whitespace-pre-wrap">
           <p class="text-text">
-            <span class="text-accent">~ $ </span>
+            <span class="text-text-muted">$ </span>
             <span>{line.cmd}</span>
-            <span class="animate-blink text-accent">▋</span>
+            
           </p>
           {line.out?.map((o) => (
             <p class="text-text-muted">{o}</p>

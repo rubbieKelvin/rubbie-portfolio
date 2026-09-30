@@ -7,32 +7,18 @@ type Props = {
 const { total, unit } = Astro.props;
 ---
 
-<div
-  class="mb-8 flex flex-col sm:flex-row sm:items-center gap-3 border-b-2 pb-4"
-  style="border-color: var(--color-border)"
->
-  <label
-    for="grep-input"
-    class="text-xs uppercase tracking-widest font-semibold text-text-muted shrink-0"
-  >
-    Filter
-  </label>
+<div class="mb-8 flex items-baseline gap-4">
   <input
     id="grep-input"
     type="text"
-    placeholder="Search..."
+    placeholder="filter (press /)"
     autocomplete="off"
     autocapitalize="off"
     spellcheck="false"
     aria-label="Filter list"
-    class="flex-1 min-w-0 bg-transparent outline-none py-1 text-sm placeholder:text-text-muted/50 caret-accent"
-    style="color: var(--color-text)"
+    class="filter-input"
   />
-  <span
-    id="file-count"
-    data-unit={unit}
-    class="text-xs text-text-muted shrink-0 font-medium"
-  >
+  <span id="file-count" data-unit={unit} class="small muted shrink-0">
     {total}
     {unit}
   </span>
@@ -40,9 +26,7 @@ const { total, unit } = Astro.props;
 
 <slot />
 
-<p id="no-matches" class="hidden text-text-muted py-12 text-sm">
-  No results for that search.
-</p>
+<p id="no-matches" class="hidden muted py-8">no results for that search.</p>
 
 <script>
   const input = document.getElementById("grep-input") as HTMLInputElement;

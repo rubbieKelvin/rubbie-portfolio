@@ -1,160 +1,322 @@
 @import "tailwindcss";
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-html,
-body {
-    @apply h-full;
+@theme {
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+    --color-bg: light-dark(#ffffff, #0c0c0c);
+    --color-text: light-dark(#111111, #ececec);
+    --color-text-muted: light-dark(#6b6b6b, #8a8a8a);
+    --color-border: light-dark(#e6e6e6, #262626);
+}
+
+html {
+    font-optical-sizing: auto;
 }
 
 body {
     @apply antialiased;
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-family: "Archivo", sans-serif;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 400;
 }
 
-@theme {
-    --font-display: "Archivo Black", sans-serif;
-
-    --color-bg: light-dark(#ffffff, #080808);
-    --color-text: light-dark(#0d0d0d, #f0f0f0);
-    --color-text-muted: light-dark(#555555, #888888);
-    --color-accent: light-dark(#cc3a00, #ff5533);
-    --color-surface: light-dark(#f2f2f2, #141414);
-    --color-border: light-dark(#0d0d0d, #f0f0f0);
-    --color-border-muted: light-dark(#d4d4d4, #2a2a2a);
+::selection {
+    background: var(--color-text);
+    color: var(--color-bg);
 }
 
-:root {
-    font-optical-sizing: auto;
+/* ---------- layout ---------- */
+
+.wrap {
+    max-width: 38rem;
+    margin: 0 auto;
+    padding: 6.5rem 1.5rem 4rem;
 }
+
+.wrap.wide {
+    max-width: 42rem;
+}
+
+@media (max-width: 640px) {
+    .wrap {
+        padding-top: 3.5rem;
+    }
+}
+
+/* ---------- type ---------- */
+
+.title {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+
+.heading {
+    font-weight: 500;
+    font-size: 13px;
+    margin-bottom: 0.5rem;
+}
+
+.stack > * + * {
+    margin-top: 0.85rem;
+}
+
+.muted {
+    color: var(--color-text-muted);
+}
+
+strong,
+.strong {
+    font-weight: 500;
+}
+
+.small {
+    font-size: 11px;
+}
+
+hr,
+.rule {
+    border: 0;
+    border-top: 1px solid var(--color-border);
+    margin: 1.75rem 0;
+}
+
+/* ---------- links ---------- */
+
+.underline-link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: opacity 0.15s;
+}
+
+.underline-link:hover {
+    opacity: 0.55;
+}
+
+.nav-link {
+    text-decoration: none;
+    transition: opacity 0.15s;
+}
+
+.nav-link:hover,
+.nav-link[aria-current="page"] {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+}
+
+/* label / content rows: a quiet two-column rhythm */
+.section {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 0.5rem 1.5rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--color-border);
+}
+
+.section > .label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    padding-top: 0.15rem;
+}
+
+@media (max-width: 640px) {
+    .section {
+        grid-template-columns: 1fr;
+    }
+}
+
+.avatar-lg {
+    width: 5rem;
+    height: 5rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    object-fit: cover;
+}
+
+.avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    object-fit: cover;
+}
+
+.links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.slash-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+    font-size: 11px;
+}
+
+.slash-list > * + *::before {
+    content: "/";
+    display: inline-block;
+    margin-right: 0.6rem;
+    color: var(--color-text-muted);
+}
+
+/* ---------- rows ---------- */
+
+.row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.3rem 0;
+    text-decoration: none;
+}
+
+.row > .row-title {
+    min-width: 0;
+    transition: opacity 0.15s;
+}
+
+.row:hover > .row-title {
+    opacity: 0.55;
+}
+
+.row > .row-meta {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+.tags {
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+/* ---------- prose (posts, case studies) ---------- */
 
 div.prose {
-    @apply space-y-5;
+    line-height: 1.75;
 
-    a {
-        color: var(--color-accent);
-        @apply underline underline-offset-2;
+    > * + * {
+        margin-top: 1rem;
     }
 
-    p {
-        color: var(--color-text-muted);
-        font-size: 1.05rem;
-        line-height: 1.85;
+    a {
+        @apply underline underline-offset-2;
+        text-decoration-thickness: 1px;
+    }
+
+    a:hover {
+        opacity: 0.55;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.5;
+        margin-top: 2rem;
     }
 
     h1 {
-        @apply mt-12 mb-4;
-        font-family: "Archivo Black", sans-serif;
-        font-size: 2.5rem;
-        color: var(--color-text);
-    }
-
-    h2 {
-        @apply mt-10 mb-3;
-        font-family: "Archivo Black", sans-serif;
-        font-size: 1.75rem;
-        color: var(--color-text);
-        border-bottom: 2px solid var(--color-border-muted);
-        padding-bottom: 0.4rem;
-    }
-
-    h3 {
-        @apply mt-8 mb-2;
-        font-family: "Archivo Black", sans-serif;
-        font-size: 1.2rem;
-        color: var(--color-text);
+        font-size: 15px;
     }
 
     blockquote {
-        @apply border-l-4 pl-5 py-1 my-6;
-        border-color: var(--color-accent);
-        background-color: var(--color-surface);
+        padding-left: 1rem;
+        border-left: 1px solid var(--color-text-muted);
+        color: var(--color-text-muted);
+    }
 
-        p {
-            font-size: 1rem;
-            color: var(--color-text);
-        }
+    ul,
+    ol {
+        padding-left: 1.25rem;
     }
 
     ul {
-        @apply list-disc list-inside space-y-1;
+        list-style: "- ";
     }
 
     ol {
-        @apply list-decimal list-inside space-y-1;
+        list-style: decimal;
     }
 
-    li {
-        color: var(--color-text-muted);
-        font-size: 1rem;
+    li + li {
+        margin-top: 0.25rem;
     }
 
     iframe {
-        width: stretch;
-        @apply my-6;
+        width: 100%;
     }
 
     pre {
-        @apply p-5 overflow-x-auto my-6;
-        background-color: var(--color-surface);
-        border: 2px solid var(--color-border-muted);
+        padding: 0.9rem 1rem;
+        overflow-x: auto;
+        border: 1px solid var(--color-border);
+        font-size: 12px;
+        line-height: 1.6;
     }
 
     code {
-        font-size: 0.875em;
-        font-family: "JetBrains Mono", "Courier New", monospace;
+        font-family: var(--font-mono);
+        font-size: 0.92em;
     }
 
-    pre code {
-        font-size: 0.8125rem;
+    :not(pre) > code {
+        border: 1px solid var(--color-border);
+        padding: 0.05rem 0.3rem;
     }
 
     table {
-        @apply w-full text-sm my-6;
+        width: 100%;
+        font-size: 12px;
     }
 
     th,
     td {
-        @apply border px-4 py-2 text-left align-top;
-        border-color: var(--color-border-muted);
+        border: 1px solid var(--color-border);
+        padding: 0.4rem 0.6rem;
+        text-align: left;
+        vertical-align: top;
     }
 
     th {
-        color: var(--color-text);
-        font-weight: 600;
-        background-color: var(--color-surface);
-    }
-
-    td {
-        color: var(--color-text-muted);
+        font-weight: 500;
     }
 
     img {
-        @apply my-6;
-        border: 2px solid var(--color-border-muted);
-    }
-
-    hr {
-        @apply my-8;
-        border-color: var(--color-border-muted);
-        border-top-width: 2px;
+        max-width: 100%;
+        height: auto;
     }
 }
 
-@keyframes blink {
-    0%,
-    50% {
-        opacity: 1;
-    }
-    51%,
-    100% {
-        opacity: 0;
-    }
+/* ---------- form bits ---------- */
+
+.filter-input {
+    width: 100%;
+    background: transparent;
+    outline: none;
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.35rem 0;
+    font: inherit;
+    color: inherit;
 }
 
-.animate-blink {
-    animation: blink 1s step-end infinite;
+.filter-input:focus {
+    border-bottom-color: var(--color-text);
+}
+
+.filter-input::placeholder {
+    color: var(--color-text-muted);
 }
 
 @media (prefers-reduced-motion: reduce) {

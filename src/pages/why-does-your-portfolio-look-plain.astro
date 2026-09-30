@@ -3,71 +3,33 @@ import Layout from "@/layouts/Layout.astro";
 ---
 
 <Layout title="Why does your portfolio look plain?">
-  <div class="max-w-5xl mx-auto px-6">
-    <section
-      class="pt-14 pb-10 border-b-2"
-      style="border-color: var(--color-border)"
-    >
-      <p
-        class="text-xs uppercase tracking-widest font-semibold text-text-muted mb-3"
-      >
-        Design Choice
+  <h1 class="title">why does your portfolio look like this?</h1>
+  <div class="stack">
+    <div>
+      <h2 class="heading">intentional</h2>
+      <p class="muted">
+        the design strips everything back to what matters: structure,
+        hierarchy, content. no gradients to hide weak ideas, no carousels to
+        distract from bad work. one column, one typeface, and the actual work.
       </p>
-      <h1
-        class="font-display font-black uppercase text-4xl md:text-5xl leading-tight tracking-tight"
-        style="color: var(--color-text)"
-      >
-        Why does your portfolio<br />look like this?
-      </h1>
-    </section>
-
-    <div class="pt-10 pb-16 max-w-2xl space-y-10">
-      <div>
-        <h2
-          class="font-display font-bold uppercase text-xs tracking-widest mb-4"
-          style="color: var(--color-text)"
-        >
-          Intentional
-        </h2>
-        <p class="text-text-muted leading-relaxed">
-          Brutalist design strips everything back to what matters: structure,
-          hierarchy, content. No gradients to hide weak ideas. No carousels to
-          distract from bad work. What you see is what there is: bold type,
-          strong borders, and the actual work.
-        </p>
-      </div>
-
-      <div>
-        <h2
-          class="font-display font-bold uppercase text-xs tracking-widest mb-4"
-          style="color: var(--color-text)"
-        >
-          Builder First
-        </h2>
-        <p class="text-text-muted leading-relaxed">
-          I'm a builder. The most important thing on this site is what I'm
-          building right now, and what I've built. The design reflects that
-          priority. No decorative clutter between you and the work. If
-          something doesn't help you understand who I am or what I build, it
-          doesn't belong here.
-        </p>
-      </div>
-
-      <div>
-        <h2
-          class="font-display font-bold uppercase text-xs tracking-widest mb-4"
-          style="color: var(--color-text)"
-        >
-          Copycats
-        </h2>
-        <p class="text-text-muted leading-relaxed">
-          Inspiration drives creativity. I've refined my skills by learning
-          from the work of others, and I welcome anyone who finds value in what
-          I create. There's a clear line between drawing inspiration and
-          outright copying. Blatantly replicating and claiming someone else's
-          work as your own is unacceptable.
-        </p>
-      </div>
+    </div>
+    <div>
+      <h2 class="heading">builder first</h2>
+      <p class="muted">
+        i'm a builder. the most important thing on this site is what i'm
+        building right now, and what i've built. if something doesn't help you
+        understand who i am or what i build, it doesn't belong here.
+      </p>
+    </div>
+    <div>
+      <h2 class="heading">copycats</h2>
+      <p class="muted">
+        inspiration drives creativity. i've refined my skills by learning from
+        the work of others, and i welcome anyone who finds value in what i
+        create. there's a clear line between drawing inspiration and outright
+        copying. blatantly replicating and claiming someone else's work as your
+        own is unacceptable.
+      </p>
     </div>
   </div>
 </Layout>

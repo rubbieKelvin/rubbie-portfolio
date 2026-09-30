@@ -7,11 +7,11 @@ const { title } = Astro.props;
 ---
 
 <div
-  class="my-6 border-l-4 p-4"
-  style="border-color: var(--color-accent); background-color: var(--color-accent-bg)"
+  class="my-6 border-l p-4"
+  style="border-color: var(--color-text-muted)"
 >
-  {title && <p class="mb-2 text-sm font-semibold text-text">{title}</p>}
-  <div class="text-sm text-text-muted">
+  {title && <p class="mb-2 font-medium text-text">{title}</p>}
+  <div class="text-text-muted">
     <slot />
   </div>
 </div>

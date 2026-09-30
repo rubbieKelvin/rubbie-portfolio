@@ -25,80 +25,41 @@ const ogImageUrl = author.data.image || undefined;
 ---
 
 <Layout title={`${author.data.name}`} image={ogImageUrl}>
-  <div class="max-w-5xl mx-auto px-6">
-    <!-- Author header -->
-    <section
-      class="pt-8 pb-10 border-b-2"
-      style="border-color: var(--color-border)"
-    >
-      <div class="flex flex-col md:flex-row gap-8 items-start">
-        {
-          author.data.image && (
-            <div class="shrink-0">
-              <img
-                src={author.data.image}
-                alt={author.data.name}
-                class="w-24 h-24 object-cover"
-                style="border: 2px solid var(--color-border-muted)"
-              />
-            </div>
-          )
-        }
-        <div>
-          <p
-            class="text-xs uppercase tracking-widest font-semibold text-text-muted mb-3"
-          >
-            Author
-          </p>
-          <h1
-            class="font-display font-black uppercase text-4xl md:text-5xl leading-tight tracking-tight mb-4"
-            style="color: var(--color-text)"
-          >
-            {author.data.name}
-          </h1>
-
-          {
-            author.data.bio && (
-              <div class="text-text-muted leading-relaxed max-w-xl mb-4">
-                <Fragment set:html={author.data.bio} />
-              </div>
-            )
-          }
-
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold text-text-muted">
-              {posts.length} {posts.length === 1 ? "post" : "posts"}
-            </span>
-            {
-              author.data.links && author.data.links.length > 0 && (
-                <div class="flex gap-4 ml-4">
-                  {author.data.links.map((link: any) => (
-                    <a
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="text-xs font-semibold uppercase tracking-widest text-text-muted hover:text-accent transition-colors"
-                    >
-                      {link.title}
-                    </a>
-                  ))}
-                </div>
-              )
-            }
-          </div>
+  <div class="stack mb-8">
+    {
+      author.data.image && (
+        <img src={author.data.image} alt={author.data.name} class="w-16 h-16 object-cover" />
+      )
+    }
+    <h1 class="title !mb-0">{author.data.name.toLowerCase()}</h1>
+    {
+      author.data.bio && (
+        <div class="muted stack">
+          <Fragment set:html={author.data.bio} />
         </div>
-      </div>
-    </section>
-
-    <!-- Posts -->
-    <div class="pt-10 pb-16">
-      {
-        posts.length > 0 ? (
-          <PostList posts={posts} />
-        ) : (
-          <p class="py-16 text-text-muted text-sm">No posts yet.</p>
-        )
-      }
-    </div>
+      )
+    }
+    <p class="small muted">
+      {posts.length} {posts.length === 1 ? "post" : "posts"}
+    </p>
+    {
+      author.data.links && author.data.links.length > 0 && (
+        <div class="slash-list">
+          {author.data.links.map((link: any) => (
+            <a href={link.url} target="_blank" rel="noopener noreferrer" class="underline-link">
+              {link.title.toLowerCase()}
+            </a>
+          ))}
+        </div>
+      )
+    }
   </div>
+
+  {
+    posts.length > 0 ? (
+      <PostList posts={posts} />
+    ) : (
+      <p class="muted">no posts yet.</p>
+    )
+  }
 </Layout>

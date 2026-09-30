@@ -32,87 +32,35 @@ const links =
   title={project.data.title}
   description={detail.data.description ?? project.data.description ?? undefined}
   image={project.data.mainImage ?? undefined}
+  wide
 >
-  <div class="max-w-5xl mx-auto px-6">
-    <article class="pb-16">
-      <!-- Header -->
-      <header
-        class="pt-8 pb-10 border-b-2"
-        style="border-color: var(--color-border)"
-      >
-        <h1
-          class="font-display font-black uppercase text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight mb-4"
-          style="color: var(--color-text)"
-        >
-          {project.data.title}
-        </h1>
-
-        {
-          detail.data.description && (
-            <p class="mb-6 max-w-2xl leading-relaxed text-text-muted">
-              {detail.data.description}
-            </p>
-          )
-        }
-
-        <div class="flex flex-wrap items-center gap-3">
-          {
-            project.data.categories.map((category: string) => (
-              <span
-                class="border px-2 py-0.5 text-xs uppercase tracking-wide"
-                style="border-color: var(--color-border-muted); color: var(--color-text-muted)"
-              >
-                {category}
-              </span>
-            ))
-          }
-          {
-            detail.data.stack.length > 0 && (
-              <span class="text-xs text-text-muted">
-                {detail.data.stack.join(" · ")}
-              </span>
-            )
-          }
+  <header class="stack mb-8">
+    <h1 class="title !mb-0">{project.data.title.toLowerCase()}</h1>
+    {detail.data.description && <p class="muted">{detail.data.description}</p>}
+    <p class="small muted">
+      {project.data.categories.map((c: string) => `#${c}`).join(" ")}
+      {detail.data.stack.length > 0 && ` / ${detail.data.stack.join(" · ").toLowerCase()}`}
+    </p>
+    {
+      links.length > 0 && (
+        <div class="links-list">
+          {links.map((link: { label: string; url: string }) => (
+            <a href={link.url} target="_blank" rel="noopener noreferrer" class="underline-link">
+              {link.label.toLowerCase()}
+            </a>
+          ))}
         </div>
+      )
+    }
+  </header>
 
-        {
-          links.length > 0 && (
-            <div class="mt-6 flex flex-wrap gap-3">
-              {links.map((link: { label: string; url: string }) => (
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-block border-2 px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors hover:bg-[var(--color-text)] hover:text-[var(--color-bg)]"
-                  style="border-color: var(--color-border)"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          )
-        }
-      </header>
+  {
+    project.data.mainImage && (
+      <Image src={project.data.mainImage} alt={project.data.title} class="w-full mb-8" />
+    )
+  }
 
-      <!-- Main image -->
-      {
-        project.data.mainImage && (
-          <div class="mt-8 mb-10">
-            <Image
-              src={project.data.mainImage}
-              alt={project.data.title}
-              class="w-full h-64 lg:h-96 object-cover"
-              style="border: 2px solid var(--color-border-muted)"
-            />
-          </div>
-        )
-      }
-
-      <!-- Case study content -->
-      <div class="prose max-w-none mt-10">
-        <Content />
-      </div>
-    </article>
-
+  <div class="prose max-w-none">
+    <Content />
   </div>
 </Layout>

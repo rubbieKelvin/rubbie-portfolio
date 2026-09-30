@@ -6,6 +6,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
 
 type Props = {
   title?: string;
+  wide?: boolean;
   description?: string;
   image?: string;
   article?: {
@@ -13,7 +14,7 @@ type Props = {
   };
 };
 
-const { title, description, image, article } = Astro.props;
+const { title, description, image, article, wide } = Astro.props;
 
 const pageTitle = title ? `${title} | Rubbie Kelvin` : "Rubbie Kelvin";
 const siteUrl = (Astro.site?.toString() || Astro.url.origin).replace(/\/$/, "");
@@ -26,9 +27,10 @@ const imageUrl = image ? image : `${siteUrl}/rto.png`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/rubbie-icon.png" />
     <meta name="generator" content={Astro.generator} />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap"
       rel="stylesheet"
     />
     <script
@@ -79,7 +81,7 @@ const imageUrl = image ? image : `${siteUrl}/rto.png`;
       id="theme-color-meta-dark"
       name="theme-color"
       media="(prefers-color-scheme: dark)"
-      content="#080808"
+      content="#0c0c0c"
     />
     <meta
       id="theme-color-meta-light"
@@ -105,7 +107,7 @@ const imageUrl = image ? image : `${siteUrl}/rto.png`;
         const metaLight = document.getElementById("theme-color-meta-light");
         function syncThemeColor() {
           const current = html.getAttribute("data-theme") || "light";
-          const color = current === "dark" ? "#080808" : "#ffffff";
+          const color = current === "dark" ? "#0c0c0c" : "#ffffff";
           metaDark?.setAttribute("content", color);
           metaLight?.setAttribute("content", color);
         }
@@ -118,12 +120,14 @@ const imageUrl = image ? image : `${siteUrl}/rto.png`;
     </script>
   </head>
 
-  <body class="min-h-full flex flex-col">
-    <AppHeader />
-    <main class="flex-grow">
-      <slot />
-    </main>
-    <AppFooter />
+  <body>
+    <div class:list={["wrap", wide && "wide"]}>
+      <AppHeader />
+      <main>
+        <slot />
+      </main>
+      <AppFooter />
+    </div>
     <GoogleAnalytics />
   </body>
 </html>

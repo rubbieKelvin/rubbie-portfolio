@@ -4,48 +4,11 @@ const key = import.meta.env.PUBLIC_LASTFM_API_KEY;
 ---
 
 {user && key && (
-  <section class="mt-16" id="now-playing" data-user={user} data-key={key} hidden>
-    <div
-      class="flex items-baseline justify-between mb-6 border-b-2 pb-3"
-      style="border-color: var(--color-border)"
-    >
-      <h2
-        class="font-display font-bold text-xs uppercase tracking-widest"
-        style="color: var(--color-text)"
-      >
-        Listening
-      </h2>
-      <span
-        id="np-status"
-        class="text-xs font-semibold uppercase tracking-widest text-text-muted"
-      ></span>
-    </div>
-
-    <a
-      id="np-link"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="group flex items-center gap-4 border-2 p-4 transition-colors hover:border-accent"
-      style="border-color: var(--color-border)"
-    >
-      <img
-        id="np-art"
-        alt=""
-        width="64"
-        height="64"
-        class="w-16 h-16 object-cover shrink-0"
-        hidden
-      />
-      <div class="min-w-0">
-        <h3
-          id="np-track"
-          class="font-display font-black text-lg uppercase tracking-tight truncate group-hover:text-accent transition-colors"
-        >
-        </h3>
-        <p id="np-artist" class="mt-1 text-text-muted text-sm truncate"></p>
-      </div>
-    </a>
-  </section>
+  <p id="now-playing" data-user={user} data-key={key} hidden>
+    <span id="np-status" class="muted"></span>{" "}
+    <a id="np-link" target="_blank" rel="noopener noreferrer" class="underline-link"><span id="np-track"></span></a>{" "}
+    <span class="muted">by <span id="np-artist"></span></span>
+  </p>
 )}
 
 <script>
@@ -67,16 +30,11 @@ const key = import.meta.env.PUBLIC_LASTFM_API_KEY;
         if (!track) return;
 
         const live = track["@attr"]?.nowplaying === "true";
-        const art = track.image?.find((i: any) => i.size === "large")?.["#text"];
 
-        $("np-status").textContent = live ? "Now playing" : "Last played";
+        $("np-status").textContent = live ? "listening to" : "last listened to";
         $("np-track").textContent = track.name;
         $("np-artist").textContent = track.artist?.["#text"] ?? "";
         ($("np-link") as HTMLAnchorElement).href = track.url;
-
-        const img = $("np-art") as HTMLImageElement;
-        img.hidden = !art;
-        if (art) img.src = art;
 
         root!.hidden = false;
       } catch {

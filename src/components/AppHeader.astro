@@ -1,44 +1,33 @@
 ---
-import ThemeToggle from "./ThemeToggle.astro";
-
 const pathname = Astro.url.pathname;
+const isHome = pathname === "/";
 
 const navLinks = [
-    { title: "Blog", url: "/blog" },
-    { title: "Projects", url: "/projects" },
+    { title: "projects", url: "/projects" },
+    { title: "writing", url: "/blog" },
 ];
 ---
 
-<header
-    class="sticky top-0 z-50 bg-bg"
-    style="border-color: var(--color-border)"
->
-    <div class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-        <a
-            href="/"
-            class="font-display text-sm tracking-widest uppercase hover:text-accent transition-colors"
-            style="color: var(--color-text)"
-        >
-            Rubbie Kelvin
-        </a>
-        <nav class="flex items-center gap-6 text-sm">
-            {navLinks.map((link) => (
-                <a
-                    href={link.url}
-                    class:list={[
-                        "uppercase tracking-wide font-semibold text-xs transition-colors hover:text-accent",
-                        pathname.startsWith(link.url)
-                            ? "text-accent"
-                            : "text-text-muted",
-                    ]}
-                    aria-current={
-                        pathname.startsWith(link.url) ? "page" : undefined
-                    }
-                >
-                    {link.title}
+<header class="mb-10">
+    {
+        isHome ? null : (
+            <div class="flex items-center justify-between">
+                <a href="/" class="flex items-center gap-3 nav-link">
+                    <img src="/rubbie-icon.png" alt="" class="avatar" width="32" height="32" />
+                    <span class="strong">rubbie kelvin</span>
                 </a>
-            ))}
-            <ThemeToggle />
-        </nav>
-    </div>
+                <nav class="flex gap-5 small">
+                    {navLinks.map((link) => (
+                        <a
+                            href={link.url}
+                            class="nav-link"
+                            aria-current={pathname.startsWith(link.url) ? "page" : undefined}
+                        >
+                            {link.title}
+                        </a>
+                    ))}
+                </nav>
+            </div>
+        )
+    }
 </header>

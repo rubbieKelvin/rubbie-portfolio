@@ -1,21 +1,12 @@
 ---
 name: project-redesign-2026
-description: Complete blog/portfolio redesign in Sep 2026 — brutalist builder aesthetic replacing terminal/CLI style
+description: Portfolio design history in 2026 — brutalist (Sep) replaced by minimal lowercase monospace single-column theme
 metadata:
   type: project
 ---
 
-Redesigned the Rubbie Kelvin portfolio/blog from scratch in September 2026.
+**Current design (Sep 30 2026):** minimal, modeled on a reference screenshot of a personal site. IBM Plex Mono at 13px, lowercase copy, ~38rem centered column (42rem for posts/case studies), home uses a label/content grid (about / now / writing / elsewhere), monochrome light/dark, no accent colour. Header: round avatar beside name on home, a small avatar + name + nav strip elsewhere; favicon.svg is a circular crop of the character art. No arrows on links — they use `underline-link`; sections separated by hairline `<hr>`; contact links separated by ` / `. All shared styles are classes in `src/assets/global.css`; `Layout.astro` owns the `.wrap` container, header (a "← home" link on non-home pages) and footer.
 
-**Why:** User wanted a complete redesign, "nothing like what we currently have." They chose brutalist/raw aesthetic and builder & founder vibe.
+**Why:** user asked to redesign the entire portfolio in the style of that reference. This supersedes the earlier brutalist redesign (Syne/Archivo, orange accent, bordered cards, uppercase), which had itself replaced the original terminal/CLI look.
 
-**What changed:**
-- Old: 3-column layout, terminal/CLI aesthetic (~ $, grep filter, monospace everywhere), yellow accent, Google Sans Code font
-- New: Single-column centered layout (max-w-5xl), brutalist bold typography, orange-red accent (#cc3a00/#ff5533 light/dark), Syne 800 font for headings, Space Grotesk for body
-- AppFooter moved to Layout.astro (global, no longer per-page)
-- No more terminal metaphors; filter is plain "Filter" not `~ $ ls -la | grep`
-- Projects shown as bordered card grid
-- Blog as numbered list grouped by year
-- Hero: huge viewport-filling name in Syne Black
-
-**How to apply:** New changes go in this direction. Don't reintroduce terminal metaphors, monospace UI text, or the 3-column layout.
+**How to apply:** keep new UI lowercase, monospace, borderless and quiet. Don't reintroduce accent colours, uppercase tracking labels, heavy borders, or bordered cards.

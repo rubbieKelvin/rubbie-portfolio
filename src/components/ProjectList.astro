@@ -28,47 +28,34 @@ const searchFor = (project: CollectionEntry<"projects">) =>
 <GrepFilter total={total} unit="projects">
   {
     groups.map((group) => (
-      <section data-group class="mb-14">
-        <p class="mb-4 text-xs uppercase tracking-widest font-semibold text-text-muted">
-          {group.title}
-        </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {group.projects.map((project) => {
-            const hasDetail = detailed.has(project.id);
-            return (
-              <a
-                href={hasDetail ? `/projects/${project.id}` : project.data.url}
-                target={hasDetail ? undefined : "_blank"}
-                rel={hasDetail ? undefined : "noopener noreferrer"}
-                data-item
-                data-search={searchFor(project)}
-                class="group border-2 p-5 transition-colors flex flex-col justify-between min-h-36 hover:border-accent"
-                style="border-color: var(--color-border-muted)"
-              >
-                <div>
-                  <h3 class="font-display font-bold uppercase text-sm tracking-wide group-hover:text-accent transition-colors">
-                    {project.data.title}
-                  </h3>
-                  {project.data.description && (
-                    <p class="mt-2 text-sm text-text-muted leading-relaxed line-clamp-3">
-                      {project.data.description}
-                    </p>
-                  )}
-                </div>
-                <div class="mt-4 flex items-center justify-between">
-                  <div class="flex gap-2 flex-wrap">
-                    {project.data.categories.map((cat: string) => (
-                      <span class="text-xs text-text-muted">#{cat}</span>
-                    ))}
-                  </div>
-                  <span class="text-xs font-semibold group-hover:text-accent transition-colors shrink-0">
-                    {hasDetail ? "Notes" : "Visit"}
+      <section data-group class="mb-8">
+        <p class="mb-2 small muted">{group.title.toLowerCase()}</p>
+        {group.projects.map((project) => {
+          const hasDetail = detailed.has(project.id);
+          return (
+            <a
+              href={hasDetail ? `/projects/${project.id}` : project.data.url}
+              target={hasDetail ? undefined : "_blank"}
+              rel={hasDetail ? undefined : "noopener noreferrer"}
+              data-item
+              data-search={searchFor(project)}
+              class="row py-2"
+            >
+              <span class="row-title">
+                <span class="strong">{project.data.title.toLowerCase()}</span>
+                {project.data.description && (
+                  <span class="muted block">{project.data.description}</span>
+                )}
+                {project.data.categories.length > 0 && (
+                  <span class="tags block">
+                    {project.data.categories.map((c: string) => `#${c}`).join(" ")}
                   </span>
-                </div>
-              </a>
-            );
-          })}
-        </div>
+                )}
+              </span>
+              <span class="row-meta">{hasDetail ? "notes" : "visit"}</span>
+            </a>
+          );
+        })}
       </section>
     ))
   }

@@ -51,37 +51,27 @@ const searchFor = (post: CollectionEntry<"posts">) =>
         (p) => p.data.publishedAt.getFullYear() === year,
       );
       return (
-        <section data-group class="mb-10">
-          <p class="mb-3 text-xs uppercase tracking-widest font-semibold text-text-muted">
-            {year}
-          </p>
-          {yearPosts.map((post, i) => (
+        <section data-group class="mb-8">
+          <p class="mb-2 small muted">{year}</p>
+          {yearPosts.map((post) => (
             <a
               href={blogUrl(post)}
               data-item
               data-search={searchFor(post)}
-              class="group flex items-center justify-between gap-4 py-3.5 border-b transition-colors hover:border-[var(--color-border)]"
-              style="border-color: var(--color-border-muted)"
+              class="row"
             >
-              <div class="flex items-center gap-4 min-w-0">
-                <span class="text-xs text-text-muted font-mono shrink-0 w-5 text-right select-none">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span class="min-w-0">
-                  <span class="block font-semibold group-hover:text-accent transition-colors truncate">
-                    {post.data.title}
+              <span class="row-title">
+                {post.data.title}
+                {post.data.categories.length > 0 && (
+                  <span class="tags block">
+                    {post.data.categories.map((c: string) => `#${c}`).join(" ")}
+                    {domainOf(post.data.external_link) &&
+                      ` ${domainOf(post.data.external_link)}`}
                   </span>
-                  {post.data.categories.length > 0 && (
-                    <span class="block mt-0.5 text-xs text-text-muted">
-                      {post.data.categories.map((c: string) => `#${c}`).join(" ")}
-                      {domainOf(post.data.external_link) &&
-                        ` ${domainOf(post.data.external_link)}`}
-                    </span>
-                  )}
-                </span>
-              </div>
-              <span class="text-xs text-text-muted shrink-0 font-medium">
-                {fmtShortDate(post.data.publishedAt)}
+                )}
+              </span>
+              <span class="row-meta">
+                {fmtShortDate(post.data.publishedAt).toLowerCase()}
               </span>
             </a>
           ))}

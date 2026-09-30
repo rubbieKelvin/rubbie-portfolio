@@ -24,30 +24,10 @@ const projectsByCategory = categories
 ---
 
 <Layout title="Projects">
-  <div class="max-w-5xl mx-auto px-6">
-    <section
-      class="pt-14 pb-10 border-b-2"
-      style="border-color: var(--color-border)"
-    >
-      <p
-        class="text-xs uppercase tracking-widest font-semibold text-text-muted mb-3"
-      >
-        Work
-      </p>
-      <h1
-        class="font-display font-black uppercase text-5xl md:text-6xl leading-none tracking-tight mb-5"
-        style="color: var(--color-text)"
-      >
-        Projects
-      </h1>
-      <p class="text-text-muted text-sm max-w-lg">
-        From learning experiments to professional tools, each project is part
-        of the story.
-      </p>
-    </section>
-
-    <div class="pt-10">
-      <ProjectList groups={projectsByCategory} detailed={detailIds} />
-    </div>
-  </div>
+  <h1 class="title">projects</h1>
+  <p class="mb-8">
+    from learning experiments to professional tools, each project is part of
+    the story.
+  </p>
+  <ProjectList groups={projectsByCategory} detailed={detailIds} />
 </Layout>
