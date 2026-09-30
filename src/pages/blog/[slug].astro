@@ -44,6 +44,7 @@ const author = authorSlug ? await getEntry("authors", authorSlug) : null;
   image={mainImage ?? undefined}
   article={publishedAt ? { publishedAt: publishedAt.toISOString() } : undefined}
   wide
+  stickyTitle={title.toLowerCase()}
 >
   <header class="mb-8">
     <h1 class="title">{title.toLowerCase()}</h1>

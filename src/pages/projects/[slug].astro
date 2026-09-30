@@ -33,6 +33,7 @@ const links =
   description={detail.data.description ?? project.data.description ?? undefined}
   image={project.data.mainImage ?? undefined}
   wide
+  stickyTitle={project.data.title.toLowerCase()}
 >
   <header class="stack mb-8">
     <h1 class="title !mb-0">{project.data.title.toLowerCase()}</h1>

@@ -1,4 +1,5 @@
 ---
+const { subtitle } = Astro.props as { subtitle?: string };
 const pathname = Astro.url.pathname;
 const isHome = pathname === "/";
 
@@ -13,12 +14,19 @@ const navLinks = [
 <header class="site-header" data-home={isHome}>
     {
         isHome ? null : (
-            <div class="flex items-center justify-between">
-                <a href="/" class="flex items-center gap-3 nav-link">
-                    <img src="/rubbie-icon.png" alt="" class="avatar" width="32" height="32" />
-                    <span class="strong">rubbie kelvin</span>
+            <div class="header-row flex items-center justify-between">
+                <a href="/" class="flex items-center gap-3 nav-link min-w-0">
+                    <img src="/rubbie-icon.png" alt="" class="avatar shrink-0" width="32" height="32" />
+                    <span class="flex flex-col justify-center min-w-0">
+                        <span class="strong leading-tight">rubbie kelvin</span>
+                        {subtitle && (
+                            <span class="header-sub small muted truncate" aria-hidden="true">
+                                {subtitle}
+                            </span>
+                        )}
+                    </span>
                 </a>
-                <nav class="flex gap-5 small">
+                <nav class="flex gap-5 small shrink-0 pl-4">
                     {navLinks.map((link) => (
                         <a
                             href={link.url}
@@ -41,5 +49,18 @@ const navLinks = [
         new IntersectionObserver(([entry]) => {
             header.toggleAttribute("data-stuck", !entry.isIntersecting);
         }).observe(sentinel);
+
+        // Reveal the page title under the site name once the h1 has scrolled under the header.
+        const h1 = document.querySelector("main h1");
+        if (h1 && header.querySelector(".header-sub")) {
+            const offset = header.offsetHeight;
+            new IntersectionObserver(
+                ([entry]) => {
+                    const gone = !entry.isIntersecting && entry.boundingClientRect.top < offset;
+                    header.toggleAttribute("data-title-hidden", gone);
+                },
+                { rootMargin: `-${offset}px 0px 0px 0px` },
+            ).observe(h1);
+        }
     }
 </script>

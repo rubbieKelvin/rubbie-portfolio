@@ -7,6 +7,8 @@ import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
 type Props = {
   title?: string;
   wide?: boolean;
+  /** Shown under the site name in the sticky header once the page h1 scrolls away */
+  stickyTitle?: string;
   description?: string;
   image?: string;
   article?: {
@@ -14,7 +16,7 @@ type Props = {
   };
 };
 
-const { title, description, image, article, wide } = Astro.props;
+const { title, description, image, article, wide, stickyTitle } = Astro.props;
 
 const pageTitle = title ? `${title} | Rubbie Kelvin` : "Rubbie Kelvin";
 const siteUrl = (Astro.site?.toString() || Astro.url.origin).replace(/\/$/, "");
@@ -122,7 +124,7 @@ const imageUrl = image ? image : `${siteUrl}/rto.png`;
 
   <body>
     <div class:list={["wrap", wide && "wide"]}>
-      <AppHeader />
+      <AppHeader subtitle={stickyTitle} />
       <main>
         <slot />
       </main>

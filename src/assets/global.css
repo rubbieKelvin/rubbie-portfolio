@@ -148,6 +148,21 @@ hr,
     display: none;
 }
 
+.header-row {
+    min-height: 2.5rem;
+}
+
+.header-sub {
+    max-height: 0;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.site-header[data-title-hidden] .header-sub {
+    max-height: 1.5rem;
+    opacity: 1;
+}
+
 .site-header[data-stuck] {
     border-bottom-color: var(--color-border);
 }
