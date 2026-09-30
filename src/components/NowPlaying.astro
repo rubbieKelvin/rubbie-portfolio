@@ -4,11 +4,14 @@ const key = import.meta.env.PUBLIC_LASTFM_API_KEY;
 ---
 
 {user && key && (
-  <p id="now-playing" data-user={user} data-key={key} hidden>
-    <span id="np-status" class="muted"></span>{" "}
-    <a id="np-link" target="_blank" rel="noopener noreferrer" class="underline-link"><span id="np-track"></span></a>{" "}
-    <span class="muted">by <span id="np-artist"></span></span>
-  </p>
+  <section class="section" id="now-playing" data-user={user} data-key={key} hidden>
+    <h2 class="label">now</h2>
+    <p>
+      <span id="np-status" class="muted"></span>{" "}
+      <a id="np-link" target="_blank" rel="noopener noreferrer" class="underline-link"><span id="np-track"></span></a>{" "}
+      <span class="muted">by <span id="np-artist"></span></span>
+    </p>
+  </section>
 )}
 
 <script>

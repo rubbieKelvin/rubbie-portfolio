@@ -2,21 +2,24 @@
 type Props = {
   total: number;
   unit: string;
+  title?: string;
+  description?: string;
 };
 
-const { total, unit } = Astro.props;
+const { total, unit, title, description } = Astro.props;
 ---
 
-<div class="mb-8 flex items-baseline gap-4">
+<div class="flex items-baseline gap-4">
+  {title && <h1 class="title !mb-0 shrink-0">{title}</h1>}
   <input
     id="grep-input"
     type="text"
-    placeholder="filter (press /)"
+    placeholder="filter (/)"
     autocomplete="off"
     autocapitalize="off"
     spellcheck="false"
     aria-label="Filter list"
-    class="filter-input"
+    class="filter-input flex-1 min-w-0"
   />
   <span id="file-count" data-unit={unit} class="small muted shrink-0">
     {total}
@@ -24,7 +27,11 @@ const { total, unit } = Astro.props;
   </span>
 </div>
 
-<slot />
+{description && <p class="mt-4">{description}</p>}
+
+<div class="mt-8">
+  <slot />
+</div>
 
 <p id="no-matches" class="hidden muted py-8">no results for that search.</p>
 
@@ -50,7 +57,7 @@ const { total, unit } = Astro.props;
         !group.querySelector("[data-item]:not(.hidden)"),
       );
     }
-    count.textContent = `${visible} of ${rows.length} ${unit}`;
+    count.textContent = q ? `${visible}/${rows.length}` : `${rows.length} ${unit}`;
     noMatches.classList.toggle("hidden", visible !== 0);
   }
 

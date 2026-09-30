@@ -8,9 +8,11 @@ type Props = {
     projects: CollectionEntry<"projects">[];
   }[];
   detailed: Set<string>;
+  title?: string;
+  description?: string;
 };
 
-const { groups, detailed } = Astro.props;
+const { groups, detailed, title, description } = Astro.props;
 const total = groups.reduce((n, g) => n + g.projects.length, 0);
 
 const searchFor = (project: CollectionEntry<"projects">) =>
@@ -25,7 +27,7 @@ const searchFor = (project: CollectionEntry<"projects">) =>
     .toLowerCase();
 ---
 
-<GrepFilter total={total} unit="projects">
+<GrepFilter total={total} unit="projects" title={title} description={description}>
   {
     groups.map((group) => (
       <section data-group class="mb-8">

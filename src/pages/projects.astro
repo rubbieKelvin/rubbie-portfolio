@@ -24,10 +24,10 @@ const projectsByCategory = categories
 ---
 
 <Layout title="Projects">
-  <h1 class="title">projects</h1>
-  <p class="mb-8">
-    from learning experiments to professional tools, each project is part of
-    the story.
-  </p>
-  <ProjectList groups={projectsByCategory} detailed={detailIds} />
+  <ProjectList
+    title="projects"
+    description="from learning experiments to professional tools, each project is part of my story."
+    groups={projectsByCategory}
+    detailed={detailIds}
+  />
 </Layout>

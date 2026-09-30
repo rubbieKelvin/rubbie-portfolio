@@ -4,9 +4,11 @@ import GrepFilter from "./GrepFilter.astro";
 
 type Props = {
   posts: CollectionEntry<"posts">[];
+  title?: string;
+  description?: string;
 };
 
-const { posts } = Astro.props;
+const { posts, title, description } = Astro.props;
 
 const sorted = [...posts].sort(
   (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
@@ -44,7 +46,7 @@ const searchFor = (post: CollectionEntry<"posts">) =>
     .toLowerCase();
 ---
 
-<GrepFilter total={sorted.length} unit="posts">
+<GrepFilter total={sorted.length} unit="posts" title={title} description={description}>
   {
     years.map((year) => {
       const yearPosts = sorted.filter(

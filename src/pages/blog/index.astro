@@ -7,10 +7,9 @@ const posts = await getCollection("posts");
 ---
 
 <Layout title="Blog">
-  <div class="flex items-baseline justify-between">
-    <h1 class="title">writing</h1>
-    <a href="/rss.xml" class="underline-link small">rss</a>
-  </div>
-  <p class="mb-8">thoughts on code, building things and everything in between.</p>
-  <PostList posts={posts} />
+  <PostList
+    title="blog"
+    description="thoughts on code, building things and everything in between."
+    posts={posts}
+  />
 </Layout>
