@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import CurrentlyBuilding from "@/components/CurrentlyBuilding.astro";
+import NowPlaying from "@/components/NowPlaying.astro";
 import { getCollection } from "astro:content";
 import introData from "@/data/intro.json";
 import contactLinks from "@/data/links.json";
@@ -69,6 +70,9 @@ const blogUrl = (post: any) => `/blog/${post.id.replace(/\.md$/, "")}`;
 
         <!-- Currently Building -->
         <CurrentlyBuilding />
+
+        <!-- Now Playing -->
+        <NowPlaying />
 
         <!-- Recent Writing -->
         <section class="mt-16">
