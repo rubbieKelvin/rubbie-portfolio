@@ -12,7 +12,11 @@ const recentPosts = [...posts]
 
 const fmtDate = (d: Date) =>
     d
-        .toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+        .toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+        })
         .toLowerCase();
 
 const blogUrl = (post: any) => `/blog/${post.id.replace(/\.md$/, "")}`;
@@ -27,10 +31,20 @@ const blogUrl = (post: any) => `/blog/${post.id.replace(/\.md$/, "")}`;
             width="80"
             height="80"
         />
-        <div>
-            <h1 class="title !mb-1">rubbie kelvin<span style="color: var(--color-accent)">.</span></h1>
+        <div class="grow">
+            <h1 class="title !mb-1">
+                rubbie kelvin<span style="color: var(--color-accent)">.</span>
+            </h1>
             <p class="muted">software engineer, nigeria.</p>
         </div>
+        <a
+            href="https://destroy.spritefusion.com/?url=rubbietheone.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline-link ml-auto"
+        >
+            &amp;$!#%
+        </a>
     </div>
 
     <section class="section">
@@ -38,17 +52,28 @@ const blogUrl = (post: any) => `/blog/${post.id.replace(/\.md$/, "")}`;
         <div class="stack">
             <p>
                 i love building tools, systems &amp; interfaces. my core
-                expertise is in <strong>python</strong>,{" "}
-                <strong>rust</strong> and <strong>typescript</strong>.
+                expertise is in <strong>python</strong>, <strong>rust</strong>{" "}
+                and <strong>typescript</strong>.
             </p>
             <p>
                 i like software that feels simple on the surface but is
                 thoughtfully engineered underneath.
             </p>
             <div class="slash-list">
-                <a href="/projects" class="underline-link">projects</a>
-                <a href="/blog" class="underline-link">blog</a>
-                <a href={introData.action_url} target="_blank" rel="noopener noreferrer" class="underline-link">resume</a>
+                <a href="/projects" class="underline-link">
+                    projects
+                </a>
+                <a href="/blog" class="underline-link">
+                    blog
+                </a>
+                <a
+                    href={introData.action_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="underline-link"
+                >
+                    resume
+                </a>
             </div>
         </div>
     </section>
@@ -56,12 +81,18 @@ const blogUrl = (post: any) => `/blog/${post.id.replace(/\.md$/, "")}`;
     <NowPlaying />
 
     <section class="section">
-        <h2 class="label"><a href="/blog" class="nav-link">blog ↗</a></h2>
+        <h2 class="label">
+            <a href="/blog" class="nav-link">
+                blog ↗
+            </a>
+        </h2>
         <div>
             {recentPosts.map((post) => (
                 <a href={blogUrl(post)} class="row">
                     <span class="row-title">{post.data.title}</span>
-                    <span class="row-meta">{fmtDate(post.data.publishedAt)}</span>
+                    <span class="row-meta">
+                        {fmtDate(post.data.publishedAt)}
+                    </span>
                 </a>
             ))}
         </div>
@@ -71,7 +102,12 @@ const blogUrl = (post: any) => `/blog/${post.id.replace(/\.md$/, "")}`;
         <h2 class="label">elsewhere</h2>
         <div class="slash-list">
             {contactLinks.map((link) => (
-                <a href={link.url} target="_blank" rel="noopener noreferrer" class="underline-link">
+                <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="underline-link"
+                >
                     {link.title.toLowerCase()}
                 </a>
             ))}
