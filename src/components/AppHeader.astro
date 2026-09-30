@@ -8,7 +8,9 @@ const navLinks = [
 ];
 ---
 
-<header class="mb-10">
+{isHome && <div class="mb-10" />}
+{!isHome && <div id="header-sentinel" class="h-px -mb-px" aria-hidden="true" />}
+<header class="site-header" data-home={isHome}>
     {
         isHome ? null : (
             <div class="flex items-center justify-between">
@@ -31,3 +33,13 @@ const navLinks = [
         )
     }
 </header>
+
+<script>
+    const header = document.querySelector<HTMLElement>(".site-header");
+    const sentinel = document.getElementById("header-sentinel");
+    if (header && sentinel) {
+        new IntersectionObserver(([entry]) => {
+            header.toggleAttribute("data-stuck", !entry.isIntersecting);
+        }).observe(sentinel);
+    }
+</script>
