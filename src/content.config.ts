@@ -73,6 +73,7 @@ const talks = defineCollection({
     title: z.string(),
     date: z.date(),
     event: z.string().optional(),
+    eventUrl: z.string().url().optional(),
     location: z.string().optional(),
     description: z.string().optional(),
     /** A YouTube link (embedded) or an image path/URL */
