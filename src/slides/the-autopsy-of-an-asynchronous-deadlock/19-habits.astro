@@ -1,7 +1,7 @@
 ---
 import Slide from "@/components/slides/Slide.astro";
 
-const notes = "About 90 seconds, then questions. Five habits to have in place before the next deadlock, because once you're in one, it's too late to add them. Each one maps to something we needed today: the heartbeat answered \"is it a deadlock?\"; lock logs gave us the arrow no tool shows; report-only timeouts tell you which wait is stuck without destroying the evidence; database deadlines turn freezes into errors; and the last one prevents both scenarios outright. End on the line: \"The database saw half the loop. The runtime saw the other half. Only we could see the whole thing.\" Pause. Thank you. Likely questions: \"Why doesn't Postgres detect it?\" It only follows waits between its own sessions. \"Isn't this just a long transaction?\" A long transaction ends eventually; this one waits for something that waits for it. \"Does it happen with HTTP calls?\" Yes: calling a service that writes the same row while your transaction is open is scenario 1 across a network.";
+const notes = "About 90 seconds, then questions. Five habits to have in place before the next deadlock, because once you're in one, it's too late to add them. Each one maps to something we needed today: the heartbeat answered \"is it a deadlock?\"; lock logs gave us the arrow no tool shows; report-only timeouts tell you which wait is stuck without destroying the evidence; database deadlines turn freezes into errors; and the last one prevents both scenarios outright.";
 ---
 
 <Slide dark kicker="before the next one" title="five habits." notes={notes}>
@@ -12,11 +12,6 @@ const notes = "About 90 seconds, then questions. Five habits to have in place be
     <li>set idle_in_transaction_session_timeout and lock_timeout.</li>
     <li>never await while holding a transaction, a lock or a connection.</li>
   </ol>
-  <p class="mt-auto s-big">the database saw half the loop. the runtime saw the other half. <span class="s-accent">only we could see the whole thing.</span></p>
-  <div class="flex justify-between items-baseline">
-    <p class="strong" style="font-size: 2em">thank you<span class="s-accent">.</span></p>
-    <p class="s-muted">rubbietheone.com</p>
-  </div>
 </Slide>
 
 <style>

@@ -1,0 +1,30 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+
+const notes = "End on the line: \"The database saw half the loop. The runtime saw the other half. Only we could see the whole thing.\" Pause. Thank you. Likely questions: \"Why doesn't Postgres detect it?\" It only follows waits between its own sessions. \"Isn't this just a long transaction?\" A long transaction ends eventually; this one waits for something that waits for it. \"Does it happen with HTTP calls?\" Yes: calling a service that writes the same row while your transaction is open is scenario 1 across a network.";
+---
+
+<Slide dark notes={notes}>
+  <div class="my-auto">
+    <h2 class="thanks-title">thank you<span class="s-accent">.</span></h2>
+    <p class="thanks-sub s-muted">questions?</p>
+  </div>
+  <div class="flex justify-between s-muted">
+    <span>rubbie kelvin</span>
+    <span>rubbietheone.com</span>
+  </div>
+</Slide>
+
+<style>
+  .thanks-title {
+    font-size: 7.5em;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .thanks-sub {
+    font-size: 2em;
+    margin-top: 0.25em;
+  }
+</style>

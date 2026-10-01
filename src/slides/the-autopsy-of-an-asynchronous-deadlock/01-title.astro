@@ -1,29 +1,47 @@
 ---
-const notes = "About 30 seconds. Name, what you do, one line on why this topic matters to you. Say up front: the demos are written in Rust, but everything in this talk applies to any language with async/await (JavaScript, Python, C#, Go) and to any database. You don't need to read Rust to follow along.";
+const notes =
+    "About 30 seconds. Name, what you do, one line on why this topic matters to you. Say up front: the demos are written in Rust, but everything in this talk applies to any language with async/await (JavaScript, Python, C#, Go) and to any database. You don't need to read Rust to follow along.";
 ---
 
 <div class="s title-slide">
-  <div class="flex items-center gap-[1em]">
-    <img src="/rubbie-icon.png" alt="" class="title-avatar" />
-    <div>
-      <p class="strong">rubbie kelvin<span class="s-accent">.</span></p>
-      <p class="s-muted">software engineer, nigeria.</p>
+    <div class="flex items-center gap-[1em]">
+        <img src="/rubbie-icon.png" alt="" class="title-avatar" />
+        <div>
+            <p class="strong">
+                rubbie kelvin<span class="s-accent">.</span>
+            </p>
+            <p class="s-muted">software engineer, nigeria.</p>
+        </div>
     </div>
-  </div>
-  <div class="mt-auto">
-    <p class="s-kicker">sysconf · 2026</p>
-    <h1 class="title-main">the autopsy of an asynchronous deadlock<span class="s-accent">.</span></h1>
-    <p class="s-big s-muted mt-[0.5em]">how to find a bug that no single tool will show you.</p>
-  </div>
-  <div class="mt-auto flex justify-between s-small">
-    <span>rubbietheone.com</span>
-    <span>examples in rust · ideas for every language</span>
-  </div>
-  <aside class="s-notes" hidden>{notes}</aside>
+    <div class="mt-auto">
+        <p class="s-kicker">sysconf · 2026</p>
+        <h1 class="title-main">
+            the autopsy of an asynchronous deadlock
+            <span class="s-accent">.</span>
+        </h1>
+    </div>
+    <div class="mt-auto flex justify-between s-small">
+        <span>rubbietheone.com</span>
+        <span>examples in rust · ideas for every language</span>
+    </div>
+    <aside class="s-notes" hidden>
+        {notes}
+    </aside>
 </div>
 
 <style>
-  .title-slide { padding: 4em 5em; }
-  .title-avatar { width: 3em; height: 3em; border-radius: 9999px; }
-  .title-main { font-size: 3em; font-weight: 500; line-height: 1.1; max-width: 18em; }
+    .title-slide {
+        padding: 4em 5em;
+    }
+    .title-avatar {
+        width: 3em;
+        height: 3em;
+        border-radius: 9999px;
+    }
+    .title-main {
+        font-size: 3em;
+        font-weight: 500;
+        line-height: 1.1;
+        max-width: 18em;
+    }
 </style>
