@@ -5,49 +5,426 @@ const notes = "About 90 seconds. Start the scenario 1 demo live (have the record
 ---
 
 <Slide dark notes={notes} class="nothing">
-  <div class="my-auto">
-    <p class="s-kicker nothing-kicker">a checkout service, right now:</p>
-    <h2 class="nothing-title">nothing<span class="s-accent">.</span></h2>
-    <ul class="nothing-chips">
-      <li>cpu 0.1%</li>
-      <li>/health 200 OK</li>
-      <li>errors 0</li>
-      <li class="is-accent">orders completed, last 5 min: 0</li>
-    </ul>
+  <div class="nothing-stack my-auto" data-nothing data-state="0">
+    <!-- states 0-2: a live dashboard that freezes -->
+    <div class="dash" aria-hidden="true">
+      <header class="dash-head">
+        <span>checkout-service <span class="s-muted">/ production</span></span>
+        <span class="s-muted">
+          <span class="dash-lapse" data-lapse>60× speed</span>
+          <span data-clock>14:02:37</span>
+        </span>
+      </header>
+
+      <div class="tiles">
+        <div class="s-card tile">
+          <p class="s-card-label">cpu</p>
+          <p class="tile-value" data-cpu>42%</p>
+          <svg class="spark" viewBox="0 0 100 20" preserveAspectRatio="none"><polyline data-spark /></svg>
+        </div>
+        <div class="s-card tile">
+          <p class="s-card-label">/health</p>
+          <p class="tile-value is-ok">200 OK</p>
+          <p class="tile-sub">checked every 1s</p>
+        </div>
+        <div class="s-card tile">
+          <p class="s-card-label">errors</p>
+          <p class="tile-value">0</p>
+          <p class="tile-sub">last 5 min</p>
+        </div>
+        <div class="s-card tile tile-orders">
+          <p class="s-card-label">orders completed, last 5 min</p>
+          <p class="tile-value" data-orders>1,284</p>
+          <p class="tile-sub" data-last-order>last order just now</p>
+        </div>
+      </div>
+
+      <div class="dash-bottom">
+        <div class="dash-log" data-log></div>
+        <!-- state 4: the punchline takes the log's place; nothing else moves -->
+        <h2 class="dash-nothing">nothing<span class="s-accent">.</span></h2>
+      </div>
+    </div>
+
+    <button type="button" class="nothing-next" data-demo-next aria-label="Advance the demo">
+      <span class="nothing-dots"><i></i><i></i><i></i><i></i></span>
+      <span class="nothing-arrow">→</span>
+      <span class="nothing-replay">↺</span>
+    </button>
   </div>
 </Slide>
 
 <style>
-  .nothing-kicker {
-    font-size: 1em;
-    margin-bottom: 1.5em;
+  :global(.s.nothing) {
+    --ok: #3fb950;
   }
 
-  .nothing-title {
-    font-size: 7.5em;
+  .nothing-stack {
+    display: grid;
+    position: relative;
+  }
+
+  .dash-bottom {
+    display: grid;
+    margin-top: 1.75em;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .dash-bottom > * {
+    grid-area: 1 / 1;
+    transition: opacity 0.5s;
+  }
+
+  .dash-nothing {
+    align-self: center;
+    font-size: 7em;
     font-weight: 400;
-    line-height: 1.15;
+    line-height: 1;
     letter-spacing: -0.01em;
+    opacity: 0;
   }
 
-  .nothing-chips {
+  [data-state="3"] .dash-log {
+    opacity: 0;
+  }
+
+  [data-state="3"] .dash-nothing {
+    opacity: 1;
+  }
+
+  /* ---------- dashboard ---------- */
+
+  .dash-head {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.8em;
-    margin-top: 0.4em;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.75em;
   }
 
-  .nothing-chips li {
-    font-size: 1.05em;
-    padding: 0.45em 0.8em;
-    border: 1px solid color-mix(in srgb, var(--color-text) 18%, transparent);
-    border-radius: 0.25em;
-    background: color-mix(in srgb, var(--color-text) 3%, transparent);
-  }
-
-  .nothing-chips li.is-accent {
+  .dash-lapse {
     color: var(--color-accent);
-    border-color: var(--color-accent);
-    background: transparent;
+    margin-right: 1em;
+    visibility: hidden;
+  }
+
+  [data-state="2"] .dash-lapse[data-on] {
+    visibility: visible;
+  }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1.5fr;
+    gap: 2em;
+  }
+
+  .tile {
+    transition: border-color 0.4s;
+  }
+
+  .tile :global(.s-card-label) {
+    font-size: 0.8em;
+  }
+
+  .tile-sub {
+    font-size: 0.8em;
+    color: var(--color-text-muted);
+  }
+
+  .tile-value {
+    font-size: 2.2em;
+    line-height: 1.25;
+    margin-bottom: 0.15em;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.4s;
+  }
+
+  .tile-value.is-ok {
+    color: var(--ok);
+  }
+
+  .spark {
+    display: block;
+    width: 100%;
+    height: 1em;
+    overflow: visible;
+  }
+
+  .spark polyline {
+    fill: none;
+    stroke: var(--color-text-muted);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* once frozen, the one number that matters turns accent */
+  [data-state="1"] .tile-orders,
+  [data-state="2"] .tile-orders,
+  [data-state="3"] .tile-orders {
+    border-top-color: var(--color-accent);
+  }
+
+  [data-state="1"] .tile-orders :global(.s-card-label),
+  [data-state="2"] .tile-orders :global(.s-card-label),
+  [data-state="3"] .tile-orders :global(.s-card-label),
+  [data-state="1"] .tile-orders .tile-value,
+  [data-state="2"] .tile-orders .tile-value,
+  [data-state="3"] .tile-orders .tile-value,
+  [data-state="1"] [data-last-order],
+  [data-state="2"] [data-last-order],
+  [data-state="3"] [data-last-order] {
+    color: var(--color-accent);
+  }
+
+  .dash-log {
+    padding-top: 0.9em;
+    height: 9.6em;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    font-size: 0.95em;
+  }
+
+  .dash-log :global(.line) {
+    display: grid;
+    grid-template-columns: 6em 10em 3em 1fr;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+
+  .dash-log :global(.line.is-health) {
+    color: var(--color-text-muted);
+  }
+
+  .dash-log :global(.ok) {
+    color: var(--ok);
+  }
+
+  .dash-log :global(.ms) {
+    color: var(--color-text-muted);
+  }
+
+  /* ---------- the demo's own control: progress dots and an arrow ---------- */
+
+  .nothing-next {
+    position: absolute;
+    right: 0;
+    bottom: -3.25em;
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    font-size: 0.85em;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .nothing-next:hover {
+    opacity: 0.55;
+  }
+
+  .nothing-dots {
+    display: flex;
+    gap: 0.4em;
+  }
+
+  .nothing-dots i {
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: 9999px;
+    background: var(--color-border);
+  }
+
+  /* once every state has been shown, the control becomes a single replay icon */
+  .nothing-replay,
+  [data-state="3"] .nothing-dots,
+  [data-state="3"] .nothing-arrow {
+    display: none;
+  }
+
+  [data-state="3"] .nothing-replay {
+    display: inline;
+    font-size: 1.3em;
+    line-height: 1;
+  }
+
+  [data-state="0"] .nothing-dots i:nth-child(1),
+  [data-state="1"] .nothing-dots i:nth-child(-n + 2),
+  [data-state="2"] .nothing-dots i:nth-child(-n + 3) {
+    background: var(--color-text-muted);
   }
 </style>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-nothing]")!;
+  const section = root.closest<HTMLElement>(".slide")!;
+  const q = <T extends Element = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+
+  const el = {
+    clock: q("[data-clock]"),
+    lapse: q("[data-lapse]"),
+    cpu: q("[data-cpu]"),
+    spark: q<SVGPolylineElement>("[data-spark]"),
+    orders: q("[data-orders]"),
+    lastOrder: q("[data-last-order]"),
+    log: q("[data-log]"),
+    next: q<HTMLButtonElement>("[data-demo-next]"),
+  };
+
+  const CLOCK_START = 14 * 3600 + 2 * 60 + 37; // 14:02:37
+  const WINDOW = 300; // "last 5 min"
+  const LAPSE_SPEED = 60;
+  const LOG_LINES = 6;
+  const SPARK_POINTS = 32;
+
+  // simulated world, in seconds
+  let state = 0;
+  let sim = 0;
+  let speed = 1;
+  let frozenAt: number | null = null;
+  let ordersAtFreeze = 0;
+  let orders = 1284;
+  let nextOrder = 0;
+  let nextHealth = 0;
+  let cpu = 42;
+  let spark: number[] = [];
+  let raf = 0;
+  let lastFrame = 0;
+  let lastSample = 0;
+  let lastHealthLog = 0;
+
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const clock = (t: number) => {
+    const s = Math.floor(CLOCK_START + t);
+    return `${pad(Math.floor(s / 3600) % 24)}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`;
+  };
+  const ago = (t: number) => {
+    const s = Math.floor(t);
+    return s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${pad(s % 60)}s`;
+  };
+
+  function log(t: number, req: string, status: string, ms: string, health: boolean) {
+    const line = document.createElement("div");
+    line.className = health ? "line is-health" : "line";
+    for (const [cls, text] of [["", clock(t)], ["", req], ["ok", status], ["ms", ms]]) {
+      const span = document.createElement("span");
+      if (cls) span.className = cls;
+      span.textContent = text;
+      line.append(span);
+    }
+    el.log.append(line);
+    while (el.log.children.length > LOG_LINES) el.log.firstElementChild!.remove();
+  }
+
+  // process everything that "happened" up to sim time `to`, in time order
+  function advance(to: number, realNow: number) {
+    for (;;) {
+      const orderDue = frozenAt === null && nextOrder <= to && nextOrder <= nextHealth;
+      if (orderDue) {
+        orders += 1;
+        log(nextOrder, "POST /checkout", "201", `${30 + Math.floor(Math.random() * 40)}ms`, false);
+        nextOrder += 0.15 + Math.random() * 0.35;
+      } else if (nextHealth <= to) {
+        // during the time-lapse, don't flood the log: one health line every ~120ms of real time
+        if (speed === 1 || realNow - lastHealthLog > 120) {
+          log(nextHealth, "GET /health", "200", `${1 + Math.floor(Math.random() * 3)}ms`, true);
+          lastHealthLog = realNow;
+        }
+        nextHealth += 1;
+      } else break;
+    }
+    sim = to;
+  }
+
+  function sample() {
+    cpu = frozenAt === null ? 34 + Math.random() * 28 : 0.1;
+    spark.push(cpu);
+    if (spark.length > SPARK_POINTS) spark.shift();
+  }
+
+  function render() {
+    el.clock.textContent = clock(sim);
+    el.cpu.textContent = frozenAt === null ? `${Math.round(cpu)}%` : "0.1%";
+    el.spark.setAttribute(
+      "points",
+      spark.map((v, i) => `${(i / (SPARK_POINTS - 1)) * 100},${20 - (v / 100) * 20}`).join(" "),
+    );
+    if (frozenAt === null) {
+      el.orders.textContent = orders.toLocaleString("en-US");
+      el.lastOrder.textContent = "last order just now";
+    } else {
+      const since = sim - frozenAt;
+      const left = Math.max(0, Math.round(ordersAtFreeze * (1 - since / WINDOW)));
+      el.orders.textContent = left.toLocaleString("en-US");
+      el.lastOrder.textContent = `last order ${ago(since)} ago`;
+    }
+    el.lapse.toggleAttribute("data-on", speed > 1);
+  }
+
+  function frame(now: number) {
+    const dt = Math.min(1, (now - lastFrame) / 1000);
+    lastFrame = now;
+    let to = sim + dt * speed;
+    // the time-lapse stops exactly five minutes after the freeze
+    if (speed > 1 && frozenAt !== null && to - frozenAt >= WINDOW) {
+      to = frozenAt + WINDOW;
+      speed = 1;
+    }
+    advance(to, now);
+    if (now - lastSample > 400) {
+      sample();
+      lastSample = now;
+    }
+    render();
+    raf = requestAnimationFrame(frame);
+  }
+
+  function reset() {
+    sim = 0;
+    speed = 1;
+    frozenAt = null;
+    orders = 1284;
+    nextOrder = 0;
+    nextHealth = 0;
+    el.log.replaceChildren();
+    spark = [];
+    for (let i = 0; i < SPARK_POINTS; i++) sample();
+    // start with a few seconds of history so the log isn't empty
+    advance(4, 0);
+  }
+
+  function setState(next: number) {
+    state = next;
+    root.dataset.state = String(state);
+    el.next.setAttribute("aria-label", state === 3 ? "Replay the demo" : "Advance the demo");
+    if (state === 0) reset();
+    if (state === 1) {
+      frozenAt = sim;
+      ordersAtFreeze = orders;
+    }
+    if (state === 2) speed = LAPSE_SPEED;
+    // advancing before the time-lapse is over skips straight to the five-minute mark
+    if (state === 3 && frozenAt !== null && sim - frozenAt < WINDOW) {
+      advance(frozenAt + WINDOW, performance.now());
+      speed = 1;
+    }
+    render();
+  }
+
+  function start() {
+    cancelAnimationFrame(raf);
+    setState(0);
+    lastFrame = performance.now();
+    raf = requestAnimationFrame(frame);
+  }
+
+  el.next.addEventListener("click", () => {
+    setState((state + 1) % 4);
+    // don't keep focus, so space/arrows stay with the deck
+    el.next.blur();
+  });
+
+  section.addEventListener("slide:enter", start);
+  section.addEventListener("slide:leave", () => cancelAnimationFrame(raf));
+  if (!section.hidden) start();
+</script>

@@ -391,6 +391,22 @@ div.prose {
     color-scheme: dark;
 }
 
+/* The accent is resolved once, against the site theme on <html>, so a slide forced
+   dark keeps the same orange as the rest of the site instead of the dark variant. */
+@property --site-accent {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #e8590c;
+}
+
+html {
+    --site-accent: var(--color-accent);
+}
+
+.deck-body {
+    --color-accent: var(--site-accent);
+}
+
 /* Slides are laid out on a fixed 16:9 stage that scales to the viewport.
    --u is 1% of the stage width, so size everything in em (or --u) and it scales together. */
 .deck {
