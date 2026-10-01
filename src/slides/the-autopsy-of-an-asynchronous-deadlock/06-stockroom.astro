@@ -1,51 +1,19 @@
 ---
-import Slide from "@/components/slides/Slide.astro";
+import Story from "@/components/slides/Story.astro";
 
 const notes = "About 90 seconds. Tell the story before any code. Everyone has locked a door. Read it slowly, one line at a time. Pause on \"for you\". Then the last line: nobody is busy, nobody complains, and nothing will ever change until someone gives up. \"Keep this picture in your head. The next slide is the same story in code, and you'll be able to point at the stockroom, the key and the assistant.\"";
 ---
 
-<Slide dark notes={notes} class="story">
-  <div class="my-auto">
-    <p class="s-kicker story-kicker">scenario 1</p>
-    <h2 class="story-title">the stockroom key<span class="s-accent">.</span></h2>
-    <div class="story-lines">
-      <p>you lock the stockroom and put the key in your pocket.</p>
-      <p>you send your assistant to fetch a box from it,</p>
-      <p>and wait at your desk for the box.</p>
-      <p class="s-muted">your assistant waits at the locked door. for you.</p>
-    </div>
-    <p class="story-punchline s-accent">you wait for them. they wait for you. nobody is busy. nobody complains.</p>
-  </div>
-</Slide>
-
-<style>
-  :global(.s.story) {
-    padding-inline: 3em;
-  }
-
-  .story-punchline {
-    white-space: nowrap;
-  }
-
-  .story-kicker {
-    font-size: 0.95em;
-    margin-bottom: 0.4em;
-  }
-
-  .story-title {
-    font-size: 3.9em;
-    font-weight: 400;
-    line-height: 1.2;
-    margin-bottom: 0.6em;
-  }
-
-  .story-lines,
-  .story-punchline {
-    font-size: 1.25em;
-    line-height: 1.65;
-  }
-
-  .story-punchline {
-    margin-top: 1.6em;
-  }
-</style>
+<Story
+  dark
+  notes={notes}
+  kicker="scenario 1"
+  title="the stockroom key"
+  lines={[
+    "you lock the stockroom and put the key in your pocket.",
+    "you send your assistant to fetch a box from it,",
+    "and wait at your desk for the box.",
+    ["your assistant waits at the locked door. for you.", "muted"],
+  ]}
+  punchline="you wait for them. they wait for you. nobody is busy. nobody complains."
+/>

@@ -1,0 +1,63 @@
+---
+/**
+ * A "story" slide: kicker, big title with an accent dot, a few narrative lines,
+ * and an accent punchline. Lines can be a string or [text, "muted"].
+ */
+import Slide from "./Slide.astro";
+
+type Line = string | [text: string, tone: "muted"];
+
+type Props = {
+  kicker: string;
+  title: string;
+  lines: Line[];
+  punchline?: string;
+  notes?: string;
+  dark?: boolean;
+};
+
+const { kicker, title, lines, punchline, notes, dark } = Astro.props;
+---
+
+<Slide dark={dark} notes={notes} class="story">
+  <div class="my-auto">
+    <p class="s-kicker story-kicker">{kicker}</p>
+    <h2 class="story-title">{title}<span class="s-accent">.</span></h2>
+    <div class="story-lines">
+      {
+        lines.map((line) =>
+          typeof line === "string" ? <p>{line}</p> : <p class="s-muted">{line[0]}</p>,
+        )
+      }
+    </div>
+    {punchline && <p class="story-punchline s-accent">{punchline}</p>}
+  </div>
+</Slide>
+
+<style>
+  :global(.s.story) {
+    padding-inline: 2em;
+  }
+
+  .story-kicker {
+    font-size: 0.95em;
+    margin-bottom: 0.4em;
+  }
+
+  .story-title {
+    font-size: 3.9em;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 0.6em;
+  }
+
+  .story-lines,
+  .story-punchline {
+    font-size: 1.25em;
+    line-height: 1.65;
+  }
+
+  .story-punchline {
+    margin-top: 1.6em;
+  }
+</style>
