@@ -1,0 +1,56 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import GrepFilter from "@/components/GrepFilter.astro";
+import { getTalks, type Talk } from "@/lib/talks";
+
+const talks = await getTalks();
+const years = [...new Set(talks.map((t) => t.data.date.getFullYear()))];
+
+const fmtShortDate = (d: Date) =>
+  d.toLocaleDateString("en-US", { month: "short", day: "numeric" }).toLowerCase();
+
+const searchFor = (talk: Talk) =>
+  [
+    talk.data.title,
+    talk.data.description,
+    talk.data.event,
+    talk.data.location,
+    talk.data.date.getFullYear().toString(),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+---
+
+<Layout title="Talks">
+  <GrepFilter
+    total={talks.length}
+    unit="talks"
+    title="talks"
+    description="talks i've given, with the slides and the things i referenced."
+  >
+    {
+      years.map((year) => (
+        <section data-group class="mb-8">
+          <p class="mb-2 small muted">{year}</p>
+          {talks
+            .filter((t) => t.data.date.getFullYear() === year)
+            .map((talk) => (
+              <a href={`/talks/${talk.id}`} data-item data-search={searchFor(talk)} class="row">
+                <span class="row-title">
+                  {talk.data.title.toLowerCase()}
+                  {talk.data.draft && <span class="muted"> (draft)</span>}
+                  {(talk.data.event || talk.data.location) && (
+                    <span class="tags block">
+                      {[talk.data.event, talk.data.location].filter(Boolean).join(" / ").toLowerCase()}
+                    </span>
+                  )}
+                </span>
+                <span class="row-meta">{fmtShortDate(talk.data.date)}</span>
+              </a>
+            ))}
+        </section>
+      ))
+    }
+  </GrepFilter>
+</Layout>

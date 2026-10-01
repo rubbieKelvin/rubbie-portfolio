@@ -360,3 +360,75 @@ div.prose {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* ---------- talks ---------- */
+
+.talk-cover {
+    aspect-ratio: 16 / 9;
+    background: var(--color-border);
+    overflow: hidden;
+}
+
+.talk-cover iframe,
+.talk-cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    object-fit: cover;
+}
+
+/* ---------- slide deck ---------- */
+
+.deck-body {
+    height: 100dvh;
+    overflow: hidden;
+}
+
+.deck {
+    height: calc(100dvh - 3rem);
+}
+
+.slide {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem clamp(1.5rem, 8vw, 8rem);
+    font-size: clamp(16px, 2.2vw, 28px);
+    line-height: 1.4;
+    overflow: auto;
+}
+
+.slide[hidden] {
+    display: none;
+}
+
+.deck-controls {
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 1.5rem;
+}
+
+.deck-controls button {
+    cursor: pointer;
+}
+
+.deck-progress {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+}
+
+.deck-progress > span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--color-text);
+    transition: width 0.2s;
+}

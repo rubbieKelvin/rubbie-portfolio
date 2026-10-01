@@ -67,4 +67,29 @@ const projectDetails = defineCollection({
   }),
 });
 
-export const collections = { posts, authors, categories, projects, projectDetails };
+const talks = defineCollection({
+  loader: glob({ pattern: "**/*.mdx", base: "./src/content/talks" }),
+  schema: z.object({
+    title: z.string(),
+    date: z.date(),
+    event: z.string().optional(),
+    location: z.string().optional(),
+    description: z.string().optional(),
+    /** A YouTube link (embedded) or an image path/URL */
+    cover: z.string().optional(),
+    /** Overrides the built-in deck at /talks/<slug>/slides, e.g. an external link */
+    slides: z.string().optional(),
+    resources: z
+      .array(
+        z.object({
+          label: z.string(),
+          url: z.string(),
+        }),
+      )
+      .default([]),
+    /** Drafts show up in dev but are left out of production builds */
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { posts, authors, categories, projects, projectDetails, talks };

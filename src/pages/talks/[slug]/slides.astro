@@ -1,0 +1,127 @@
+---
+import "@/assets/global.css";
+import { getTalks, getSlides, type Talk } from "@/lib/talks";
+
+export async function getStaticPaths() {
+  const talks = await getTalks();
+  return talks
+    .filter((talk) => getSlides(talk.id).length > 0)
+    .map((talk) => ({ params: { slug: talk.id }, props: { talk } }));
+}
+
+const { talk } = Astro.props as { talk: Talk };
+const slides = getSlides(talk.id);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <title>{talk.data.title} (slides) | Rubbie Kelvin</title>
+    <script is:inline>
+      (function () {
+        let stored = null;
+        try {
+          stored = localStorage.getItem("theme");
+        } catch (e) {}
+        const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = stored || (dark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+  </head>
+
+  <body class="deck-body">
+    <main class="deck" data-talk={talk.id}>
+      {
+        slides.map((Slide, i) => (
+          <section class="slide" data-index={i} aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`} hidden={i !== 0}>
+            <Slide />
+          </section>
+        ))
+      }
+    </main>
+
+    <nav class="deck-controls small muted">
+      <a href={`/talks/${talk.id}`} class="nav-link">← {talk.data.title.toLowerCase()} (esc)</a>
+      <span class="flex items-center gap-4">
+        <button type="button" data-prev class="nav-link" aria-label="Previous slide">prev</button>
+        <span data-counter>1 / {slides.length}</span>
+        <button type="button" data-next class="nav-link" aria-label="Next slide">next</button>
+        <button type="button" data-restart class="nav-link">restart (r)</button>
+        <button type="button" data-fullscreen class="nav-link">fullscreen (f)</button>
+      </span>
+    </nav>
+    <div class="deck-progress" aria-hidden="true"><span data-progress></span></div>
+
+    <script>
+      const talkUrl = `/talks/${document.querySelector<HTMLElement>(".deck")!.dataset.talk}`;
+      const slides = Array.from(document.querySelectorAll<HTMLElement>(".slide"));
+      const counter = document.querySelector<HTMLElement>("[data-counter]")!;
+      const progress = document.querySelector<HTMLElement>("[data-progress]")!;
+      let current = -1;
+
+      // Slides can listen for these to start/stop their own animations:
+      //   slide.addEventListener("slide:enter", ...) / "slide:leave"
+      function go(n: number) {
+        const next = Math.max(0, Math.min(slides.length - 1, n));
+        if (next === current) return;
+        if (current >= 0) {
+          slides[current].hidden = true;
+          slides[current].dispatchEvent(new CustomEvent("slide:leave"));
+        }
+        current = next;
+        slides[current].hidden = false;
+        slides[current].dispatchEvent(new CustomEvent("slide:enter"));
+        counter.textContent = `${current + 1} / ${slides.length}`;
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        history.replaceState(null, "", `#${current + 1}`);
+      }
+
+      const fromHash = () => (parseInt(location.hash.slice(1), 10) || 1) - 1;
+      go(fromHash());
+      window.addEventListener("hashchange", () => go(fromHash()));
+
+      function toggleFullscreen() {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen?.();
+      }
+
+      document.addEventListener("keydown", (e) => {
+        const t = e.target as HTMLElement;
+        if (t.closest("input, textarea, select, [contenteditable]")) return;
+        if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) go(current + 1);
+        else if (["ArrowLeft", "ArrowUp", "PageUp"].includes(e.key)) go(current - 1);
+        else if (e.key === "Home") go(0);
+        else if (e.key === "End") go(slides.length - 1);
+        else if (e.key === "f") toggleFullscreen();
+        else if (e.key === "r") go(0);
+        // In fullscreen the browser uses Esc to exit fullscreen, so only leave the deck outside it.
+        else if (e.key === "Escape" && !document.fullscreenElement) location.href = talkUrl;
+        else return;
+        e.preventDefault();
+      });
+
+      document.querySelector("[data-prev]")!.addEventListener("click", () => go(current - 1));
+      document.querySelector("[data-next]")!.addEventListener("click", () => go(current + 1));
+      document.querySelector("[data-restart]")!.addEventListener("click", () => go(0));
+      document.querySelector("[data-fullscreen]")!.addEventListener("click", toggleFullscreen);
+
+      let touchX: number | null = null;
+      document.addEventListener("touchstart", (e) => (touchX = e.touches[0].clientX), { passive: true });
+      document.addEventListener("touchend", (e) => {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 50) go(current + (dx < 0 ? 1 : -1));
+        touchX = null;
+      });
+    </script>
+  </body>
+</html>

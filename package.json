@@ -9,10 +9,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^7.0.5",
+    "@astrojs/mdx": "^8.0.2",
     "@astrojs/rss": "^4.0.19",
     "@tailwindcss/vite": "^4.1.12",
-    "astro": "^7.1.6",
+    "astro": "^7.3.5",
     "tailwindcss": "^4.1.12"
   },
   "packageManager": "pnpm@9.15.3+sha1.120e76442c589bb9a3267dbbefa5658c9943fcae"
