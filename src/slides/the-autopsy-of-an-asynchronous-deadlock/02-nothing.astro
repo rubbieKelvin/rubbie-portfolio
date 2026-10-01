@@ -4,14 +4,50 @@ import Slide from "@/components/slides/Slide.astro";
 const notes = "About 90 seconds. Start the scenario 1 demo live (have the recording ready as a fallback) and let it freeze. Then stay silent for a few seconds; the silence is the point. Walk the chips: the process is up, the health check answers 200, no errors in the logs, CPU is idle. And yet no order has completed in five minutes. Say: \"Every dashboard we own says this service is fine. Nothing crashed. Nothing is slow. Nothing is happening at all.\" Then: \"By the end of this talk you'll know how to take this apart, whatever language you write.\"I’m supposed to show what a deadlock is here.";
 ---
 
-<Slide dark kicker="a checkout service, right now:" title="nothing." notes={notes}>
-  <div class="s-cols" style="--cols: 3">
-    <div class="s-card"><p class="s-card-label">cpu</p><p class="s-big">0.1%</p></div>
-    <div class="s-card"><p class="s-card-label">/health</p><p class="s-big">200 OK</p></div>
-    <div class="s-card"><p class="s-card-label">errors</p><p class="s-big">0</p></div>
-  </div>
-  <div class="s-card is-accent mt-[1em]">
-    <p class="s-card-label">orders completed, last 5 min</p>
-    <p class="s-accent" style="font-size: 4em; line-height: 1">0</p>
+<Slide dark notes={notes} class="nothing">
+  <div class="my-auto">
+    <p class="s-kicker nothing-kicker">a checkout service, right now:</p>
+    <h2 class="nothing-title">nothing<span class="s-accent">.</span></h2>
+    <ul class="nothing-chips">
+      <li>cpu 0.1%</li>
+      <li>/health 200 OK</li>
+      <li>errors 0</li>
+      <li class="is-accent">orders completed, last 5 min: 0</li>
+    </ul>
   </div>
 </Slide>
+
+<style>
+  .nothing-kicker {
+    font-size: 1em;
+    margin-bottom: 1.5em;
+  }
+
+  .nothing-title {
+    font-size: 7.5em;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .nothing-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8em;
+    margin-top: 0.4em;
+  }
+
+  .nothing-chips li {
+    font-size: 1.05em;
+    padding: 0.45em 0.8em;
+    border: 1px solid color-mix(in srgb, var(--color-text) 18%, transparent);
+    border-radius: 0.25em;
+    background: color-mix(in srgb, var(--color-text) 3%, transparent);
+  }
+
+  .nothing-chips li.is-accent {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background: transparent;
+  }
+</style>
