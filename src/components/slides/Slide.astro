@@ -4,13 +4,15 @@ type Props = {
   kicker?: string;
   title?: string;
   notes?: string;
+  /** Always render this slide in the dark palette, whatever the site theme */
+  dark?: boolean;
   class?: string;
 };
 
-const { kicker, title, notes, class: className } = Astro.props;
+const { kicker, title, notes, dark, class: className } = Astro.props;
 ---
 
-<div class:list={["s", className]}>
+<div class:list={["s", className]} data-dark={dark ? "" : undefined}>
   {kicker && <p class="s-kicker">{kicker}</p>}
   {title && <h2 class="s-title">{title}</h2>}
   <div class="s-body">

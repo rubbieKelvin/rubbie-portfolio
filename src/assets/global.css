@@ -383,6 +383,12 @@ div.prose {
 .deck-body {
     height: 100dvh;
     overflow: hidden;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/* a slide marked `dark` flips the whole deck (stage + controls) to the dark palette */
+.deck-body[data-slide-dark] {
+    color-scheme: dark;
 }
 
 /* Slides are laid out on a fixed 16:9 stage that scales to the viewport.

@@ -76,6 +76,7 @@ const slides = getSlides(talk.id);
         if (current >= 0) slides[current].dispatchEvent(new CustomEvent("slide:leave"));
         current = next;
         slides.forEach((s, i) => (s.hidden = i !== current));
+        document.body.toggleAttribute("data-slide-dark", !!slides[current].querySelector("[data-dark]"));
         slides[current].dispatchEvent(new CustomEvent("slide:enter"));
         counter.textContent = `${current + 1} / ${slides.length}`;
         progress.style.width = `${((current + 1) / slides.length) * 100}%`;
