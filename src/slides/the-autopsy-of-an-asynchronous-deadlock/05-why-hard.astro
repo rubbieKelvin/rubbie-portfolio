@@ -1,0 +1,27 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+
+const notes = "About 2 minutes. With threads, a deadlock is annoying but findable: attach a debugger (gdb, lldb, Visual Studio, a Java thread dump), print every thread's stack, and the stuck ones point at the line they're stuck on. Try that on a deadlocked async service and you see idle worker threads waiting for work, and none of your code. The stuck task was packed into a value on the heap when it awaited. No thread is running it, so no stack shows it. Optional live moment: attach lldb to the frozen demo and run \"bt all\". Point out that nothing of ours is there. Then the turn: in the two scenarios coming up, part of the loop isn't even in our process. It runs through the database. That's what makes them worth an autopsy.";
+---
+
+<Slide kicker="why it's hard" title="a stuck task isn't on any stack." notes={notes}>
+  <div class="s-cols">
+    <div class="s-card">
+      <p class="s-card-label">a stuck thread</p>
+      <div class="s-lines">
+        <p>the debugger finds it parked on a lock</p>
+        <p>its stack names the exact line</p>
+        <p class="s-muted">five minutes, and you're done</p>
+      </div>
+    </div>
+    <div class="s-card is-accent">
+      <p class="s-card-label">a stuck task</p>
+      <div class="s-lines">
+        <p>every thread is idle, waiting for work</p>
+        <p>none of your code is on any stack</p>
+        <p class="s-muted">the task is just data, waiting for a wake-up that never comes</p>
+      </div>
+    </div>
+  </div>
+  <p class="mt-auto s-big">and often, half the loop isn't in your process at all. <span class="s-accent">it's in your database.</span></p>
+</Slide>

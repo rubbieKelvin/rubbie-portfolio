@@ -18,7 +18,8 @@ const slideModules = import.meta.glob<{ default: any }>("/src/slides/*/*.astro",
 
 export function getSlides(slug: string) {
   return Object.entries(slideModules)
-    .filter(([path]) => path.split("/").at(-2) === slug)
+    // files starting with "_" are helpers, not slides
+    .filter(([path]) => path.split("/").at(-2) === slug && !path.split("/").at(-1)!.startsWith("_"))
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([, mod]) => mod.default);
 }

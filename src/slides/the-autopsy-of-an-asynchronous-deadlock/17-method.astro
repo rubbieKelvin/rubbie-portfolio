@@ -1,0 +1,14 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+
+const notes = "About 2 minutes. Zoom out: this is what we did twice, and it works in any language. One: decide whether it's a deadlock at all. CPU near zero, progress flat, the runtime still alive (a heartbeat helps), and waiting longer changes nothing. Two: list every waiter. For each stuck thing, task, session or thread, write down two things: what it holds and what it waits for. Three: draw the loop. Follow the arrows until you're back where you started. Write down which tool showed you each arrow; usually it takes more than one. Four: break one arrow. Any one is enough. The common ones: release before you await, one lock order everywhere, and a deadline on every wait.";
+---
+
+<Slide kicker="the method" title="the autopsy, in any stack." notes={notes}>
+  <div class="s-cols" style="--cols: 4">
+    <div class="s-card"><p class="s-accent s-big">01</p><p class="strong mt-[0.5em]">is it a deadlock?</p><p class="s-muted mt-[0.5em]">cpu near zero, progress flat, heartbeat still ticking. waiting longer changes nothing.</p></div>
+    <div class="s-card"><p class="s-accent s-big">02</p><p class="strong mt-[0.5em]">list every waiter</p><p class="s-muted mt-[0.5em]">for each stuck thing: what does it hold? what is it waiting for?</p></div>
+    <div class="s-card"><p class="s-accent s-big">03</p><p class="strong mt-[0.5em]">draw the loop</p><p class="s-muted mt-[0.5em]">follow the arrows until you're back where you started. note which tool saw each one.</p></div>
+    <div class="s-card"><p class="s-accent s-big">04</p><p class="strong mt-[0.5em]">break one arrow</p><p class="s-muted mt-[0.5em]">release before you await. one lock order. a deadline on every wait.</p></div>
+  </div>
+</Slide>

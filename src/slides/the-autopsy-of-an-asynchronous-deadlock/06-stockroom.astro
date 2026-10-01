@@ -1,0 +1,15 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+
+const notes = "About 90 seconds. Tell the story before any code. Everyone has locked a door. Read it slowly, one line at a time. Pause on \"for you\". Then the last line: nobody is busy, nobody complains, and nothing will ever change until someone gives up. \"Keep this picture in your head. The next slide is the same story in code, and you'll be able to point at the stockroom, the key and the assistant.\"";
+---
+
+<Slide kicker="scenario 1" title="the stockroom key." notes={notes}>
+  <div class="s-lines s-big">
+    <p>you lock the stockroom and put the key in your pocket.</p>
+    <p>you send your assistant to fetch a box from it,</p>
+    <p>and wait at your desk for the box.</p>
+    <p>your assistant waits at the locked door. <span class="s-accent">for you.</span></p>
+  </div>
+  <p class="mt-auto s-muted">you wait for them. they wait for you. nobody is busy. nobody complains.</p>
+</Slide>

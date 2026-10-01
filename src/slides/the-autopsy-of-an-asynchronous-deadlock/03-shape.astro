@@ -1,0 +1,23 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+import Table from "@/components/slides/Table.astro";
+
+const notes = "About 90 seconds. A deadlock needs two things: something is held while its holder waits for something else, and the waits form a loop. Nobody in the loop is doing anything wrong in isolation; the loop is the bug. The table is the first question of every incident: which kind of \"stuck\" is this? A crash is loud. A slowdown is still moving, so waiting helps. A deadlock is the quiet one: the process is alive, nothing errors, the health check passes, and waiting longer changes nothing. That last row is the quickest test you have.";
+---
+
+<Slide kicker="first, the shape" title="a deadlock is a loop of waiting." notes={notes}>
+  <div class="s-lines s-big">
+    <p>a waits for b. b waits for a.</p>
+    <p class="s-muted">nobody is broken. nobody will ever move.</p>
+  </div>
+  <Table
+    head={["", "crash", "slowdown", "deadlock"]}
+    rows={[
+      ["the process", "gone", "busy", "alive, and idle"],
+      ["errors", "loud", "some timeouts", "none"],
+      ["health check", "fails", "usually passes", "passes"],
+      ["waiting longer", "—", "helps", "changes nothing"],
+    ]}
+    highlight={3}
+  />
+</Slide>

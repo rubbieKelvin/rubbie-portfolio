@@ -1,0 +1,22 @@
+---
+title: The Autopsy of an Asynchronous Deadlock
+date: 2026-10-03
+event: sysconf
+description: How to find a bug that no single tool will show you. Two async deadlocks taken apart, step by step, with examples in Rust and ideas for every language.
+resources:
+  - label: postgres docs - pg_stat_activity
+    url: https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-ACTIVITY-VIEW
+  - label: postgres docs - lock_timeout & idle_in_transaction_session_timeout
+    url: https://www.postgresql.org/docs/current/runtime-config-client.html
+  - label: tokio-console
+    url: https://github.com/tokio-rs/console
+  - label: python - asyncio.all_tasks()
+    url: https://docs.python.org/3/library/asyncio-task.html#asyncio.all_tasks
+draft: true
+---
+
+A checkout service is up, the health check is green, the logs are clean, the CPU is idle, and no order has completed in five minutes. Nothing crashed. Nothing is slow. Nothing is happening at all.
+
+This talk takes that freeze apart. It walks through two asynchronous deadlocks, one hidden behind an `await` inside an open transaction and one split between an in-memory lock and a database row, and shows why no single tool ever shows you the whole loop. The database sees half of it, the runtime sees the other half, and you have to draw the last arrow yourself.
+
+The demos are written in Rust with tokio, but everything applies to any language with async/await (JavaScript, Python, C#, Go) and to any database.

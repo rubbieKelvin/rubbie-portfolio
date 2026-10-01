@@ -1,0 +1,15 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+
+const notes = "About 60 seconds. The second story. The guard is the database's deadlock detector. The camera covers the database. The corner is your application's memory. First half of the story: a deadlock the guard can see, and fixes on its own. Second half: the same standoff, with one person out of view. The guard sees someone waiting and assumes it's normal. \"Next slide: the half the guard can see.\"";
+---
+
+<Slide kicker="scenario 2" title="half the hallway." notes={notes}>
+  <div class="s-lines s-big">
+    <p>two people meet in a narrow hallway. each waits for the other to step aside.</p>
+    <p class="s-muted">a guard watching the camera sees it, and sends one of them back.</p>
+    <p>now the hallway turns a corner. <span class="s-accent">one person stands just out of view.</span></p>
+    <p class="s-muted">the guard sees one person waiting. that looks normal.</p>
+  </div>
+  <p class="mt-auto">so the guard waits too. so does everyone behind them.</p>
+</Slide>

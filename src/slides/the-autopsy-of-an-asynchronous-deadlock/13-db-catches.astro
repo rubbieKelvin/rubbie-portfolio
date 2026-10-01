@@ -1,0 +1,33 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+import Code from "@/components/slides/Code.astro";
+
+const notes = "About 90 seconds. The classic database deadlock: two bank transfers in opposite directions. A locks row 1 then wants row 2; B locks row 2 then wants row 1. Run it live if you have the demo. After deadlock_timeout (one second by default) Postgres checks, finds the loop, and aborts one transaction with SQLSTATE 40P01. It even prints both halves of the loop for you. \"This is the guard doing its job. Every deadlock after this one, we'll have to reconstruct that message ourselves.\" The fix for this one is well known: take row locks in a consistent order (for example by id), and retry on 40P01.";
+---
+
+<Slide kicker="scenario 2 · half the hallway" title="first, the one the database catches." notes={notes}>
+  <div class="s-cols">
+    <Code
+      label="transaction a"
+      lines={[
+        ["update accounts … id = 1;", "← locks row 1"],
+        ["update accounts … id = 2;", "← waits for b", "accent"],
+      ]}
+    />
+    <Code
+      label="transaction b"
+      lines={[
+        ["update accounts … id = 2;", "← locks row 2"],
+        ["update accounts … id = 1;", "← waits for a", "accent"],
+      ]}
+    />
+  </div>
+  <Code
+    lines={[
+      ["ERROR: deadlock detected", "", "accent"],
+      "DETAIL: Process 130 waits for ShareLock on transaction 741; blocked by process 129.",
+      "        Process 129 waits for ShareLock on transaction 740; blocked by process 130.",
+    ]}
+  />
+  <p>both locks are in the database, so the guard sees the whole loop. about a second later, one side gets an error it can retry.</p>
+</Slide>

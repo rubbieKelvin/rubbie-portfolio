@@ -73,12 +73,9 @@ const slides = getSlides(talk.id);
       function go(n: number) {
         const next = Math.max(0, Math.min(slides.length - 1, n));
         if (next === current) return;
-        if (current >= 0) {
-          slides[current].hidden = true;
-          slides[current].dispatchEvent(new CustomEvent("slide:leave"));
-        }
+        if (current >= 0) slides[current].dispatchEvent(new CustomEvent("slide:leave"));
         current = next;
-        slides[current].hidden = false;
+        slides.forEach((s, i) => (s.hidden = i !== current));
         slides[current].dispatchEvent(new CustomEvent("slide:enter"));
         counter.textContent = `${current + 1} / ${slides.length}`;
         progress.style.width = `${((current + 1) / slides.length) * 100}%`;

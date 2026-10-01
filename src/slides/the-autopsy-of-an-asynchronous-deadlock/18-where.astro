@@ -1,0 +1,20 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+import Table from "@/components/slides/Table.astro";
+
+const notes = "About 90 seconds. Step two of the method needs witnesses, and they live in different layers. No single row of this table shows a deadlock; you need at least two. Database: every major database can tell you who waits on whom. Runtime: most async runtimes can list their tasks. Rust has tokio-console; Python can list tasks and print each one's stack; Visual Studio has a Tasks view in Parallel Stacks; Go can dump every goroutine. Your code: the one witness only you can create. Log when you take a lock, and wrap long waits in a timeout that reports instead of cancelling. Why not cancel? Because dropping the wait releases whatever it held: the freeze disappears or moves, and your evidence goes with it. Process: a debugger is still useful for one question: is a thread stuck inside our code? If so, it's probably a blocking call, not a deadlock between tasks.";
+---
+
+<Slide kicker="the method" title="where to look." notes={notes}>
+  <Table
+    head={["layer", "the question", "tools"]}
+    rows={[
+      ["database", "who waits for whom?", "postgres: pg_stat_activity, pg_blocking_pids() · mysql: sys.innodb_lock_waits"],
+      ["runtime", "which tasks stopped being woken?", "rust: tokio-console · python: asyncio.all_tasks() · c#: parallel stacks › tasks · go: goroutine dump"],
+      ["your code", "who took which lock, and when?", "logs around every lock · timeouts that report instead of cancel"],
+      ["process", "is a thread stuck in our code?", "lldb / gdb, or your platform's thread dump"],
+    ]}
+    highlight={2}
+  />
+  <div class="s-card mt-auto"><p class="s-card-label">a timeout that reports</p><p>logs "still waiting after 5s" and keeps waiting, so the evidence stays where it is. node.js has no built-in task inspector, so your own logs do this job.</p></div>
+</Slide>

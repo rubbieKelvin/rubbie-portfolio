@@ -1,0 +1,29 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+import Table from "@/components/slides/Table.astro";
+
+const notes = "About 2 minutes. The database told us who is waiting on whom inside the database. Now we need the app side: why is the handler idle? In Rust, tokio-console lists every task the runtime knows about. Show it live on the frozen demo. Two tasks have been idle for minutes and their poll count stopped moving: they ran a couple of times and were never woken again. The heartbeat keeps getting woken: the runtime itself is fine. (The table on the slide is illustrative; use what the live console shows.) Other languages have their own version of this view; the footnote lists a few. Then put the two halves together. The database: the worker waits for the handler. The runtime: the handler waits for the worker. That's the loop. Neither tool shows it alone. That's the core lesson of this talk.";
+---
+
+<Slide kicker="scenario 1 · the autopsy" title="step 2: ask the runtime." notes={notes}>
+  <div class="s-cols" style="grid-template-columns: 3fr 2fr">
+    <div>
+      <p class="s-small mb-[0.5em]">tokio-console, tasks view (illustrative)</p>
+      <Table
+        head={["task", "state", "idle for", "polls"]}
+        rows={[
+          ["mark_paid", "idle", "4m 12s", "3"],
+          ["send_receipt", "idle", "4m 11s", "2"],
+          ["heartbeat", "idle", "1s", "253"],
+        ]}
+      />
+      <p class="s-small mt-[1em]">the same view elsewhere: python asyncio.all_tasks() · c# parallel stacks › tasks · go goroutine dump</p>
+    </div>
+    <div class="s-lines">
+      <div class="s-card"><p class="s-card-label">the database said</p><p>the worker waits for the handler's transaction.</p></div>
+      <div class="s-card"><p class="s-card-label">the runtime says</p><p>the handler waits for the worker.</p></div>
+      <div class="s-card is-accent"><p class="s-card-label">put them together</p><p>a loop.</p></div>
+    </div>
+  </div>
+  <p class="mt-auto s-big">neither tool shows a deadlock. <span class="s-accent">you draw the last arrow yourself.</span></p>
+</Slide>

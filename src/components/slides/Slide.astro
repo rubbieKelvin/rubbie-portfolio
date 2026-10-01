@@ -1,0 +1,20 @@
+---
+/** Shared frame for a slide: optional kicker + title, body, and hidden speaker notes. */
+type Props = {
+  kicker?: string;
+  title?: string;
+  notes?: string;
+  class?: string;
+};
+
+const { kicker, title, notes, class: className } = Astro.props;
+---
+
+<div class:list={["s", className]}>
+  {kicker && <p class="s-kicker">{kicker}</p>}
+  {title && <h2 class="s-title">{title}</h2>}
+  <div class="s-body">
+    <slot />
+  </div>
+  {notes && <aside class="s-notes" hidden>{notes}</aside>}
+</div>

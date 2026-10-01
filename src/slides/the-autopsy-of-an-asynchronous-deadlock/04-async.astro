@@ -1,0 +1,23 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+import Table from "@/components/slides/Table.astro";
+
+const notes = "About 90 seconds. For anyone who doesn't write Rust: .await in Rust is the same idea as await in JavaScript, Python or C#. The demos use Rust with the tokio runtime, but nothing in this talk depends on that. The one thing to remember: when a task awaits something that isn't ready, it doesn't sit on a thread. It gives the thread back to the runtime and waits on a shelf until something wakes it up. That's how a handful of threads serve thousands of requests. It's also why deadlocks hide: a task waiting forever looks exactly like a task waiting normally. (Go is a partial exception: goroutines keep their own stacks, so a goroutine dump does show where they're stuck. The database half of today's scenarios still hides from it.)";
+---
+
+<Slide kicker="async, for everyone" title="await means: wake me when it's ready." notes={notes}>
+  <Table
+    code
+    head={["language", "the same idea"]}
+    rows={[
+      ["javascript", "const res = await fetch(url);"],
+      ["python", "res = await session.get(url)"],
+      ["c#", "var res = await client.GetAsync(url);"],
+      ["rust", "let res = client.get(url).send().await?;"],
+    ]}
+  />
+  <div class="s-card is-accent">
+    <p>a few threads run thousands of tasks.</p>
+    <p class="s-muted">a task that awaits gives its thread back, and waits on a shelf until something wakes it up.</p>
+  </div>
+</Slide>

@@ -1,0 +1,24 @@
+---
+/** A plain slide table. `highlight` marks a row index (0-based) with the accent colour. */
+type Props = {
+  head: string[];
+  rows: string[][];
+  highlight?: number;
+  code?: boolean;
+};
+
+const { head, rows, highlight, code } = Astro.props;
+---
+
+<table class:list={["s-table", code && "is-code"]}>
+  <thead>
+    <tr>{head.map((h) => <th>{h}</th>)}</tr>
+  </thead>
+  <tbody>
+    {rows.map((row, i) => (
+      <tr class:list={[i === highlight && "is-accent"]}>
+        {row.map((cell) => <td>{cell}</td>)}
+      </tr>
+    ))}
+  </tbody>
+</table>

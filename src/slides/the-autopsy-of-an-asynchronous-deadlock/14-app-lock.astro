@@ -1,0 +1,30 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+import Code from "@/components/slides/Code.astro";
+
+const notes = "About 90 seconds. Same shop, same database. For speed, the app keeps pending reservations in memory, guarded by an in-memory lock. That's the second lock, and it lives in our code, around the corner from the camera. reserve() takes the app lock first so memory and database never disagree, then updates stock. restock() updates stock inside a transaction first, then takes the app lock to clear back-orders before committing. Both choices are defensible. Together: the same two locks, opposite order. It only happens when a reservation and a delivery for the same product arrive within milliseconds. Never in tests. On a popular product, it's a matter of time. Run the demo: it freezes, and this time Postgres prints nothing. Rust aside, if asked: with std::sync::Mutex the compiler would refuse to hold the guard across an await in a spawned task. tokio's Mutex is designed to be held across awaits, so this compiles cleanly.";
+---
+
+<Slide kicker="scenario 2 · half the hallway" title="now move one lock into your app." notes={notes}>
+  <div class="s-cols">
+    <Code
+      label="reserve(): a customer reserves one unit"
+      lines={[
+        ["lock(reservations)", "← app lock", "accent"],
+        ["update products … id = 7;", "← waits for restock"],
+      ]}
+    />
+    <Code
+      label="restock(): a delivery arrives"
+      lines={[
+        "begin;",
+        ["update products … id = 7;", "← row lock"],
+        ["lock(reservations)", "← waits for reserve", "accent"],
+      ]}
+    />
+  </div>
+  <div class="s-cols">
+    <div class="s-card"><p class="s-card-label">the app lock</p><p>any in-memory lock: rust tokio::sync::Mutex · python asyncio.Lock · c# SemaphoreSlim · node async-mutex</p></div>
+    <div class="s-card is-accent"><p class="s-card-label">the trap</p><p>each function is reasonable on its own. together they take the same two locks in opposite order.</p></div>
+  </div>
+</Slide>

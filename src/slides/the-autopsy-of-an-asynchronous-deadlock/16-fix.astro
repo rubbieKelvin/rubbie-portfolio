@@ -1,0 +1,13 @@
+---
+import Slide from "@/components/slides/Slide.astro";
+
+const notes = "About 90 seconds. Best: one source of truth. If reservations live in the database, a row lock (or SELECT ... FOR UPDATE, or an advisory lock) replaces the in-memory lock. Both locks are back in the guard's view, and if anyone gets the order wrong, Postgres catches it within a second and returns an error you can retry. Next best: never hold an app lock across a database call. Do the database work, then take the lock briefly to update memory, with nothing awaited while you hold it. At minimum: one order everywhere, written down next to the lock so the next person sees it. Guardrail: lock_timeout means reserve's update fails instead of waiting forever. Its lock is released and restock gets through. Run the fixed demo if you have time.";
+---
+
+<Slide kicker="scenario 2 · the fix" title="bring the lock back on camera." notes={notes}>
+  <div class="s-lines">
+    <div class="s-card is-accent"><p class="s-card-label">best</p><p class="s-big">one source of truth. keep the reservation in the database, so both locks are on camera and a mistake becomes a retryable error within a second.</p></div>
+    <div class="s-card"><p class="s-card-label">or</p><p>don't hold an app lock across a database call. do the database work first, then lock, update memory, release. no await in between.</p></div>
+    <div class="s-card"><p class="s-card-label">guardrail</p><p>lock_timeout, so a stuck wait becomes an error instead of a freeze.</p></div>
+  </div>
+</Slide>

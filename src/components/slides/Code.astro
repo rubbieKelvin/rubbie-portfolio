@@ -1,0 +1,20 @@
+---
+/** A code block where each line can carry a side annotation, e.g. ["commit;", "never reached", "muted"]. */
+type Tone = "accent" | "muted";
+type Line = string | [code: string, note?: string, tone?: Tone];
+
+type Props = {
+  lines: Line[];
+  label?: string;
+};
+
+const { lines, label } = Astro.props;
+const rows = lines.map((l) => (typeof l === "string" ? [l] : l));
+---
+
+<figure class="s-code">
+  {label && <figcaption class="s-code-label">{label}</figcaption>}
+  <pre>{rows.map(([code, note, tone]) => (
+    <span class:list={["s-code-line", tone && `is-${tone}`]}><code>{code || " "}</code>{note && <span class="s-code-note">{note}</span>}</span>
+  ))}</pre>
+</figure>
