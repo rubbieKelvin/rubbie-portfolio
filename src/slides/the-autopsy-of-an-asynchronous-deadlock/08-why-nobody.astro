@@ -2,7 +2,7 @@
 import Slide from "@/components/slides/Slide.astro";
 import WitnessLoop from "@/components/slides/WitnessLoop.astro";
 
-const notes = "About 90 seconds. Follow the arrows: the handler waits for the worker, the worker waits for the row lock, and the lock is held by the handler. Back where we started: a loop. Postgres has a good deadlock detector: if two transactions each wait for the other's lock, it notices within about a second and cancels one. But it only follows waits between database sessions. Here it sees the worker waiting behind a session that is \"idle in transaction\", meaning doing nothing it knows about. That looks like a queue that will clear any moment. The runtime sees two parked tasks, which is what tasks do all day. The arrow that closes the loop is an await. No database can see your code.\n\nOn screen: press space to draw the three arrows one at a time, then once per witness (the database, the runtime, your code): each view keeps only the arrows that witness can see. The last press brings the whole loop back.";
+const notes = "About 90 seconds. Space draws the three arrows, then once per witness; the last press brings the whole loop back.\n\n- the loop: handler awaits worker, worker waits for row 42, row 42 is held by the handler\n- database: sees a queue, not a loop. the session is \"idle in transaction\", so its deadlock detector stays quiet\n- runtime: sees two idle tasks, which is normal\n- only your code knows the await that closes the loop. no tool sees it";
 ---
 
 <Slide kicker="scenario 1 · the stockroom key" title="why nobody catches it." notes={notes}>

@@ -2,329 +2,377 @@
 import Slide from "@/components/slides/Slide.astro";
 import DemoControl from "@/components/slides/DemoControl.astro";
 
-const notes = "About 90 seconds. Tell the story before any code. Everyone has locked a door. Read it slowly, one line at a time: each press of space plays the next line in the little scene and shows it on screen. Pause on \"for you\". Then the last line: nobody is busy, nobody complains, and nothing will ever change until someone gives up. \"Keep this picture in your head. The next slide is the same story in code, and you'll be able to point at the stockroom, the key and the assistant.\"";
+const notes =
+    "the stockroom key is the lock. Only one person can hold it at a time, and whoever holds it keeps it until they're done. Here you hold it while waiting on your assistant, and your assistant needs it to finish. Neither can move until the other lets go";
 ---
 
 <Slide dark notes={notes} class="stockroom">
-  <div class="my-auto stockroom-body" data-stockroom data-step="0">
-    <p class="s-kicker story-kicker">scenario 1</p>
-    <h2 class="story-title">the stockroom key<span class="s-accent">.</span></h2>
+    <div class="my-auto stockroom-body" data-stockroom data-step="0">
+        <p class="s-kicker story-kicker">scenario 1</p>
+        <h2 class="story-title">
+            the stockroom key<span class="s-accent">.</span>
+        </h2>
 
-    <svg viewBox="70 40 720 110" class="scene" aria-hidden="true">
-      <line x1="70" y1="118" x2="790" y2="118" class="floor" />
+        <svg viewBox="70 40 720 110" class="scene" aria-hidden="true">
+            <line x1="70" y1="118" x2="790" y2="118" class="floor" />
 
-      <!-- you, behind your desk -->
-      <g class="person you">
-        <g class="dots" transform="translate(150 50)"><circle cx="-11" r="3.5" /><circle r="3.5" /><circle cx="11" r="3.5" /></g>
-        <circle cx="150" cy="72" r="10" class="figure" />
-        <path d="M134,118 V100 a16,16 0 0 1 32,0 V118 z" class="figure" />
-        <text x="150" y="142" class="label">you</text>
-      </g>
-      <rect x="95" y="96" width="110" height="22" class="desk" />
+            <!-- you, behind your desk -->
+            <g class="person you">
+                <g class="dots" transform="translate(150 50)">
+                    <circle cx="-11" r="3.5" />
+                    <circle r="3.5" />
+                    <circle cx="11" r="3.5" />
+                </g>
+                <circle cx="150" cy="72" r="10" class="figure" />
+                <path
+                    d="M134,118 V100 a16,16 0 0 1 32,0 V118 z"
+                    class="figure"
+                />
+                <text x="150" y="142" class="label">
+                    you
+                </text>
+            </g>
+            <rect x="95" y="96" width="110" height="22" class="desk" />
 
-      <!-- the key: starts in the stockroom door, ends up in your pocket -->
-      <g class="key-move" data-key>
-        <g class="key" transform="translate(178 86)">
-          <circle r="5" />
-          <path d="M5,0 H20 M15,0 V4 M19,0 V5" />
-        </g>
-      </g>
+            <!-- the key: starts in the stockroom door, ends up in your pocket -->
+            <g class="key-move" data-key>
+                <g class="key" transform="translate(178 86)">
+                    <circle r="5" />
+                    <path d="M5,0 H20 M15,0 V4 M19,0 V5" />
+                </g>
+            </g>
 
-      <!-- your assistant: walks from your side to the stockroom door -->
-      <g class="walker" data-assistant>
-        <g class="person assistant">
-          <g class="dots" transform="translate(290 50)"><circle cx="-11" r="3.5" /><circle r="3.5" /><circle cx="11" r="3.5" /></g>
-          <circle cx="290" cy="72" r="10" class="figure" />
-          <path d="M274,118 V100 a16,16 0 0 1 32,0 V118 z" class="figure" />
-          <text x="290" y="142" class="label">assistant</text>
-        </g>
-      </g>
+            <!-- your assistant: walks from your side to the stockroom door -->
+            <g class="walker" data-assistant>
+                <g class="person assistant">
+                    <g class="dots" transform="translate(290 50)">
+                        <circle cx="-11" r="3.5" />
+                        <circle r="3.5" />
+                        <circle cx="11" r="3.5" />
+                    </g>
+                    <circle cx="290" cy="72" r="10" class="figure" />
+                    <path
+                        d="M274,118 V100 a16,16 0 0 1 32,0 V118 z"
+                        class="figure"
+                    />
+                    <text x="290" y="142" class="label">
+                        assistant
+                    </text>
+                </g>
+            </g>
 
-      <!-- the stockroom, with the box inside -->
-      <rect x="560" y="34" width="190" height="84" class="room" />
-      <rect x="590" y="64" width="44" height="54" class="door" />
-      <circle cx="626" cy="93" r="2" class="door-knob" />
-      <g class="box">
-        <rect x="680" y="96" width="32" height="22" />
-        <path d="M680,103 H712 M696,96 V103" />
-      </g>
-      <g class="padlock" transform="translate(604 72)">
-        <path d="M3.5,8 V5.5 a4.5,4.5 0 0 1 9,0 V8" class="padlock-shackle" />
-        <rect x="1" y="8" width="14" height="11" rx="2" class="padlock-body" />
-      </g>
-      <text x="655" y="142" class="label">stockroom</text>
-    </svg>
+            <!-- the stockroom, with the box inside -->
+            <rect x="560" y="34" width="190" height="84" class="room" />
+            <rect x="590" y="64" width="44" height="54" class="door" />
+            <circle cx="626" cy="93" r="2" class="door-knob" />
+            <g class="box">
+                <rect x="680" y="96" width="32" height="22" />
+                <path d="M680,103 H712 M696,96 V103" />
+            </g>
+            <g class="padlock" transform="translate(604 72)">
+                <path
+                    d="M3.5,8 V5.5 a4.5,4.5 0 0 1 9,0 V8"
+                    class="padlock-shackle"
+                />
+                <rect
+                    x="1"
+                    y="8"
+                    width="14"
+                    height="11"
+                    rx="2"
+                    class="padlock-body"
+                />
+            </g>
+            <text x="655" y="142" class="label">
+                stockroom
+            </text>
+        </svg>
 
-    <div class="story-lines">
-      <p data-line="1">you lock the stockroom and put the key in your pocket.</p>
-      <p data-line="2">you send your assistant to fetch a box from it,</p>
-      <p data-line="3">and wait at your desk for the box.</p>
-      <p data-line="4" class="s-muted">your assistant waits at the locked door. <span class="for-you">for you.</span></p>
+        <div class="story-lines">
+            <p data-line="1">
+                you lock the stockroom and put the key in your pocket.
+            </p>
+            <p data-line="2">you send your assistant to fetch a box from it,</p>
+            <p data-line="3">and wait at your desk for the box.</p>
+            <p data-line="4" class="s-muted">
+                your assistant waits at the locked door.{" "}
+                <span class="for-you">for you.</span>
+            </p>
+        </div>
+        <p data-line="5" class="story-punchline s-accent">
+            you wait for them. they wait for you. nobody is busy. nobody
+            complains.
+        </p>
+
+        <DemoControl states={6} />
     </div>
-    <p data-line="5" class="story-punchline s-accent">you wait for them. they wait for you. nobody is busy. nobody complains.</p>
-
-    <DemoControl states={6} />
-  </div>
 </Slide>
 
 <style>
-  :global(.s.stockroom) {
-    padding: 2.5em 2em 3em;
-  }
-
-  .stockroom-body {
-    position: relative;
-  }
-
-  .story-kicker {
-    font-size: 0.95em;
-    margin-bottom: 0.4em;
-  }
-
-  .story-title {
-    font-size: 3.9em;
-    font-weight: 400;
-    line-height: 1.2;
-    margin-bottom: 0.3em;
-  }
-
-  .story-lines,
-  .story-punchline {
-    font-size: 1.25em;
-    line-height: 1.65;
-    white-space: nowrap;
-  }
-
-  .story-punchline {
-    margin-top: 1em;
-  }
-
-  /* text appears with the scene; hidden lines keep their space so nothing shifts */
-  [data-line] {
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
-
-  [data-step="1"] [data-line="1"],
-  [data-step="2"] [data-line]:is([data-line="1"], [data-line="2"]),
-  [data-step="3"] [data-line]:is([data-line="1"], [data-line="2"], [data-line="3"]),
-  [data-step="4"] [data-line]:not([data-line="5"]),
-  [data-step="5"] [data-line] {
-    opacity: 1;
-  }
-
-  /* ---------- the scene ---------- */
-
-  .scene {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin: 0.25em 0 0.75em;
-    overflow: visible;
-    font-family: var(--font-mono);
-  }
-
-  .floor {
-    stroke: var(--color-border);
-    stroke-width: 1;
-  }
-
-  .figure {
-    fill: var(--color-text);
-  }
-
-  .assistant .figure {
-    fill: var(--color-text-muted);
-  }
-
-  .label {
-    font-size: 15px;
-    text-anchor: middle;
-    fill: var(--color-text-muted);
-  }
-
-  .desk {
-    fill: var(--color-bg);
-    stroke: var(--color-text-muted);
-    stroke-width: 1.5;
-  }
-
-  .room {
-    fill: none;
-    stroke: var(--color-text-muted);
-    stroke-width: 1.5;
-  }
-
-  .door {
-    fill: var(--color-bg);
-    stroke: var(--color-text);
-    stroke-width: 1.5;
-  }
-
-  .door-knob {
-    fill: var(--color-text);
-  }
-
-  .box {
-    fill: none;
-    stroke: var(--color-text-muted);
-    stroke-width: 1.5;
-  }
-
-  .key {
-    fill: none;
-    stroke: var(--color-text);
-    stroke-width: 2;
-    stroke-linecap: round;
-    transition: stroke 0.4s;
-  }
-
-  .padlock-shackle {
-    fill: none;
-    stroke: var(--color-text);
-    stroke-width: 2;
-    transition: stroke 0.3s;
-  }
-
-  .padlock-body {
-    fill: var(--color-text);
-    transition: fill 0.3s;
-  }
-
-  /* ---------- what each step does ---------- */
-
-  /* 0: door unlocked, key in the door, both of you at your desks */
-  .padlock,
-  .key-move {
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .key-move {
-    transform: translate(432px, 6px);
-    transition: transform 1.2s ease-in-out, opacity 0.3s;
-  }
-
-  .walker {
-    transition: transform 1.8s ease-in-out;
-  }
-
-  /* 1: lock the stockroom, the key flies into your pocket */
-  [data-step]:not([data-step="0"]) .padlock,
-  [data-step]:not([data-step="0"]) .key-move {
-    opacity: 1;
-  }
-
-  [data-step]:not([data-step="0"]) .key-move {
-    transform: none;
-  }
-
-  /* 2: the assistant walks to the stockroom door */
-  :is([data-step="2"], [data-step="3"], [data-step="4"], [data-step="5"]) .walker {
-    transform: translateX(245px);
-  }
-
-  /* 3: you wait at your desk; 4: the assistant waits at the locked door */
-  .dots {
-    opacity: 0;
-    fill: var(--color-accent);
-    transition: opacity 0.3s;
-  }
-
-  .dots circle {
-    animation: waiting 1.2s ease-in-out infinite;
-  }
-
-  .dots circle:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-
-  .dots circle:nth-child(3) {
-    animation-delay: 0.4s;
-  }
-
-  @keyframes waiting {
-    0%,
-    60%,
-    100% {
-      opacity: 0.25;
+    :global(.s.stockroom) {
+        padding: 2.5em 2em 3em;
     }
-    30% {
-      opacity: 1;
+
+    .stockroom-body {
+        position: relative;
     }
-  }
 
-  :is([data-step="3"], [data-step="4"], [data-step="5"]) .you .dots,
-  :is([data-step="4"], [data-step="5"]) .assistant .dots {
-    opacity: 1;
-  }
-
-  /* 4: the assistant tries the door: it rattles, and the padlock flashes */
-  [data-step="4"] .assistant {
-    animation: rattle 0.45s ease-in-out 1;
-  }
-
-  @keyframes rattle {
-    25% {
-      transform: translateX(4px);
+    .story-kicker {
+        font-size: 0.95em;
+        margin-bottom: 0.4em;
     }
-    50% {
-      transform: translateX(-3px);
+
+    .story-title {
+        font-size: 3.9em;
+        font-weight: 400;
+        line-height: 1.2;
+        margin-bottom: 0.3em;
     }
-    75% {
-      transform: translateX(2px);
+
+    .story-lines,
+    .story-punchline {
+        font-size: 1.25em;
+        line-height: 1.65;
+        white-space: nowrap;
     }
-  }
 
-  :is([data-step="4"], [data-step="5"]) .padlock-shackle {
-    stroke: var(--color-accent);
-  }
+    .story-punchline {
+        margin-top: 1em;
+    }
 
-  :is([data-step="4"], [data-step="5"]) .padlock-body {
-    fill: var(--color-accent);
-  }
+    /* text appears with the scene; hidden lines keep their space so nothing shifts */
+    [data-line] {
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
 
-  /* 5: the thing everybody is waiting on is in your pocket */
-  [data-step="5"] .key {
-    stroke: var(--color-accent);
-  }
+    [data-step="1"] [data-line="1"],
+    [data-step="2"] [data-line]:is([data-line="1"], [data-line="2"]),
+    [data-step="3"]
+        [data-line]:is([data-line="1"], [data-line="2"], [data-line="3"]),
+    [data-step="4"] [data-line]:not([data-line="5"]),
+    [data-step="5"] [data-line] {
+        opacity: 1;
+    }
 
-  /* replaying jumps back to the start instead of walking backwards */
-  .is-resetting * {
-    transition: none !important;
-  }
+    /* ---------- the scene ---------- */
+
+    .scene {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin: 0.25em 0 0.75em;
+        overflow: visible;
+        font-family: var(--font-mono);
+    }
+
+    .floor {
+        stroke: var(--color-border);
+        stroke-width: 1;
+    }
+
+    .figure {
+        fill: var(--color-text);
+    }
+
+    .assistant .figure {
+        fill: var(--color-text-muted);
+    }
+
+    .label {
+        font-size: 15px;
+        text-anchor: middle;
+        fill: var(--color-text-muted);
+    }
+
+    .desk {
+        fill: var(--color-bg);
+        stroke: var(--color-text-muted);
+        stroke-width: 1.5;
+    }
+
+    .room {
+        fill: none;
+        stroke: var(--color-text-muted);
+        stroke-width: 1.5;
+    }
+
+    .door {
+        fill: var(--color-bg);
+        stroke: var(--color-text);
+        stroke-width: 1.5;
+    }
+
+    .door-knob {
+        fill: var(--color-text);
+    }
+
+    .box {
+        fill: none;
+        stroke: var(--color-text-muted);
+        stroke-width: 1.5;
+    }
+
+    .key {
+        fill: none;
+        stroke: var(--color-text);
+        stroke-width: 2;
+        stroke-linecap: round;
+        transition: stroke 0.4s;
+    }
+
+    .padlock-shackle {
+        fill: none;
+        stroke: var(--color-text);
+        stroke-width: 2;
+        transition: stroke 0.3s;
+    }
+
+    .padlock-body {
+        fill: var(--color-text);
+        transition: fill 0.3s;
+    }
+
+    /* ---------- what each step does ---------- */
+
+    /* 0: door unlocked, key in the door, both of you at your desks */
+    .padlock,
+    .key-move {
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .key-move {
+        transform: translate(432px, 6px);
+        transition:
+            transform 1.2s ease-in-out,
+            opacity 0.3s;
+    }
+
+    .walker {
+        transition: transform 1.8s ease-in-out;
+    }
+
+    /* 1: lock the stockroom, the key flies into your pocket */
+    [data-step]:not([data-step="0"]) .padlock,
+    [data-step]:not([data-step="0"]) .key-move {
+        opacity: 1;
+    }
+
+    [data-step]:not([data-step="0"]) .key-move {
+        transform: none;
+    }
+
+    /* 2: the assistant walks to the stockroom door */
+    :is([data-step="2"], [data-step="3"], [data-step="4"], [data-step="5"])
+        .walker {
+        transform: translateX(245px);
+    }
+
+    /* 3: you wait at your desk; 4: the assistant waits at the locked door */
+    .dots {
+        opacity: 0;
+        fill: var(--color-accent);
+        transition: opacity 0.3s;
+    }
+
+    .dots circle {
+        animation: waiting 1.2s ease-in-out infinite;
+    }
+
+    .dots circle:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .dots circle:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes waiting {
+        0%,
+        60%,
+        100% {
+            opacity: 0.25;
+        }
+        30% {
+            opacity: 1;
+        }
+    }
+
+    :is([data-step="3"], [data-step="4"], [data-step="5"]) .you .dots,
+    :is([data-step="4"], [data-step="5"]) .assistant .dots {
+        opacity: 1;
+    }
+
+    /* 4: the assistant tries the door: it rattles, and the padlock flashes */
+    [data-step="4"] .assistant {
+        animation: rattle 0.45s ease-in-out 1;
+    }
+
+    @keyframes rattle {
+        25% {
+            transform: translateX(4px);
+        }
+        50% {
+            transform: translateX(-3px);
+        }
+        75% {
+            transform: translateX(2px);
+        }
+    }
+
+    :is([data-step="4"], [data-step="5"]) .padlock-shackle {
+        stroke: var(--color-accent);
+    }
+
+    :is([data-step="4"], [data-step="5"]) .padlock-body {
+        fill: var(--color-accent);
+    }
+
+    /* 5: the thing everybody is waiting on is in your pocket */
+    [data-step="5"] .key {
+        stroke: var(--color-accent);
+    }
+
+    /* replaying jumps back to the start instead of walking backwards */
+    .is-resetting * {
+        transition: none !important;
+    }
 </style>
 
 <script>
-  import { onAdvance, updateDemoControl } from "@/components/slides/demo-control";
+    import {
+        onAdvance,
+        updateDemoControl,
+    } from "@/components/slides/demo-control";
 
-  const root = document.querySelector<HTMLElement>("[data-stockroom]")!;
-  const section = root.closest<HTMLElement>(".slide")!;
-  const control = root.querySelector<HTMLButtonElement>("[data-demo-next]")!;
-  const LAST = 5;
-  let step = 0;
+    const root = document.querySelector<HTMLElement>("[data-stockroom]")!;
+    const section = root.closest<HTMLElement>(".slide")!;
+    const control = root.querySelector<HTMLButtonElement>("[data-demo-next]")!;
+    const LAST = 5;
+    let step = 0;
 
-  function show(next: number) {
-    if (next === 0) {
-      root.classList.add("is-resetting");
-      root.dataset.step = "0";
-      root.getBoundingClientRect(); // apply the reset before re-enabling transitions
-      root.classList.remove("is-resetting");
+    function show(next: number) {
+        if (next === 0) {
+            root.classList.add("is-resetting");
+            root.dataset.step = "0";
+            root.getBoundingClientRect(); // apply the reset before re-enabling transitions
+            root.classList.remove("is-resetting");
+        }
+        step = next;
+        root.dataset.step = String(step);
+        updateDemoControl(control, step);
     }
-    step = next;
-    root.dataset.step = String(step);
-    updateDemoControl(control, step);
-  }
 
-  control.addEventListener("click", () => {
-    show(step >= LAST ? 0 : step + 1);
-    // don't keep focus, so space/arrows stay with the deck
-    control.blur();
-  });
+    control.addEventListener("click", () => {
+        show(step >= LAST ? 0 : step + 1);
+        // don't keep focus, so space/arrows stay with the deck
+        control.blur();
+    });
 
-  // space: the next line of the story, until the last one
-  onAdvance(root, () => step < LAST && (show(step + 1), true));
+    // space: the next line of the story, until the last one
+    onAdvance(root, () => step < LAST && (show(step + 1), true));
 
-  section.addEventListener("slide:enter", () => show(0));
-  show(0);
+    section.addEventListener("slide:enter", () => show(0));
+    show(0);
 </script>

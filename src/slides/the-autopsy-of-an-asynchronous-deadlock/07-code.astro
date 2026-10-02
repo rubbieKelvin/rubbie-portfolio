@@ -2,110 +2,138 @@
 import Slide from "@/components/slides/Slide.astro";
 import Code from "@/components/slides/Code.astro";
 
-const notes = "About 90 seconds. The code is Rust with tokio-postgres, but nothing here is Rust-specific: in Node, Python or C# it looks the same, so walk it line by line for anyone who doesn't read Rust. A request marks order 42 as paid inside a transaction. That locks row 42 until the commit. Before committing, it hands the receipt to send_receipt and awaits the result. send_receipt lives in another file, was written months later by someone else, takes its own connection from the pool, and also updates row 42. Ask the room: \"which line is the bug?\" Let them look. Answer: none of them. Each line is fine. The bug is the order: an await while the transaction is still open. Point at the four cards: stockroom, key, assistant, desk. Why it hides: plain reads never wait for writers, so this only breaks the day someone adds a write to the worker. And unit tests usually mock the worker.";
+const notes =
+    "Same story as the stockroom, in code. Order 42 is locked in a transaction, and send_receipt awaits a second connection that updates the same row. Ask the room: which line is the bug? None; the bug is the await while the transaction is open. Point at the four cards: stockroom, key, assistant, desk.";
 ---
 
-<Slide kicker="scenario 1 · the stockroom key" title="the code." notes={notes} class="rust-code">
-  <div class="flow" data-flow>
-    <!-- moved onto the `fn mark_paid(` line by the script below -->
-    <button type="button" class="run-play" data-flow-play aria-label="Run mark_paid">▶</button>
-    <Code
-      lang="rust"
-      label="// orders.rs: the request handler"
-      lines={[
-        "async fn mark_paid(",
-        "    db: &mut Client,",
-        "    id: i64,",
-        ") -> anyhow::Result<()> {",
-        "    let tx = db.transaction().await?;",
-        "    // locks row 42",
-        "    tx.execute(",
-        "        \"update orders set status = 'paid' where id = $1\",",
-        "        &[&id],",
-        "    ).await?;",
-        ["    // waits for the worker…", "", "accent"],
-        "    send_receipt(id).await?;",
-        ["    // never reached", "", "muted"],
-        ["    return Ok(tx.commit().await?);", "", "muted"],
-        "}",
-      ]}
-    />
-    <Code
-      lang="rust"
-      label="// receipts.rs: the receipt worker, in another file"
-      lines={[
-        "async fn send_receipt(id: i64) -> anyhow::Result<()> {",
-        "    // a different connection",
-        "    let db = POOL.get().await?;",
-        ["    // waits for row 42", "", "accent"],
-        "    db.execute(",
-        "        \"update orders set receipt_sent = true where id = $1\",",
-        "        &[&id],",
-        "    ).await?;",
-        "    return mailer::send(id).await;",
-        "}",
-      ]}
-    />
-  </div>
-  <div class="s-cols mt-auto" style="--cols: 4">
-    <div class="s-card"><p class="s-card-label">the stockroom</p><p>row 42</p></div>
-    <div class="s-card"><p class="s-card-label">the key in your pocket</p><p>the open transaction</p></div>
-    <div class="s-card"><p class="s-card-label">your assistant</p><p>send_receipt</p></div>
-    <div class="s-card is-accent"><p class="s-card-label">waiting at your desk</p><p>.await</p></div>
-  </div>
+<Slide
+    kicker="scenario 1 · the stockroom key"
+    title="the code."
+    notes={notes}
+    class="rust-code"
+>
+    <div class="flow" data-flow>
+        <!-- moved onto the `fn mark_paid(` line by the script below -->
+        <button
+            type="button"
+            class="run-play"
+            data-flow-play
+            aria-label="Run mark_paid"
+        >
+            ▶
+        </button>
+        <Code
+            lang="rust"
+            label="// orders.rs: the request handler"
+            lines={[
+                "async fn mark_paid(",
+                "    db: &mut Client,",
+                "    id: i64,",
+                ") -> anyhow::Result<()> {",
+                "    let tx = db.transaction().await?;",
+                "    // locks row 42",
+                "    tx.execute(",
+                "        \"update orders set status = 'paid' where id = $1\",",
+                "        &[&id],",
+                "    ).await?;",
+                ["    // waits for the worker…", "", "accent"],
+                "    send_receipt(id).await?;",
+                ["    // never reached", "", "muted"],
+                ["    return Ok(tx.commit().await?);", "", "muted"],
+                "}",
+            ]}
+        />
+        <Code
+            lang="rust"
+            label="// receipts.rs: the receipt worker, in another file"
+            lines={[
+                "async fn send_receipt(id: i64) -> anyhow::Result<()> {",
+                "    // a different connection",
+                "    let db = POOL.get().await?;",
+                ["    // waits for row 42", "", "accent"],
+                "    db.execute(",
+                '        "update orders set receipt_sent = true where id = $1",',
+                "        &[&id],",
+                "    ).await?;",
+                "    return mailer::send(id).await;",
+                "}",
+            ]}
+        />
+    </div>
+    <div class="s-cols mt-auto" style="--cols: 4">
+        <div class="s-card">
+            <p class="s-card-label">the stockroom</p>
+            <p>row 42</p>
+        </div>
+        <div class="s-card">
+            <p class="s-card-label">the key in your pocket</p>
+            <p>the open transaction</p>
+        </div>
+        <div class="s-card">
+            <p class="s-card-label">your assistant</p>
+            <p>send_receipt</p>
+        </div>
+        <div class="s-card is-accent">
+            <p class="s-card-label">waiting at your desk</p>
+            <p>.await</p>
+        </div>
+    </div>
 </Slide>
 
 <style>
-  /* the handler and the worker side by side */
-  .flow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25em;
-    align-items: start;
-  }
+    /* the handler and the worker side by side */
+    .flow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25em;
+        align-items: start;
+    }
 
-  .flow :global(.s-code) {
-    font-size: 0.7em;
-  }
+    .flow :global(.s-code) {
+        font-size: 0.7em;
+    }
 </style>
 
-
 <script>
-  import { codeBlocks, codeRun } from "@/components/slides/code-run";
+    import { codeBlocks, codeRun } from "@/components/slides/code-run";
 
-  const root = document.querySelector<HTMLElement>("[data-flow]")!;
-  const play = root.querySelector<HTMLButtonElement>("[data-flow-play]")!;
-  const [handler, worker] = codeBlocks(root);
+    const root = document.querySelector<HTMLElement>("[data-flow]")!;
+    const play = root.querySelector<HTMLButtonElement>("[data-flow-play]")!;
+    const [handler, worker] = codeBlocks(root);
 
-  // put the play button right after `async fn mark_paid(`
-  handler[0].append(play);
+    // put the play button right after `async fn mark_paid(`
+    handler[0].append(play);
 
-  // each statement, as the lines it spans
-  const H = { tx: handler[4], update: handler.slice(6, 10), send: handler[11] };
-  const W = { pool: worker[2], update: worker.slice(4, 8) };
+    // each statement, as the lines it spans
+    const H = {
+        tx: handler[4],
+        update: handler.slice(6, 10),
+        send: handler[11],
+    };
+    const W = { pool: worker[2], update: worker.slice(4, 8) };
 
-  // the instruction flow, from opening the transaction to getting stuck
-  codeRun({
-    root,
-    play,
-    label: "Run mark_paid",
-    steps: ({ run, finish, lock, contend, stick }) => [
-      () => run(H.tx), // let tx = db.transaction().await?;
-      () => (finish(H.tx), run(H.update)), // tx.execute(update ...)
-      () => {
-        // the update has locked row 42; the lock stays on it until commit
-        finish(H.update);
-        lock(H.update, "row");
-        run(H.send); // send_receipt(id).await? → waits from here on
-      },
-      () => run(W.pool), // let db = POOL.get().await?;
-      () => {
-        finish(W.pool);
-        run(W.update); // db.execute(update ...) → tries the lock the transaction holds
-        contend("row");
-      },
-      // nothing will ever wake either of them up
-      () => (stick(H.send), stick(W.update)),
-    ],
-  });
+    // the instruction flow, from opening the transaction to getting stuck
+    codeRun({
+        root,
+        play,
+        label: "Run mark_paid",
+        steps: ({ run, finish, lock, contend, stick }) => [
+            () => run(H.tx), // let tx = db.transaction().await?;
+            () => (finish(H.tx), run(H.update)), // tx.execute(update ...)
+            () => {
+                // the update has locked row 42; the lock stays on it until commit
+                finish(H.update);
+                lock(H.update, "row");
+                run(H.send); // send_receipt(id).await? → waits from here on
+            },
+            () => run(W.pool), // let db = POOL.get().await?;
+            () => {
+                finish(W.pool);
+                run(W.update); // db.execute(update ...) → tries the lock the transaction holds
+                contend("row");
+            },
+            // nothing will ever wake either of them up
+            () => (stick(H.send), stick(W.update)),
+        ],
+    });
 </script>

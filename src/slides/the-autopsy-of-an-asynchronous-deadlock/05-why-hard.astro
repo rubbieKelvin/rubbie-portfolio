@@ -1,27 +1,38 @@
 ---
 import Slide from "@/components/slides/Slide.astro";
 
-const notes = "About 2 minutes. With threads, a deadlock is annoying but findable: attach a debugger (gdb, lldb, Visual Studio, a Java thread dump), print every thread's stack, and the stuck ones point at the line they're stuck on. Try that on a deadlocked async service and you see idle worker threads waiting for work, and none of your code. The stuck task was packed into a value on the heap when it awaited. No thread is running it, so no stack shows it. Optional live moment: attach lldb to the frozen demo and run \"bt all\". Point out that nothing of ours is there. Then the turn: in the two scenarios coming up, part of the loop isn't even in our process. It runs through the database. That's what makes them worth an autopsy.";
+const notes =
+    "asynchronous in a deadlock context:\n- a waiting task isn't blocking a thread, it's parked on the shelf\n- nobody is spinning: cpu idle, nothing errors, nothing is slow\n- a task waiting forever looks exactly like a task waiting normally\n- that's why async deadlocks are quiet instead of loud\n\nwhy it's hard to find:\n- threads: attach a debugger (gdb, lldb, a java thread dump), every stack is printed, the stuck ones name the line\n- async: you see idle workers waiting for work, and none of your code\n- the stuck task was packed into a value on the heap when it awaited; no thread runs it, so no stack shows it\n- optional live moment: attach lldb to the frozen demo, run \"bt all\", point out nothing of ours is there\n- go is a partial exception: goroutines keep their stacks, so a dump shows where they're stuck. the database half still hides\n\nthe turn:\n- the thing a task waits for can live somewhere else, so the loop can span two systems\n- in the next scenarios, part of the loop runs through the database. that's what makes them worth an autopsy";
 ---
 
-<Slide kicker="why it's hard" title="a stuck task isn't on any stack." notes={notes}>
-  <div class="s-cols">
-    <div class="s-card">
-      <p class="s-card-label">a stuck thread</p>
-      <div class="s-lines">
-        <p>the debugger finds it parked on a lock</p>
-        <p>its stack names the exact line</p>
-        <p class="s-muted">five minutes, and you're done</p>
-      </div>
+<Slide
+    kicker="why it's hard"
+    title="a stuck task isn't on any stack."
+    notes={notes}
+>
+    <div class="s-cols">
+        <div class="s-card">
+            <p class="s-card-label">a stuck thread</p>
+            <div class="s-lines">
+                <p>the debugger finds it parked on a lock</p>
+                <p>its stack names the exact line</p>
+                <p class="s-muted">five minutes, and you're done</p>
+            </div>
+        </div>
+        <div class="s-card is-accent">
+            <p class="s-card-label">a stuck task</p>
+            <div class="s-lines">
+                <p>every thread is idle, waiting for work</p>
+                <p>none of your code is on any stack</p>
+                <p class="s-muted">
+                    the task is just data, waiting for a wake-up that never
+                    comes
+                </p>
+            </div>
+        </div>
     </div>
-    <div class="s-card is-accent">
-      <p class="s-card-label">a stuck task</p>
-      <div class="s-lines">
-        <p>every thread is idle, waiting for work</p>
-        <p>none of your code is on any stack</p>
-        <p class="s-muted">the task is just data, waiting for a wake-up that never comes</p>
-      </div>
-    </div>
-  </div>
-  <p class="mt-auto s-big">and often, half the loop isn't in your process at all. <span class="s-accent">it's in your database.</span></p>
+    <p class="mt-auto s-big">
+        and often, half the loop isn't in your process at all.{" "}
+        <span class="s-accent">it's in your database.</span>
+    </p>
 </Slide>

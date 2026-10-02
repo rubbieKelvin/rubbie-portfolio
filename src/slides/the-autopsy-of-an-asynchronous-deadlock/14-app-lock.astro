@@ -2,112 +2,130 @@
 import Slide from "@/components/slides/Slide.astro";
 import Code from "@/components/slides/Code.astro";
 
-const notes = "About 90 seconds. Same shop, same database. For speed, the app keeps pending reservations in memory, guarded by an in-memory lock. That's the second lock, and it lives in our code, around the corner from the camera. reserve() takes the app lock first so memory and database never disagree, then updates stock. restock() updates stock inside a transaction first, then takes the app lock to clear back-orders before committing. Both choices are defensible. Together: the same two locks, opposite order. It only happens when a reservation and a delivery for the same product arrive within milliseconds. Never in tests. On a popular product, it's a matter of time. Run the demo: it freezes, and this time Postgres prints nothing. Rust aside, if asked: with std::sync::Mutex the compiler would refuse to hold the guard across an await in a spawned task. tokio's Mutex is designed to be held across awaits, so this compiles cleanly. Not Rust? The same app lock elsewhere: python asyncio.Lock, C# SemaphoreSlim, node async-mutex.";
+const notes =
+    "this is the second case.\n- for speed, the app keeps pending reservations in memory behind an in-memory lock. a second lock, in our code, around the corner from the camera\n- reserve(): app lock first, then the database row\n- restock(): database row first, then the app lock\n- each order is defensible. together: the same two locks, opposite order\n- only when a reservation and a delivery for the same product land within milliseconds. never in tests, but on a popular product it's a matter of time\n- if asked (rust): std Mutex would refuse to be held across an await; tokio's Mutex is built for it, so this compiles cleanly\n- other languages: python asyncio.Lock, c# SemaphoreSlim, node async-mutex";
 ---
 
-<Slide kicker="scenario 2 · half the hallway" title="now move one lock into your app." notes={notes} class="rust-code">
-  <div class="app-lock-run" data-app-lock>
-    <button type="button" class="run-play run-both" data-run-both aria-label="Run reserve and restock together">▶</button>
-    <Code
-      lang="rust"
-      label="// reserve(): a customer reserves one unit"
-      lines={[
-        "async fn reserve(app: &App, id: i64) -> anyhow::Result<()> {",
-        ["    // app lock (a tokio::sync::Mutex)", "", "accent"],
-        "    let mut pending = app.reservations.lock().await;",
-        "    // waits for restock",
-        "    app.db.execute(",
-        "        \"update products set stock = stock - 1 where id = $1\",",
-        "        &[&id],",
-        "    ).await?;",
-        "    pending.push(id);",
-        "    return Ok(());",
-        "}",
-      ]}
-    />
-    <Code
-      lang="rust"
-      label="// restock(): a delivery arrives"
-      lines={[
-        "async fn restock(app: &App, id: i64) -> anyhow::Result<()> {",
-        "    let mut db = app.pool.get().await?;",
-        "    let tx = db.transaction().await?;",
-        "    // row lock",
-        "    tx.execute(",
-        "        \"update products set stock = stock + 5 where id = $1\",",
-        "        &[&id],",
-        "    ).await?;",
-        ["    // waits for reserve", "", "accent"],
-        "    let mut pending = app.reservations.lock().await;",
-        "    pending.retain(|&r| r != id);",
-        "    return Ok(tx.commit().await?);",
-        "}",
-      ]}
-    />
-  </div>
+<Slide
+    kicker="scenario 2 · half the hallway"
+    title="now move one lock into your app."
+    notes={notes}
+    class="rust-code"
+>
+    <div class="app-lock-run" data-app-lock>
+        <button
+            type="button"
+            class="run-play run-both"
+            data-run-both
+            aria-label="Run reserve and restock together"
+        >
+            ▶
+        </button>
+        <Code
+            lang="rust"
+            label="// reserve(): a customer reserves one unit"
+            lines={[
+                "async fn reserve(app: &App, id: i64) -> anyhow::Result<()> {",
+                ["    // app lock (a tokio::sync::Mutex)", "", "accent"],
+                "    let mut pending = app.reservations.lock().await;",
+                "    // waits for restock",
+                "    app.db.execute(",
+                '        "update products set stock = stock - 1 where id = $1",',
+                "        &[&id],",
+                "    ).await?;",
+                "    pending.push(id);",
+                "    return Ok(());",
+                "}",
+            ]}
+        />
+        <Code
+            lang="rust"
+            label="// restock(): a delivery arrives"
+            lines={[
+                "async fn restock(app: &App, id: i64) -> anyhow::Result<()> {",
+                "    let mut db = app.pool.get().await?;",
+                "    let tx = db.transaction().await?;",
+                "    // row lock",
+                "    tx.execute(",
+                '        "update products set stock = stock + 5 where id = $1",',
+                "        &[&id],",
+                "    ).await?;",
+                ["    // waits for reserve", "", "accent"],
+                "    let mut pending = app.reservations.lock().await;",
+                "    pending.retain(|&r| r != id);",
+                "    return Ok(tx.commit().await?);",
+                "}",
+            ]}
+        />
+    </div>
 </Slide>
 
 <style>
-  /* the two functions side by side, so they read as running at the same time */
-  .app-lock-run {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25em;
-  }
+    /* the two functions side by side, so they read as running at the same time */
+    .app-lock-run {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25em;
+    }
 
-  .app-lock-run :global(.s-code) {
-    font-size: 0.7em;
-  }
+    .app-lock-run :global(.s-code) {
+        font-size: 0.7em;
+    }
 
-  /* one button for both functions: top right, on the labels' line */
-  .run-both {
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
+    /* one button for both functions: top right, on the labels' line */
+    .run-both {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
 </style>
 
 <script>
-  import { codeBlocks, codeRun } from "@/components/slides/code-run";
+    import { codeBlocks, codeRun } from "@/components/slides/code-run";
 
-  const root = document.querySelector<HTMLElement>("[data-app-lock]")!;
-  const play = root.querySelector<HTMLButtonElement>("[data-run-both]")!;
-  const [reserve, restock] = codeBlocks(root);
+    const root = document.querySelector<HTMLElement>("[data-app-lock]")!;
+    const play = root.querySelector<HTMLButtonElement>("[data-run-both]")!;
+    const [reserve, restock] = codeBlocks(root);
 
-  // each statement, as the lines it spans
-  const R = { lock: reserve[2], update: reserve.slice(4, 8) };
-  const S = { pool: restock[1], tx: restock[2], update: restock.slice(4, 8), lock: restock[9] };
+    // each statement, as the lines it spans
+    const R = { lock: reserve[2], update: reserve.slice(4, 8) };
+    const S = {
+        pool: restock[1],
+        tx: restock[2],
+        update: restock.slice(4, 8),
+        lock: restock[9],
+    };
 
-  // the deadlock depends on timing: restock starts a moment earlier, so both functions take
-  // their first lock at the same instant, then reach for each other's at the same instant
-  codeRun({
-    root,
-    play,
-    label: "Run reserve and restock together",
-    steps: ({ run, finish, lock, contend, stick }) => [
-      () => run(S.pool), // pool.get()
-      () => (finish(S.pool), run(S.tx)), // db.transaction()
-      () => {
-        // the same moment: both go for their first lock
-        finish(S.tx);
-        run(R.lock); // reservations.lock()
-        run(S.update); // tx.execute(update ...)
-      },
-      () => {
-        // both get it...
-        finish(R.lock);
-        lock(R.lock, "app");
-        finish(S.update);
-        lock(S.update, "row");
-        // ...and both immediately reach for the one the other holds
-        run(R.update); // app.db.execute(update ...) → row 7 is held by restock
-        run(S.lock); // reservations.lock() → held by reserve
-        contend("app");
-        contend("row");
-      },
-      // the same two locks, in opposite order: neither will ever move
-      () => (stick(R.update), stick(S.lock)),
-    ],
-  });
+    // the deadlock depends on timing: restock starts a moment earlier, so both functions take
+    // their first lock at the same instant, then reach for each other's at the same instant
+    codeRun({
+        root,
+        play,
+        label: "Run reserve and restock together",
+        steps: ({ run, finish, lock, contend, stick }) => [
+            () => run(S.pool), // pool.get()
+            () => (finish(S.pool), run(S.tx)), // db.transaction()
+            () => {
+                // the same moment: both go for their first lock
+                finish(S.tx);
+                run(R.lock); // reservations.lock()
+                run(S.update); // tx.execute(update ...)
+            },
+            () => {
+                // both get it...
+                finish(R.lock);
+                lock(R.lock, "app");
+                finish(S.update);
+                lock(S.update, "row");
+                // ...and both immediately reach for the one the other holds
+                run(R.update); // app.db.execute(update ...) → row 7 is held by restock
+                run(S.lock); // reservations.lock() → held by reserve
+                contend("app");
+                contend("row");
+            },
+            // the same two locks, in opposite order: neither will ever move
+            () => (stick(R.update), stick(S.lock)),
+        ],
+    });
 </script>

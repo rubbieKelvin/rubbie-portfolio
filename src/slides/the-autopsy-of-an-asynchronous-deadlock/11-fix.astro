@@ -2,33 +2,41 @@
 import Slide from "@/components/slides/Slide.astro";
 import Code from "@/components/slides/Code.astro";
 
-const notes = "About 90 seconds. The fix is moving one line: commit, then hand off. Run the fixed demo: the order goes through in milliseconds. If \"paid\" and \"receipt queued\" must happen together, use the outbox pattern: insert the job as a row in the same transaction, and the worker picks it up after the commit. It can't start before the lock is gone, because the job doesn't exist until then. Deadlines: idle_in_transaction_session_timeout ends sessions that sit idle with a transaction open; lock_timeout makes a waiter give up. Both are off by default in Postgres. They don't fix the bug, but the next one becomes an error you can see instead of a freeze. Likely question: \"Would a timeout on the await fix it?\" It turns the freeze into an error and the transaction rolls back. But the receipt email has already gone out and the order is back to unpaid. A timeout is an alarm, not a fix.";
+const notes =
+    "Run the fixed demo: the order goes through in milliseconds.\n\n- the fix: move one line. commit, then hand off\n- all or nothing? outbox: write the job as a row in the same transaction; it can't start before the lock is gone\n- deadlines (idle_in_transaction_session_timeout, lock_timeout): off by default, don't fix the bug, but the next freeze becomes an error you can see\n- likely question: would a timeout on the await fix it? no. it turns the freeze into an error, but the receipt may have gone out and the order rolls back to unpaid. a timeout is an alarm, not a fix\n- the rule: never await anything while a transaction is open";
 ---
 
-<Slide kicker="scenario 1 · the fix" title="give the key back before you send anyone." notes={notes}>
-  <div class="s-cols">
-    <Code
-      label="before"
-      lines={[
-        "begin;",
-        "update orders … id = 42;",
-        ["await send_receipt(42);", "← stuck", "accent"],
-        ["commit;", "", "muted"],
-      ]}
-    />
-    <Code
-      label="after"
-      lines={[
-        "begin;",
-        "update orders … id = 42;",
-        ["commit;", "← lock released"],
-        "await send_receipt(42);",
-      ]}
-    />
-  </div>
-  <div class="s-cols" style="--cols: 3">
-    <div class="s-card"><p class="s-card-label">all or nothing?</p><p>use an outbox: write the job as a row in the same transaction. the worker picks it up after the commit.</p></div>
-    <div class="s-card"><p class="s-card-label">deadlines</p><p>idle_in_transaction_session_timeout and lock_timeout turn the next freeze into an error. both are off by default.</p></div>
-    <div class="s-card is-accent"><p class="s-card-label">the rule</p><p>never await anything while a transaction is open.</p></div>
-  </div>
+<Slide
+    kicker="scenario 1 · the fix"
+    title="give the key back before you send anyone."
+    notes={notes}
+>
+    <div class="s-cols">
+        <Code
+            lang="rust"
+            label="before"
+            lines={[
+                ["// orders.rs - mark_paid(...)", "", "muted"],
+                "let tx = db.transaction().await?;",
+                'tx.execute("update orders …", &[&id]).await?;',
+                ["send_receipt(id).await?;", "stuck", "accent"],
+                ["tx.commit().await?;", "", "muted"],
+            ]}
+        />
+        <Code
+            lang="rust"
+            label="after"
+            lines={[
+                ["// orders.rs - mark_paid(...)", "", "muted"],
+                "let tx = db.transaction().await?;",
+                'tx.execute("update orders …", &[&id]).await?;',
+                ["tx.commit().await?;", "lock released"],
+                "send_receipt(id).await?;",
+            ]}
+        />
+    </div>
+    <div class="s-card is-accent mt-auto">
+        <p class="s-card-label">the rule</p>
+        <p>never await anything while a transaction is open.</p>
+    </div>
 </Slide>

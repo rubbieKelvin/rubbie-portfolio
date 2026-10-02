@@ -2,7 +2,7 @@
 import Slide from "@/components/slides/Slide.astro";
 import DemoControl from "@/components/slides/DemoControl.astro";
 
-const notes = "About 90 seconds. Start the scenario 1 demo live (have the recording ready as a fallback) and let it freeze. Then stay silent for a few seconds; the silence is the point. Walk the chips: the process is up, the health check answers 200, no errors in the logs, CPU is idle. And yet no order has completed in five minutes. Say: \"Every dashboard we own says this service is fine. Nothing crashed. Nothing is slow. Nothing is happening at all.\" Then: \"By the end of this talk you'll know how to take this apart, whatever language you write.\"I’m supposed to show what a deadlock is here.";
+const notes = "About 90 seconds. Show, don't define; the definition is slide 3. Space steps through it. (0) Live: orders flowing, healthy day. (1) Freeze: stay silent, let them look for the problem. (2) Time-lapse: five minutes pass. Service up, health check 200, zero errors, CPU idle, no orders. (3) \"nothing.\" Say: every dashboard says fine, nothing crashed, nothing is slow, nothing is happening. Promise: by the end you'll know how to take this apart. Fallback: have the recording ready.";
 ---
 
 <Slide dark notes={notes} class="nothing">

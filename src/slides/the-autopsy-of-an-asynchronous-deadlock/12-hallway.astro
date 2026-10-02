@@ -2,295 +2,333 @@
 import Slide from "@/components/slides/Slide.astro";
 import DemoControl from "@/components/slides/DemoControl.astro";
 
-const notes = "About 60 seconds. The second story. Press space to play each line in the scene: the hallway is seen from above, the shaded wedge is the camera's view. The guard is the database's deadlock detector. The camera covers the database. The corner is your application's memory. First half of the story: a deadlock the guard can see, and fixes on its own. Second half: the same standoff, with one person out of view. The guard sees someone waiting and assumes it's normal. \"Next slide: the half the guard can see.\"";
+const notes =
+    "The hallway is seen from above; the shaded wedge is the camera's view. The guard is the database's deadlock detector, the camera covers the database, and the corner is your application's memory. First half: a deadlock the guard can see and fixes. Second half: the same standoff with one person out of view, so it looks normal. Next slide: the half the guard can see.";
 ---
 
 <Slide dark notes={notes} class="hallway">
-  <div class="my-auto hallway-body" data-hallway data-step="0">
-    <p class="s-kicker story-kicker">scenario 2</p>
-    <h2 class="story-title">half the hallway<span class="s-accent">.</span></h2>
+    <div class="my-auto hallway-body" data-hallway data-step="0">
+        <p class="s-kicker story-kicker">scenario 2</p>
+        <h2 class="story-title">
+            half the hallway<span class="s-accent">.</span>
+        </h2>
 
-    <!-- the hallway, seen from above -->
-    <svg viewBox="40 8 900 132" class="scene" aria-hidden="true">
-      <!-- what the guard's camera can see -->
-      <polygon points="95,40 230,31 790,31 790,84 230,84" class="cone" />
+        <!-- the hallway, seen from above -->
+        <svg viewBox="40 8 900 132" class="scene" aria-hidden="true">
+            <!-- what the guard's camera can see -->
+            <polygon points="95,40 230,31 790,31 790,84 230,84" class="cone" />
 
-      <line x1="60" y1="30" x2="860" y2="30" class="wall" />
-      <line x1="60" y1="85" x2="790" y2="85" class="wall" />
-      <line x1="790" y1="85" x2="860" y2="85" class="wall straight-only" />
-      <!-- the corner: the hallway turns down, out of the camera's view -->
-      <line x1="860" y1="30" x2="860" y2="140" class="wall corner-only" />
-      <line x1="790" y1="85" x2="790" y2="140" class="wall corner-only" />
-      <text x="780" y="132" class="label corner-only out-of-view">out of view</text>
+            <line x1="60" y1="30" x2="860" y2="30" class="wall" />
+            <line x1="60" y1="85" x2="790" y2="85" class="wall" />
+            <line
+                x1="790"
+                y1="85"
+                x2="860"
+                y2="85"
+                class="wall straight-only"
+            />
+            <!-- the corner: the hallway turns down, out of the camera's view -->
+            <line x1="860" y1="30" x2="860" y2="140" class="wall corner-only" />
+            <line x1="790" y1="85" x2="790" y2="140" class="wall corner-only" />
+            <text x="780" y="132" class="label corner-only out-of-view">
+                out of view
+            </text>
 
-      <!-- the guard's camera -->
-      <rect x="88" y="31" width="14" height="8" rx="1" class="camera" />
-      <text x="95" y="20" class="label guard-label">guard</text>
-      <text x="125" y="20" class="label guard-alarm">!</text>
-      <text x="125" y="20" class="label guard-normal">looks normal</text>
+            <!-- the guard's camera -->
+            <rect x="88" y="31" width="14" height="8" rx="1" class="camera" />
+            <text x="95" y="20" class="label guard-label">
+                guard
+            </text>
+            <text x="125" y="20" class="label guard-alarm">
+                !
+            </text>
+            <text x="125" y="20" class="label guard-normal">
+                looks normal
+            </text>
 
-      <!-- people -->
-      {
-        ["p1", "p2"].map((id) => (
-          <g class={`person ${id}`}>
-            <g class="dots" transform="translate(0 40)"><circle cx="-8" r="3" /><circle r="3" /><circle cx="8" r="3" /></g>
-            <circle cy="57" r="10" class="figure" />
-          </g>
-        ))
-      }
-      <g class="person p3">
-        <g class="dots" transform="translate(825 98)"><circle cx="-8" r="3" /><circle r="3" /><circle cx="8" r="3" /></g>
-        <circle cx="825" cy="115" r="10" class="figure" />
-      </g>
-    </svg>
+            <!-- people -->
+            {["p1", "p2"].map((id) => (
+                <g class={`person ${id}`}>
+                    <g class="dots" transform="translate(0 40)">
+                        <circle cx="-8" r="3" />
+                        <circle r="3" />
+                        <circle cx="8" r="3" />
+                    </g>
+                    <circle cy="57" r="10" class="figure" />
+                </g>
+            ))}
+            <g class="person p3">
+                <g class="dots" transform="translate(825 98)">
+                    <circle cx="-8" r="3" />
+                    <circle r="3" />
+                    <circle cx="8" r="3" />
+                </g>
+                <circle cx="825" cy="115" r="10" class="figure" />
+            </g>
+        </svg>
 
-    <div class="story-lines">
-      <p data-line="1">two people meet in a narrow hallway. each waits for the other to step aside.</p>
-      <p data-line="2">a guard watching the camera sees it, and sends one of them back.</p>
-      <p data-line="3">now the hallway turns a corner. one person stands just out of view.</p>
-      <p data-line="4" class="s-muted">the guard sees one person waiting. that looks normal.</p>
+        <div class="story-lines">
+            <p data-line="1">
+                two people meet in a narrow hallway. each waits for the other to
+                step aside.
+            </p>
+            <p data-line="2">
+                a guard watching the camera sees it, and sends one of them back.
+            </p>
+            <p data-line="3">
+                now the hallway turns a corner. one person stands just out of
+                view.
+            </p>
+            <p data-line="4" class="s-muted">
+                the guard sees one person waiting. that looks normal.
+            </p>
+        </div>
+
+        <DemoControl states={5} />
     </div>
-
-    <DemoControl states={5} />
-  </div>
 </Slide>
 
 <style>
-  :global(.s.hallway) {
-    padding: 2.5em 2em 3em;
-  }
-
-  .hallway-body {
-    position: relative;
-  }
-
-  .story-kicker {
-    font-size: 0.95em;
-    margin-bottom: 0.4em;
-  }
-
-  .story-title {
-    font-size: 3.9em;
-    font-weight: 400;
-    line-height: 1.2;
-    margin-bottom: 0.3em;
-  }
-
-  .story-lines {
-    font-size: 1.25em;
-    line-height: 1.65;
-    white-space: nowrap;
-  }
-
-
-  /* text appears with the scene; hidden lines keep their space so nothing shifts */
-  [data-line] {
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
-
-  [data-step="1"] [data-line="1"],
-  [data-step="2"] [data-line]:is([data-line="1"], [data-line="2"]),
-  [data-step="3"] [data-line]:is([data-line="1"], [data-line="2"], [data-line="3"]),
-  [data-step="4"] [data-line] {
-    opacity: 1;
-  }
-
-  /* ---------- the scene ---------- */
-
-  .scene {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin: 0.25em 0 0.75em;
-    overflow: visible;
-    font-family: var(--font-mono);
-  }
-
-  .wall {
-    stroke: var(--color-text-muted);
-    stroke-width: 2;
-    transition: opacity 0.4s;
-  }
-
-  .cone {
-    fill: color-mix(in srgb, var(--color-text) 7%, transparent);
-    transition: fill 0.3s;
-  }
-
-  .camera {
-    fill: var(--color-text);
-  }
-
-  .label {
-    font-size: 14px;
-    fill: var(--color-text-muted);
-  }
-
-  .guard-label {
-    text-anchor: middle;
-  }
-
-  .out-of-view {
-    text-anchor: end;
-  }
-
-  .figure {
-    fill: var(--color-text);
-  }
-
-  .p2 .figure {
-    fill: var(--color-text-muted);
-  }
-
-  .p3 .figure {
-    fill: var(--color-text-muted);
-  }
-
-  .person {
-    transition: transform 1.6s ease-in-out, opacity 0.4s;
-  }
-
-  /* ---------- what each step does ---------- */
-
-  /* 0: an empty, straight hallway. people start off-stage */
-  .p1 {
-    transform: translateX(10px);
-  }
-
-  .p2 {
-    transform: translateX(990px);
-  }
-
-  .p3,
-  .corner-only,
-  .guard-alarm,
-  .guard-normal {
-    opacity: 0;
-  }
-
-  .corner-only,
-  .guard-alarm,
-  .guard-normal,
-  .p3 {
-    transition: opacity 0.4s;
-  }
-
-  /* 1: two people meet in the middle */
-  :is([data-step="1"], [data-step="2"]) .p1 {
-    transform: translateX(420px);
-  }
-
-  [data-step="1"] .p2 {
-    transform: translateX(450px);
-  }
-
-  /* 2: the guard sees it and sends one of them back */
-  [data-step="2"] .guard-alarm {
-    opacity: 1;
-    fill: var(--color-accent);
-    font-weight: 500;
-  }
-
-  [data-step="2"] .cone {
-    fill: color-mix(in srgb, var(--color-accent) 16%, transparent);
-  }
-
-  :is([data-step="2"], [data-step="3"], [data-step="4"]) .p2 {
-    transform: translateX(990px);
-    opacity: 0;
-  }
-
-  /* 3: the hallway turns a corner; someone stands just out of view */
-  :is([data-step="3"], [data-step="4"]) .corner-only,
-  :is([data-step="3"], [data-step="4"]) .p3 {
-    opacity: 1;
-  }
-
-  :is([data-step="3"], [data-step="4"]) .straight-only {
-    opacity: 0;
-  }
-
-  :is([data-step="3"], [data-step="4"]) .p1 {
-    transform: translateX(765px);
-  }
-
-  /* 4: the guard sees one person waiting: that looks normal */
-  :is([data-step="4"]) .guard-normal {
-    opacity: 1;
-  }
-
-  /* waiting */
-  .dots {
-    opacity: 0;
-    fill: var(--color-accent);
-    transition: opacity 0.3s;
-  }
-
-  .dots circle {
-    animation: waiting 1.2s ease-in-out infinite;
-  }
-
-  .dots circle:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-
-  .dots circle:nth-child(3) {
-    animation-delay: 0.4s;
-  }
-
-  @keyframes waiting {
-    0%,
-    60%,
-    100% {
-      opacity: 0.25;
+    :global(.s.hallway) {
+        padding: 2.5em 2em 3em;
     }
-    30% {
-      opacity: 1;
+
+    .hallway-body {
+        position: relative;
     }
-  }
 
-  [data-step="1"] :is(.p1, .p2) .dots,
-  :is([data-step="3"], [data-step="4"]) :is(.p1, .p3) .dots {
-    opacity: 1;
-  }
+    .story-kicker {
+        font-size: 0.95em;
+        margin-bottom: 0.4em;
+    }
 
-  /* replaying jumps back to the start instead of walking backwards */
-  .is-resetting * {
-    transition: none !important;
-  }
+    .story-title {
+        font-size: 3.9em;
+        font-weight: 400;
+        line-height: 1.2;
+        margin-bottom: 0.3em;
+    }
+
+    .story-lines {
+        font-size: 1.25em;
+        line-height: 1.65;
+        white-space: nowrap;
+    }
+
+    /* text appears with the scene; hidden lines keep their space so nothing shifts */
+    [data-line] {
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+
+    [data-step="1"] [data-line="1"],
+    [data-step="2"] [data-line]:is([data-line="1"], [data-line="2"]),
+    [data-step="3"]
+        [data-line]:is([data-line="1"], [data-line="2"], [data-line="3"]),
+    [data-step="4"] [data-line] {
+        opacity: 1;
+    }
+
+    /* ---------- the scene ---------- */
+
+    .scene {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin: 0.25em 0 0.75em;
+        overflow: visible;
+        font-family: var(--font-mono);
+    }
+
+    .wall {
+        stroke: var(--color-text-muted);
+        stroke-width: 2;
+        transition: opacity 0.4s;
+    }
+
+    .cone {
+        fill: color-mix(in srgb, var(--color-text) 7%, transparent);
+        transition: fill 0.3s;
+    }
+
+    .camera {
+        fill: var(--color-text);
+    }
+
+    .label {
+        font-size: 14px;
+        fill: var(--color-text-muted);
+    }
+
+    .guard-label {
+        text-anchor: middle;
+    }
+
+    .out-of-view {
+        text-anchor: end;
+    }
+
+    .figure {
+        fill: var(--color-text);
+    }
+
+    .p2 .figure {
+        fill: var(--color-text-muted);
+    }
+
+    .p3 .figure {
+        fill: var(--color-text-muted);
+    }
+
+    .person {
+        transition:
+            transform 1.6s ease-in-out,
+            opacity 0.4s;
+    }
+
+    /* ---------- what each step does ---------- */
+
+    /* 0: an empty, straight hallway. people start off-stage */
+    .p1 {
+        transform: translateX(10px);
+    }
+
+    .p2 {
+        transform: translateX(990px);
+    }
+
+    .p3,
+    .corner-only,
+    .guard-alarm,
+    .guard-normal {
+        opacity: 0;
+    }
+
+    .corner-only,
+    .guard-alarm,
+    .guard-normal,
+    .p3 {
+        transition: opacity 0.4s;
+    }
+
+    /* 1: two people meet in the middle */
+    :is([data-step="1"], [data-step="2"]) .p1 {
+        transform: translateX(420px);
+    }
+
+    [data-step="1"] .p2 {
+        transform: translateX(450px);
+    }
+
+    /* 2: the guard sees it and sends one of them back */
+    [data-step="2"] .guard-alarm {
+        opacity: 1;
+        fill: var(--color-accent);
+        font-weight: 500;
+    }
+
+    [data-step="2"] .cone {
+        fill: color-mix(in srgb, var(--color-accent) 16%, transparent);
+    }
+
+    :is([data-step="2"], [data-step="3"], [data-step="4"]) .p2 {
+        transform: translateX(990px);
+        opacity: 0;
+    }
+
+    /* 3: the hallway turns a corner; someone stands just out of view */
+    :is([data-step="3"], [data-step="4"]) .corner-only,
+    :is([data-step="3"], [data-step="4"]) .p3 {
+        opacity: 1;
+    }
+
+    :is([data-step="3"], [data-step="4"]) .straight-only {
+        opacity: 0;
+    }
+
+    :is([data-step="3"], [data-step="4"]) .p1 {
+        transform: translateX(765px);
+    }
+
+    /* 4: the guard sees one person waiting: that looks normal */
+    :is([data-step="4"]) .guard-normal {
+        opacity: 1;
+    }
+
+    /* waiting */
+    .dots {
+        opacity: 0;
+        fill: var(--color-accent);
+        transition: opacity 0.3s;
+    }
+
+    .dots circle {
+        animation: waiting 1.2s ease-in-out infinite;
+    }
+
+    .dots circle:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .dots circle:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes waiting {
+        0%,
+        60%,
+        100% {
+            opacity: 0.25;
+        }
+        30% {
+            opacity: 1;
+        }
+    }
+
+    [data-step="1"] :is(.p1, .p2) .dots,
+    :is([data-step="3"], [data-step="4"]) :is(.p1, .p3) .dots {
+        opacity: 1;
+    }
+
+    /* replaying jumps back to the start instead of walking backwards */
+    .is-resetting * {
+        transition: none !important;
+    }
 </style>
 
 <script>
-  import { onAdvance, updateDemoControl } from "@/components/slides/demo-control";
+    import {
+        onAdvance,
+        updateDemoControl,
+    } from "@/components/slides/demo-control";
 
-  const root = document.querySelector<HTMLElement>("[data-hallway]")!;
-  const section = root.closest<HTMLElement>(".slide")!;
-  const control = root.querySelector<HTMLButtonElement>("[data-demo-next]")!;
-  const LAST = 4;
-  let step = 0;
+    const root = document.querySelector<HTMLElement>("[data-hallway]")!;
+    const section = root.closest<HTMLElement>(".slide")!;
+    const control = root.querySelector<HTMLButtonElement>("[data-demo-next]")!;
+    const LAST = 4;
+    let step = 0;
 
-  function show(next: number) {
-    if (next === 0) {
-      root.classList.add("is-resetting");
-      root.dataset.step = "0";
-      root.getBoundingClientRect(); // apply the reset before re-enabling transitions
-      root.classList.remove("is-resetting");
+    function show(next: number) {
+        if (next === 0) {
+            root.classList.add("is-resetting");
+            root.dataset.step = "0";
+            root.getBoundingClientRect(); // apply the reset before re-enabling transitions
+            root.classList.remove("is-resetting");
+        }
+        step = next;
+        root.dataset.step = String(step);
+        updateDemoControl(control, step);
     }
-    step = next;
-    root.dataset.step = String(step);
-    updateDemoControl(control, step);
-  }
 
-  control.addEventListener("click", () => {
-    show(step >= LAST ? 0 : step + 1);
-    // don't keep focus, so space/arrows stay with the deck
-    control.blur();
-  });
+    control.addEventListener("click", () => {
+        show(step >= LAST ? 0 : step + 1);
+        // don't keep focus, so space/arrows stay with the deck
+        control.blur();
+    });
 
-  // space: the next line of the story, until the last one
-  onAdvance(root, () => step < LAST && (show(step + 1), true));
+    // space: the next line of the story, until the last one
+    onAdvance(root, () => step < LAST && (show(step + 1), true));
 
-  section.addEventListener("slide:enter", () => show(0));
-  show(0);
+    section.addEventListener("slide:enter", () => show(0));
+    show(0);
 </script>
