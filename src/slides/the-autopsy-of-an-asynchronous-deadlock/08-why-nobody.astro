@@ -1,23 +1,28 @@
 ---
 import Slide from "@/components/slides/Slide.astro";
-import Table from "@/components/slides/Table.astro";
+import WitnessLoop from "@/components/slides/WitnessLoop.astro";
 
-const notes = "About 90 seconds. Follow the arrows: the handler waits for the worker, the worker waits for the row lock, and the lock is held by the handler. Back where we started: a loop. Postgres has a good deadlock detector: if two transactions each wait for the other's lock, it notices within about a second and cancels one. But it only follows waits between database sessions. Here it sees the worker waiting behind a session that is \"idle in transaction\", meaning doing nothing it knows about. That looks like a queue that will clear any moment. The runtime sees two parked tasks, which is what tasks do all day. The arrow that closes the loop is an await. No database can see your code.";
+const notes = "About 90 seconds. Follow the arrows: the handler waits for the worker, the worker waits for the row lock, and the lock is held by the handler. Back where we started: a loop. Postgres has a good deadlock detector: if two transactions each wait for the other's lock, it notices within about a second and cancels one. But it only follows waits between database sessions. Here it sees the worker waiting behind a session that is \"idle in transaction\", meaning doing nothing it knows about. That looks like a queue that will clear any moment. The runtime sees two parked tasks, which is what tasks do all day. The arrow that closes the loop is an await. No database can see your code.\n\nOn screen: press space to draw the three arrows one at a time, then once per witness (the database, the runtime, your code): each view keeps only the arrows that witness can see. The last press brings the whole loop back.";
 ---
 
 <Slide kicker="scenario 1 · the stockroom key" title="why nobody catches it." notes={notes}>
-  <Table
-    head={["from", "arrow", "to", "seen by"]}
-    rows={[
-      ["the handler", "awaits", "the worker's reply", "your code only"],
-      ["the worker", "waits for", "the lock on row 42", "the database"],
-      ["row 42's lock", "is held by", "the handler's open transaction", "the database"],
+  <WitnessLoop
+    id="s8"
+    nodes={[
+      { id: "handler", label: "the handler", kind: "task", x: 170, y: 60, notes: { runtime: "idle" } },
+      { id: "worker", label: "the worker", kind: "task", x: 830, y: 60, notes: { runtime: "idle" } },
+      { id: "row", label: "row 42", kind: "resource", x: 500, y: 240 },
     ]}
-    highlight={0}
+    edges={[
+      { from: "handler", to: "worker", kind: "wait", label: "awaits", seenBy: ["code"], caption: "the handler awaits the worker's reply." },
+      { from: "worker", to: "row", kind: "wait", label: "waits for", seenBy: ["database"], caption: "the worker waits for the lock on row 42." },
+      { from: "row", to: "handler", kind: "held", label: "held by", seenBy: ["database"], caption: "row 42's lock is held by the handler's open transaction. the loop is closed." },
+    ]}
+    witnesses={[
+      { id: "database", name: "what the database sees", caption: "a queue, not a loop: the worker waits behind a session that's doing nothing. its deadlock detector stays quiet." },
+      { id: "runtime", name: "what the runtime sees", caption: "two idle tasks. cpu 0%. health check green." },
+      { id: "code", name: "what only your code knows", caption: "the handler awaits the worker. that arrow closes the loop, and no tool sees it." },
+    ]}
+    final={{ name: "put together", caption: "the loop closes through an await. only you can see the whole thing." }}
   />
-  <div class="s-cols" style="--cols: 3">
-    <div class="s-card"><p class="s-card-label">the database</p><p>sees a queue, not a loop. its deadlock detector stays quiet.</p></div>
-    <div class="s-card"><p class="s-card-label">the runtime</p><p>sees two idle tasks. cpu 0%. health check green.</p></div>
-    <div class="s-card is-accent"><p class="s-card-label">the loop</p><p>closes through an await in your code. only you can see that arrow.</p></div>
-  </div>
 </Slide>

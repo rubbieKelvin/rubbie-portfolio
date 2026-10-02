@@ -1,0 +1,398 @@
+---
+/**
+ * A wait-for loop, built one arrow at a time, then seen through each witness's eyes:
+ * the database, the runtime, your code... each one only sees some of the arrows.
+ * Same visual language as slide 3: boxed tasks, padlocked resources, solid "held by"
+ * arrows and dashed accent "waits" arrows.
+ *
+ * Steps (space, or the demo control):
+ *   0            the points, no arrows
+ *   1..E         one arrow per step, with its caption
+ *   E+1..E+W     one witness per step: only the arrows it sees stay visible
+ *   E+W+1        the whole loop again, and a dot travels it
+ */
+import DemoControl from "./DemoControl.astro";
+
+type Node = {
+  id: string;
+  label: string;
+  kind: "task" | "resource";
+  x: number;
+  y: number;
+  /** a small tag under the node in a witness's view, e.g. { runtime: "idle" } */
+  notes?: Record<string, string>;
+};
+
+type Edge = {
+  from: string;
+  to: string;
+  kind: "held" | "wait";
+  label: string;
+  /** shown while this arrow is drawn */
+  caption: string;
+  /** witness ids that can see this arrow */
+  seenBy: string[];
+};
+
+type Witness = {
+  id: string;
+  name: string;
+  caption: string;
+  /** an extra line shown in this view, in code style (e.g. a log line) */
+  aside?: string;
+};
+
+type Props = {
+  /** unique per slide, for svg marker ids */
+  id: string;
+  nodes: Node[];
+  /** in loop order: each edge starts where the previous one ended */
+  edges: Edge[];
+  witnesses: Witness[];
+  final: { name: string; caption: string };
+};
+
+const { id, nodes, edges, witnesses, final } = Astro.props;
+const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
+
+const TASK = { w: 210, h: 64 };
+const RESOURCE_R = 38;
+const GAP = 6;
+
+// where a line from `a` towards `b` leaves `a`'s outline
+function exit(a: Node, b: Node) {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const len = Math.hypot(dx, dy);
+  if (a.kind === "resource") {
+    const r = RESOURCE_R + GAP;
+    return { x: a.x + (dx / len) * r, y: a.y + (dy / len) * r };
+  }
+  const t = Math.min((TASK.w / 2) / Math.abs(dx || 1e-9), (TASK.h / 2) / Math.abs(dy || 1e-9));
+  const g = GAP / len;
+  return { x: a.x + dx * (t + g), y: a.y + dy * (t + g) };
+}
+
+// labels sit on the outside of the loop
+const cx = nodes.reduce((s, n) => s + n.x, 0) / nodes.length;
+const cy = nodes.reduce((s, n) => s + n.y, 0) / nodes.length;
+
+const lines = edges.map((e) => {
+  const a = byId[e.from];
+  const b = byId[e.to];
+  const p1 = exit(a, b);
+  const p2 = exit(b, a);
+  const mx = (p1.x + p2.x) / 2;
+  const my = (p1.y + p2.y) / 2;
+  let nx = -(p2.y - p1.y);
+  let ny = p2.x - p1.x;
+  const nl = Math.hypot(nx, ny);
+  nx /= nl;
+  ny /= nl;
+  if ((mx - cx) * nx + (my - cy) * ny < 0) {
+    nx = -nx;
+    ny = -ny;
+  }
+  return { ...e, p1, p2, lx: mx + nx * 22, ly: my + ny * 22 + 5 };
+});
+
+const E = edges.length;
+const W = witnesses.length;
+const states = E + W + 2;
+---
+
+<div class="wloop" data-witness-loop data-edges={E} data-witness-order={witnesses.map((w) => w.id).join(" ")} data-step="0">
+  <svg viewBox="0 0 1000 300" class="wloop-svg" aria-hidden="true">
+    <defs>
+      <marker id={`${id}-head-held`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" class="head-held" />
+      </marker>
+      <marker id={`${id}-head-wait`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" class="head-wait" />
+      </marker>
+    </defs>
+
+    {
+      nodes.map((n) => (
+        <g class:list={["node", `is-${n.kind}`]}>
+          {n.kind === "task" ? (
+            <>
+              <rect x={n.x - TASK.w / 2} y={n.y - TASK.h / 2} width={TASK.w} height={TASK.h} rx="6" class="task-box" />
+              <text x={n.x} y={n.y + 9} class="node-label">{n.label}</text>
+            </>
+          ) : (
+            <>
+              <text x={n.x - 10} y={n.y + 10} class="node-label">{n.label}</text>
+              <g class="padlock" transform={`translate(${n.x + (n.label.length * 9.5) - 2} ${n.y - 18})`}>
+                <path d="M3.5,8 V5.5 a4.5,4.5 0 0 1 9,0 V8" class="padlock-shackle" />
+                <rect x="1" y="8" width="14" height="11" rx="2" class="padlock-body" />
+              </g>
+            </>
+          )}
+          {n.notes &&
+            Object.entries(n.notes).map(([witness, note]) => (
+              <text x={n.x} y={n.y + (n.kind === "task" ? TASK.h / 2 + 26 : 42)} class="node-note" data-note-for={witness}>
+                {note}
+              </text>
+            ))}
+        </g>
+      ))
+    }
+
+    {
+      lines.map((l, i) => (
+        <g class:list={["edge", `is-${l.kind}`]} data-edge={i} data-seen={l.seenBy.join(" ")}>
+          <line
+            x1={l.p1.x}
+            y1={l.p1.y}
+            x2={l.p2.x}
+            y2={l.p2.y}
+            class="edge-line"
+            marker-end={`url(#${id}-head-${l.kind})`}
+          />
+          <text x={l.lx} y={l.ly} class="edge-label">{l.label}</text>
+        </g>
+      ))
+    }
+
+    {
+      lines.map((l) => (
+        <circle r="6" class="pulse" data-pulse data-from={`${l.p1.x},${l.p1.y}`} data-to={`${l.p2.x},${l.p2.y}`} />
+      ))
+    }
+  </svg>
+
+  <div class="wloop-captions">
+    {
+      lines.map((l, i) => (
+        <div class="wloop-caption" data-caption={i + 1}>
+          <p>{l.caption}</p>
+        </div>
+      ))
+    }
+    {
+      witnesses.map((w, i) => (
+        <div class="wloop-caption" data-caption={E + 1 + i}>
+          <p class="s-kicker wloop-witness">{w.name}</p>
+          <p>{w.caption}</p>
+          {w.aside && <p class="wloop-aside">{w.aside}</p>}
+        </div>
+      ))
+    }
+    <div class="wloop-caption" data-caption={E + W + 1}>
+      <p class="s-kicker wloop-witness">{final.name}</p>
+      <p class="s-accent">{final.caption}</p>
+    </div>
+  </div>
+
+  <DemoControl states={states} />
+</div>
+
+<style>
+  .wloop {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .wloop-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    font-family: var(--font-mono);
+  }
+
+  /* ---------- points ---------- */
+
+  .task-box {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 1.5;
+  }
+
+  .node-label {
+    font-size: 26px;
+    text-anchor: middle;
+    fill: var(--color-text);
+  }
+
+  .padlock-shackle {
+    fill: none;
+    stroke: var(--color-text);
+    stroke-width: 2;
+  }
+
+  .padlock-body {
+    fill: var(--color-text);
+  }
+
+  .node-note {
+    font-size: 16px;
+    text-anchor: middle;
+    fill: var(--color-accent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .node-note.is-on {
+    opacity: 1;
+  }
+
+  /* ---------- arrows ---------- */
+
+  .edge {
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .edge.is-on {
+    opacity: 1;
+  }
+
+  /* in a witness's view, the arrows it can't see almost disappear */
+  .edge.is-on.is-hidden {
+    opacity: 0.08;
+  }
+
+  .edge-line {
+    fill: none;
+    stroke-width: 2;
+  }
+
+  .is-held .edge-line {
+    stroke: var(--color-text-muted);
+  }
+
+  .is-wait .edge-line {
+    stroke: var(--color-accent);
+    stroke-dasharray: 8 8;
+  }
+
+  .edge-label {
+    font-size: 16px;
+    text-anchor: middle;
+  }
+
+  .is-held .edge-label {
+    fill: var(--color-text-muted);
+  }
+
+  .is-wait .edge-label {
+    fill: var(--color-accent);
+  }
+
+  .head-held {
+    fill: var(--color-text-muted);
+  }
+
+  .head-wait {
+    fill: var(--color-accent);
+  }
+
+  .pulse {
+    fill: var(--color-accent);
+    opacity: 0;
+  }
+
+  /* ---------- captions: stacked in one place, so nothing shifts ---------- */
+
+  .wloop-captions {
+    display: grid;
+    margin-top: 0.75em;
+  }
+
+  .wloop-caption {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transition: opacity 0.35s;
+    font-size: 1.1em;
+  }
+
+  .wloop-caption.is-on {
+    opacity: 1;
+  }
+
+  .wloop-witness {
+    font-size: 0.75em;
+    margin-bottom: 0.4em;
+  }
+
+  .wloop-aside {
+    margin-top: 0.6em;
+    font-size: 0.8em;
+    color: var(--color-text-muted);
+  }
+</style>
+
+<script>
+  import { onAdvance, updateDemoControl } from "./demo-control";
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-witness-loop]")) {
+    const section = root.closest<HTMLElement>(".slide")!;
+    const control = root.querySelector<HTMLButtonElement>("[data-demo-next]")!;
+    const edges = Array.from(root.querySelectorAll<SVGGElement>("[data-edge]"));
+    const notes = Array.from(root.querySelectorAll<SVGTextElement>("[data-note-for]"));
+    const captions = Array.from(root.querySelectorAll<HTMLElement>("[data-caption]"));
+    const pulses = Array.from(root.querySelectorAll<SVGCircleElement>("[data-pulse]"));
+    const E = Number(root.dataset.edges);
+    // witness ids, in the order their views appear
+    const witnessOrder = root.dataset.witnessOrder!.split(" ");
+    const W = witnessOrder.length;
+    const LAST = E + W + 1;
+    let step = 0;
+    let travelling: Animation[] = [];
+
+    // the whole loop: a dot hops along each arrow in turn, forever
+    function travel() {
+      const HOP = 900;
+      travelling = pulses.map((dot, i) => {
+        const [x1, y1] = dot.dataset.from!.split(",");
+        const [x2, y2] = dot.dataset.to!.split(",");
+        const share = 1 / pulses.length;
+        return dot.animate(
+          [
+            { transform: `translate(${x1}px, ${y1}px)`, opacity: 1, offset: 0 },
+            { transform: `translate(${x2}px, ${y2}px)`, opacity: 1, offset: share },
+            { transform: `translate(${x2}px, ${y2}px)`, opacity: 0, offset: Math.min(1, share + 0.001) },
+            { transform: `translate(${x2}px, ${y2}px)`, opacity: 0, offset: 1 },
+          ],
+          { duration: HOP * pulses.length, delay: HOP * i, iterations: Infinity },
+        );
+      });
+    }
+
+    function show(next: number) {
+      step = next;
+      root.dataset.step = String(step);
+      // which witness's view this step is, if any
+      const witness = step > E && step <= E + W ? witnessOrder[step - E - 1] : null;
+
+      edges.forEach((edge, i) => {
+        edge.classList.toggle("is-on", i < Math.min(step, E));
+        const seen = edge.dataset.seen!.split(" ");
+        edge.classList.toggle("is-hidden", witness !== null && !seen.includes(witness));
+      });
+      notes.forEach((n) => n.classList.toggle("is-on", witness !== null && n.dataset.noteFor === witness));
+      captions.forEach((c) => c.classList.toggle("is-on", Number(c.dataset.caption) === step));
+
+      travelling.forEach((a) => a.cancel());
+      travelling = [];
+      if (step === LAST) travel();
+
+      updateDemoControl(control, step);
+    }
+
+    control.addEventListener("click", () => {
+      show(step >= LAST ? 0 : step + 1);
+      // don't keep focus, so space/arrows stay with the deck
+      control.blur();
+    });
+
+    onAdvance(root, () => step < LAST && (show(step + 1), true));
+    section.addEventListener("slide:enter", () => show(0));
+    section.addEventListener("slide:leave", () => travelling.forEach((a) => a.cancel()));
+    show(0);
+  }
+</script>

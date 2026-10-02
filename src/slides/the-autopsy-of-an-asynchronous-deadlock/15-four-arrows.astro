@@ -1,23 +1,30 @@
 ---
 import Slide from "@/components/slides/Slide.astro";
-import Table from "@/components/slides/Table.astro";
+import WitnessLoop from "@/components/slides/WitnessLoop.astro";
 
-const notes = "About 2 minutes. Same method as scenario 1, one more arrow. Database first: the pg_stat_activity query shows reserve's session waiting on a lock, blocked by restock's session, which is idle in transaction. That picture is identical to scenario 1, and that's the takeaway: whenever you see a session waiting on an idle-in-transaction session from your own app, stop looking in the database. The rest of the loop is in your code. Runtime next: in tokio-console, restock's task is idle. The Resources view lists the app's Mutex as locked, with a task waiting on it. What it doesn't say is who holds it. Nothing does, unless you logged it. That's the last arrow, and it only comes from your own logs: \"reserve took the reservations lock at 12:03:07\". Four arrows: two from the database, one from the runtime, one from your logs. Draw them and the loop closes.";
+const notes = "About 2 minutes. Same method as scenario 1, one more arrow. Database first: the pg_stat_activity query shows reserve's session waiting on a lock, blocked by restock's session, which is idle in transaction. That picture is identical to scenario 1, and that's the takeaway: whenever you see a session waiting on an idle-in-transaction session from your own app, stop looking in the database. The rest of the loop is in your code. Runtime next: in tokio-console, restock's task is idle. The Resources view lists the app's Mutex as locked, with a task waiting on it. What it doesn't say is who holds it. Nothing does, unless you logged it. That's the last arrow, and it only comes from your own logs: \"reserve took the reservations lock at 12:03:07\". Four arrows: two from the database, one from the runtime, one from your logs. Draw them and the loop closes.\n\nOn screen: press space to draw the four arrows, then once per witness (the database, the runtime, your logs). The logs view shows the log line that gives you the last arrow. The last press brings the whole loop back.";
 ---
 
 <Slide kicker="scenario 2 · the autopsy" title="four arrows, two witnesses." notes={notes}>
-  <Table
-    head={["from", "arrow", "to", "seen by"]}
-    rows={[
-      ["reserve", "waits for", "row 7", "the database"],
-      ["row 7", "is held by", "restock's open transaction", "the database"],
-      ["restock", "waits for", "the app lock", "the runtime"],
-      ["the app lock", "is held by", "reserve", "only your own logs"],
+  <WitnessLoop
+    id="s15"
+    nodes={[
+      { id: "reserve", label: "reserve", kind: "task", x: 170, y: 150 },
+      { id: "restock", label: "restock", kind: "task", x: 830, y: 150 },
+      { id: "applock", label: "app lock", kind: "resource", x: 500, y: 40, notes: { runtime: "held by: ?" } },
+      { id: "row", label: "row 7", kind: "resource", x: 500, y: 262 },
     ]}
-    highlight={3}
+    edges={[
+      { from: "reserve", to: "row", kind: "wait", label: "waits for", seenBy: ["database"], caption: "reserve waits for row 7." },
+      { from: "row", to: "restock", kind: "held", label: "held by", seenBy: ["database"], caption: "row 7 is held by restock's open transaction." },
+      { from: "restock", to: "applock", kind: "wait", label: "waits for", seenBy: ["runtime"], caption: "restock waits for the app lock." },
+      { from: "applock", to: "reserve", kind: "held", label: "held by", seenBy: ["logs"], caption: "the app lock is held by reserve. the loop is closed." },
+    ]}
+    witnesses={[
+      { id: "database", name: "what the database sees", caption: "reserve waiting on an idle-in-transaction session from your own app: the same picture as scenario 1. the rest of the loop is in your code." },
+      { id: "runtime", name: "what the runtime sees", caption: "restock is waiting for the app lock. runtime tools show who waits for a lock, never who holds it." },
+      { id: "logs", name: "what only your logs show", caption: "who took the app lock, and when. that's the last arrow.", aside: "12:03:07.114  reserve: took the reservations lock (product 7)" },
+    ]}
+    final={{ name: "put together", caption: "two arrows from the database, one from the runtime, one from your logs. draw them all and the loop closes." }}
   />
-  <div class="s-cols">
-    <div class="s-card"><p class="s-card-label">same picture</p><p>the database view looks exactly like scenario 1. a session waiting on an idle in transaction session from your own app means: the rest of the loop is in your code.</p></div>
-    <div class="s-card is-accent"><p class="s-card-label">blind spot</p><p>runtime tools show who waits for a lock, never who holds it. log when you take a lock, not only when you wait.</p></div>
-  </div>
 </Slide>
