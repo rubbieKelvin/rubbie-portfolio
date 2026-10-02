@@ -614,6 +614,133 @@ html {
     opacity: 0.4;
 }
 
+/* ---------- code runs (src/components/slides/code-run.ts) ---------- */
+
+.run-play {
+    font-size: 0.9em;
+    line-height: 1;
+    color: var(--color-accent);
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+.astro-code .run-play {
+    margin-left: 1.25em;
+}
+
+.run-play:hover {
+    opacity: 0.55;
+}
+
+.run-play:disabled {
+    color: var(--color-text-muted);
+    cursor: default;
+    opacity: 1;
+}
+
+/* the line currently executing (or stuck) */
+.astro-code .line.is-running {
+    display: inline-block;
+    width: 100%;
+    background: color-mix(in srgb, var(--color-text) 10%, transparent);
+    transition: background-color 0.2s;
+}
+
+.astro-code .line.is-stuck {
+    background: color-mix(in srgb, var(--color-accent) 22%, transparent);
+}
+
+/* three dots by a line that is waiting for something */
+.run-dots {
+    display: inline-flex;
+    gap: 0.3em;
+    margin-left: 1em;
+    vertical-align: middle;
+}
+
+.run-dots i {
+    width: 0.35em;
+    height: 0.35em;
+    border-radius: 9999px;
+    background: var(--color-text-muted);
+    animation: run-wait 1.2s ease-in-out infinite;
+}
+
+.is-stuck .run-dots i {
+    background: var(--color-accent);
+}
+
+.run-dots i:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.run-dots i:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes run-wait {
+    0%,
+    60%,
+    100% {
+        opacity: 0.25;
+    }
+    30% {
+        opacity: 1;
+    }
+}
+
+/* a lock: shown once it's taken, shaking while someone else tries it */
+.run-lock {
+    display: inline-block;
+    width: 0.9em;
+    height: 1.1em;
+    margin-left: 1em;
+    vertical-align: -0.15em;
+    color: var(--color-text);
+    transition: color 0.3s;
+}
+
+.run-lock.is-contended {
+    color: var(--color-accent);
+    animation: run-rattle 2s ease-in-out infinite;
+}
+
+@keyframes run-rattle {
+    0%,
+    30%,
+    100% {
+        transform: none;
+    }
+    5% {
+        transform: translateX(3px) rotate(8deg);
+    }
+    10% {
+        transform: translateX(-3px) rotate(-8deg);
+    }
+    15% {
+        transform: translateX(2px) rotate(5deg);
+    }
+    20% {
+        transform: translateX(-2px) rotate(-5deg);
+    }
+    25% {
+        transform: translateX(1px);
+    }
+}
+
+/* slides with real Rust: lines are long, so give the slide more width and a smaller code size */
+.s.rust-code {
+    padding: 3em 2em;
+}
+
+.s.rust-code .s-title {
+    margin-bottom: 0.75em;
+}
+
+.s.rust-code .s-code {
+    font-size: 0.8em;
+}
+
 .deck-controls {
     height: 3rem;
     display: flex;

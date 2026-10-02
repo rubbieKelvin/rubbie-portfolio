@@ -6,18 +6,27 @@ const notes = "About 90 seconds. The code is Rust with tokio-postgres, but nothi
 ---
 
 <Slide kicker="scenario 1 · the stockroom key" title="the code." notes={notes} class="rust-code">
-  <div class="s-lines" data-flow>
-    <!-- moved onto the `fn mark_paid` line by the script below -->
-    <button type="button" class="flow-play" data-flow-play aria-label="Run mark_paid">▶</button>
+  <div class="flow" data-flow>
+    <!-- moved onto the `fn mark_paid(` line by the script below -->
+    <button type="button" class="run-play" data-flow-play aria-label="Run mark_paid">▶</button>
     <Code
       lang="rust"
       label="// orders.rs: the request handler"
       lines={[
-        "async fn mark_paid(db: &mut Client, id: i64) -> anyhow::Result<()> {",
+        "async fn mark_paid(",
+        "    db: &mut Client,",
+        "    id: i64,",
+        ") -> anyhow::Result<()> {",
         "    let tx = db.transaction().await?;",
-        ["    tx.execute(\"update orders set status = 'paid' where id = $1\", &[&id]).await?;", "locks row 42"],
-        ["    send_receipt(id).await?;", "waits for the worker…", "accent"],
-        ["    Ok(tx.commit().await?)", "never reached", "muted"],
+        "    // locks row 42",
+        "    tx.execute(",
+        "        \"update orders set status = 'paid' where id = $1\",",
+        "        &[&id],",
+        "    ).await?;",
+        ["    // waits for the worker…", "", "accent"],
+        "    send_receipt(id).await?;",
+        ["    // never reached", "", "muted"],
+        ["    Ok(tx.commit().await?)", "", "muted"],
         "}",
       ]}
     />
@@ -26,8 +35,13 @@ const notes = "About 90 seconds. The code is Rust with tokio-postgres, but nothi
       label="// receipts.rs: the receipt worker, in another file"
       lines={[
         "async fn send_receipt(id: i64) -> anyhow::Result<()> {",
-        ["    let db = POOL.get().await?;", "a different connection"],
-        ["    db.execute(\"update orders set receipt_sent = true where id = $1\", &[&id]).await?;", "waits for row 42", "accent"],
+        "    // a different connection",
+        "    let db = POOL.get().await?;",
+        ["    // waits for row 42", "", "accent"],
+        "    db.execute(",
+        "        \"update orders set receipt_sent = true where id = $1\",",
+        "        &[&id],",
+        "    ).await?;",
         "    mailer::send(id).await",
         "}",
       ]}
@@ -42,222 +56,56 @@ const notes = "About 90 seconds. The code is Rust with tokio-postgres, but nothi
 </Slide>
 
 <style>
-  /* ---------- the "run it" simulation ---------- */
-
-  .flow-play {
-    margin-left: 1.25em;
-    font-size: 0.9em;
-    line-height: 1;
-    color: var(--color-accent);
-    cursor: pointer;
-    transition: opacity 0.15s;
+  /* the handler and the worker side by side */
+  .flow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25em;
+    align-items: start;
   }
 
-  .flow-play:hover {
-    opacity: 0.55;
-  }
-
-  .flow-play:disabled {
-    color: var(--color-text-muted);
-    cursor: default;
-    opacity: 1;
-  }
-
-  /* the line currently executing (or stuck) */
-  :global(.rust-code .line.is-running) {
-    display: inline-block;
-    width: 100%;
-    background: color-mix(in srgb, var(--color-text) 10%, transparent);
-    transition: background-color 0.2s;
-  }
-
-  :global(.rust-code .line.is-stuck) {
-    background: color-mix(in srgb, var(--color-accent) 22%, transparent);
-  }
-
-  /* three dots by a line that is waiting for something */
-  :global(.run-dots) {
-    display: inline-flex;
-    gap: 0.3em;
-    margin-left: 1em;
-    vertical-align: middle;
-  }
-
-  :global(.run-dots i) {
-    width: 0.35em;
-    height: 0.35em;
-    border-radius: 9999px;
-    background: var(--color-text-muted);
-    animation: run-wait 1.2s ease-in-out infinite;
-  }
-
-  :global(.is-stuck .run-dots i) {
-    background: var(--color-accent);
-  }
-
-  :global(.run-dots i:nth-child(2)) {
-    animation-delay: 0.2s;
-  }
-
-  :global(.run-dots i:nth-child(3)) {
-    animation-delay: 0.4s;
-  }
-
-  @keyframes run-wait {
-    0%,
-    60%,
-    100% {
-      opacity: 0.25;
-    }
-    30% {
-      opacity: 1;
-    }
-  }
-
-  /* the transaction's lock: shown once it's taken, shaking while someone else tries it */
-  :global(.run-lock) {
-    display: inline-block;
-    width: 0.9em;
-    height: 1.1em;
-    margin-left: 1em;
-    vertical-align: -0.15em;
-    color: var(--color-text);
-    transition: color 0.3s;
-  }
-
-  :global(.run-lock.is-contended) {
-    color: var(--color-accent);
-    animation: run-rattle 2s ease-in-out infinite;
-  }
-
-  @keyframes run-rattle {
-    0%,
-    30%,
-    100% {
-      transform: none;
-    }
-    5% {
-      transform: translateX(3px) rotate(8deg);
-    }
-    10% {
-      transform: translateX(-3px) rotate(-8deg);
-    }
-    15% {
-      transform: translateX(2px) rotate(5deg);
-    }
-    20% {
-      transform: translateX(-2px) rotate(-5deg);
-    }
-    25% {
-      transform: translateX(1px);
-    }
-  }
-
-  /* real Rust lines are long: give this slide more width and a slightly smaller code size */
-  :global(.s.rust-code) {
-    padding: 3em 2em;
-  }
-
-  :global(.s.rust-code .s-title) {
-    margin-bottom: 0.75em;
-  }
-
-  :global(.s.rust-code .s-code) {
-    font-size: 0.8em;
+  .flow :global(.s-code) {
+    font-size: 0.7em;
   }
 </style>
 
-<script>
-  const root = document.querySelector<HTMLElement>("[data-flow]")!;
-  const section = root.closest<HTMLElement>(".slide")!;
-  const play = root.querySelector<HTMLButtonElement>("[data-flow-play]")!;
-  const [handler, worker] = Array.from(root.querySelectorAll("pre")).map((pre) =>
-    Array.from(pre.querySelectorAll<HTMLElement>(".line")),
-  );
 
-  // put the play button at the end of `async fn mark_paid(...) {`
+<script>
+  import { codeBlocks, codeRun } from "@/components/slides/code-run";
+
+  const root = document.querySelector<HTMLElement>("[data-flow]")!;
+  const play = root.querySelector<HTMLButtonElement>("[data-flow-play]")!;
+  const [handler, worker] = codeBlocks(root);
+
+  // put the play button right after `async fn mark_paid(`
   handler[0].append(play);
 
-  const STEP_MS = 900;
-  let timers: number[] = [];
-
-  function dots() {
-    const el = document.createElement("span");
-    el.className = "run-dots";
-    el.setAttribute("aria-hidden", "true");
-    el.append(document.createElement("i"), document.createElement("i"), document.createElement("i"));
-    return el;
-  }
-
-  function padlock() {
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 16 20");
-    svg.setAttribute("class", "run-lock");
-    svg.setAttribute("aria-hidden", "true");
-    svg.innerHTML =
-      '<path d="M3.5,8 V5.5 a4.5,4.5 0 0 1 9,0 V8" fill="none" stroke="currentColor" stroke-width="2" />' +
-      '<rect x="1" y="8" width="14" height="11" rx="2" fill="currentColor" />';
-    return svg;
-  }
-
-  function run(line: HTMLElement) {
-    line.classList.add("is-running");
-    line.append(dots());
-  }
-
-  function finish(line: HTMLElement) {
-    line.classList.remove("is-running");
-    line.querySelector(".run-dots")?.remove();
-  }
-
-  function reset() {
-    timers.forEach(clearTimeout);
-    timers = [];
-    [...handler, ...worker].forEach((line) => {
-      finish(line);
-      line.classList.remove("is-stuck");
-    });
-    root.querySelector(".run-lock")?.remove();
-    play.textContent = "▶";
-    play.disabled = false;
-    play.setAttribute("aria-label", "Run mark_paid");
-  }
+  // each statement, as the lines it spans
+  const H = { tx: handler[4], update: handler.slice(6, 10), send: handler[11] };
+  const W = { pool: worker[2], update: worker.slice(4, 8) };
 
   // the instruction flow, from opening the transaction to getting stuck
-  const flow: (() => void)[] = [
-    () => run(handler[1]), // let tx = db.transaction().await?;
-    () => (finish(handler[1]), run(handler[2])), // tx.execute(update ... )
-    () => {
-      // the update has locked row 42; the lock stays on this line until commit
-      finish(handler[2]);
-      handler[2].append(padlock());
-      run(handler[3]); // send_receipt(id).await? → waits from here on
-    },
-    () => run(worker[1]), // let db = POOL.get().await?;
-    () => {
-      finish(worker[1]);
-      run(worker[2]); // db.execute(update ... ) → tries the lock the transaction holds
-      root.querySelector(".run-lock")?.classList.add("is-contended");
-    },
-    () => {
+  codeRun({
+    root,
+    play,
+    label: "Run mark_paid",
+    steps: ({ run, finish, lock, contend, stick }) => [
+      () => run(H.tx), // let tx = db.transaction().await?;
+      () => (finish(H.tx), run(H.update)), // tx.execute(update ...)
+      () => {
+        // the update has locked row 42; the lock stays on it until commit
+        finish(H.update);
+        lock(H.update, "row");
+        run(H.send); // send_receipt(id).await? → waits from here on
+      },
+      () => run(W.pool), // let db = POOL.get().await?;
+      () => {
+        finish(W.pool);
+        run(W.update); // db.execute(update ...) → tries the lock the transaction holds
+        contend("row");
+      },
       // nothing will ever wake either of them up
-      handler[3].classList.add("is-stuck");
-      worker[2].classList.add("is-stuck");
-      play.textContent = "↺";
-      play.disabled = false;
-      play.setAttribute("aria-label", "Reset");
-    },
-  ];
-
-  play.addEventListener("click", () => {
-    const replay = play.textContent === "↺";
-    reset();
-    play.blur();
-    if (replay) return;
-    play.disabled = true;
-    flow.forEach((step, i) => timers.push(window.setTimeout(step, i * STEP_MS)));
+      () => (stick(H.send), stick(W.update)),
+    ],
   });
-
-  section.addEventListener("slide:enter", reset);
-  section.addEventListener("slide:leave", reset);
 </script>
