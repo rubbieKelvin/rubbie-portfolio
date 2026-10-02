@@ -21,7 +21,7 @@ const notes = "About 90 seconds. Same shop, same database. For speed, the app ke
         "        &[&id],",
         "    ).await?;",
         "    pending.push(id);",
-        "    Ok(())",
+        "    return Ok(());",
         "}",
       ]}
     />
@@ -40,7 +40,7 @@ const notes = "About 90 seconds. Same shop, same database. For speed, the app ke
         ["    // waits for reserve", "", "accent"],
         "    let mut pending = app.reservations.lock().await;",
         "    pending.retain(|&r| r != id);",
-        "    Ok(tx.commit().await?)",
+        "    return Ok(tx.commit().await?);",
         "}",
       ]}
     />

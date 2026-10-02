@@ -26,7 +26,7 @@ const notes = "About 90 seconds. The code is Rust with tokio-postgres, but nothi
         ["    // waits for the worker…", "", "accent"],
         "    send_receipt(id).await?;",
         ["    // never reached", "", "muted"],
-        ["    Ok(tx.commit().await?)", "", "muted"],
+        ["    return Ok(tx.commit().await?);", "", "muted"],
         "}",
       ]}
     />
@@ -42,7 +42,7 @@ const notes = "About 90 seconds. The code is Rust with tokio-postgres, but nothi
         "        \"update orders set receipt_sent = true where id = $1\",",
         "        &[&id],",
         "    ).await?;",
-        "    mailer::send(id).await",
+        "    return mailer::send(id).await;",
         "}",
       ]}
     />

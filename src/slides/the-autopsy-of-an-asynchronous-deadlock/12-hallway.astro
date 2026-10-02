@@ -28,11 +28,10 @@ const notes = "About 60 seconds. The second story. Press space to play each line
       <text x="95" y="20" class="label guard-label">guard</text>
       <text x="125" y="20" class="label guard-alarm">!</text>
       <text x="125" y="20" class="label guard-normal">looks normal</text>
-      <g class="dots guard-dots" transform="translate(140 16)"><circle cx="-8" r="3" /><circle r="3" /><circle cx="8" r="3" /></g>
 
       <!-- people -->
       {
-        ["p1", "p2", "p4", "p5"].map((id) => (
+        ["p1", "p2"].map((id) => (
           <g class={`person ${id}`}>
             <g class="dots" transform="translate(0 40)"><circle cx="-8" r="3" /><circle r="3" /><circle cx="8" r="3" /></g>
             <circle cy="57" r="10" class="figure" />
@@ -51,9 +50,8 @@ const notes = "About 60 seconds. The second story. Press space to play each line
       <p data-line="3">now the hallway turns a corner. one person stands just out of view.</p>
       <p data-line="4" class="s-muted">the guard sees one person waiting. that looks normal.</p>
     </div>
-    <p data-line="5" class="story-punchline s-accent">so the guard waits too. so does everyone behind them.</p>
 
-    <DemoControl states={6} />
+    <DemoControl states={5} />
   </div>
 </Slide>
 
@@ -78,16 +76,12 @@ const notes = "About 60 seconds. The second story. Press space to play each line
     margin-bottom: 0.3em;
   }
 
-  .story-lines,
-  .story-punchline {
+  .story-lines {
     font-size: 1.25em;
     line-height: 1.65;
     white-space: nowrap;
   }
 
-  .story-punchline {
-    margin-top: 1em;
-  }
 
   /* text appears with the scene; hidden lines keep their space so nothing shifts */
   [data-line] {
@@ -98,8 +92,7 @@ const notes = "About 60 seconds. The second story. Press space to play each line
   [data-step="1"] [data-line="1"],
   [data-step="2"] [data-line]:is([data-line="1"], [data-line="2"]),
   [data-step="3"] [data-line]:is([data-line="1"], [data-line="2"], [data-line="3"]),
-  [data-step="4"] [data-line]:not([data-line="5"]),
-  [data-step="5"] [data-line] {
+  [data-step="4"] [data-line] {
     opacity: 1;
   }
 
@@ -146,9 +139,7 @@ const notes = "About 60 seconds. The second story. Press space to play each line
     fill: var(--color-text);
   }
 
-  .p2 .figure,
-  .p4 .figure,
-  .p5 .figure {
+  .p2 .figure {
     fill: var(--color-text-muted);
   }
 
@@ -169,11 +160,6 @@ const notes = "About 60 seconds. The second story. Press space to play each line
 
   .p2 {
     transform: translateX(990px);
-  }
-
-  .p4,
-  .p5 {
-    transform: translateX(-10px);
   }
 
   .p3,
@@ -210,37 +196,28 @@ const notes = "About 60 seconds. The second story. Press space to play each line
     fill: color-mix(in srgb, var(--color-accent) 16%, transparent);
   }
 
-  :is([data-step="2"], [data-step="3"], [data-step="4"], [data-step="5"]) .p2 {
+  :is([data-step="2"], [data-step="3"], [data-step="4"]) .p2 {
     transform: translateX(990px);
     opacity: 0;
   }
 
   /* 3: the hallway turns a corner; someone stands just out of view */
-  :is([data-step="3"], [data-step="4"], [data-step="5"]) .corner-only,
-  :is([data-step="3"], [data-step="4"], [data-step="5"]) .p3 {
+  :is([data-step="3"], [data-step="4"]) .corner-only,
+  :is([data-step="3"], [data-step="4"]) .p3 {
     opacity: 1;
   }
 
-  :is([data-step="3"], [data-step="4"], [data-step="5"]) .straight-only {
+  :is([data-step="3"], [data-step="4"]) .straight-only {
     opacity: 0;
   }
 
-  :is([data-step="3"], [data-step="4"], [data-step="5"]) .p1 {
+  :is([data-step="3"], [data-step="4"]) .p1 {
     transform: translateX(765px);
   }
 
   /* 4: the guard sees one person waiting: that looks normal */
   :is([data-step="4"]) .guard-normal {
     opacity: 1;
-  }
-
-  /* 5: so the guard waits too, and so does everyone behind them */
-  [data-step="5"] .p4 {
-    transform: translateX(725px);
-  }
-
-  [data-step="5"] .p5 {
-    transform: translateX(685px);
   }
 
   /* waiting */
@@ -274,9 +251,7 @@ const notes = "About 60 seconds. The second story. Press space to play each line
   }
 
   [data-step="1"] :is(.p1, .p2) .dots,
-  :is([data-step="3"], [data-step="4"], [data-step="5"]) :is(.p1, .p3) .dots,
-  [data-step="5"] :is(.p4, .p5) .dots,
-  [data-step="5"] .guard-dots {
+  :is([data-step="3"], [data-step="4"]) :is(.p1, .p3) .dots {
     opacity: 1;
   }
 
@@ -292,7 +267,7 @@ const notes = "About 60 seconds. The second story. Press space to play each line
   const root = document.querySelector<HTMLElement>("[data-hallway]")!;
   const section = root.closest<HTMLElement>(".slide")!;
   const control = root.querySelector<HTMLButtonElement>("[data-demo-next]")!;
-  const LAST = 5;
+  const LAST = 4;
   let step = 0;
 
   function show(next: number) {
