@@ -1,6 +1,7 @@
 ---
 import "@/assets/global.css";
 import { getTalks, getSlides, type Talk } from "@/lib/talks";
+import Presenter from "@/components/slides/Presenter.astro";
 
 export async function getStaticPaths() {
   const talks = await getTalks();
@@ -11,6 +12,7 @@ export async function getStaticPaths() {
 
 const { talk } = Astro.props as { talk: Talk };
 const slides = getSlides(talk.id);
+const dev = import.meta.env.DEV;
 ---
 
 <!doctype html>
@@ -66,34 +68,61 @@ const slides = getSlides(talk.id);
         <button type="button" data-next class="nav-link" aria-label="Next slide">next</button>
         <button type="button" data-restart class="nav-link">restart (r)</button>
         <button type="button" data-fullscreen class="nav-link">fullscreen (f)</button>
+        {dev && <button type="button" data-open-presenter class="nav-link">presenter (p)</button>}
       </span>
     </nav>
     <div class="deck-progress" aria-hidden="true"><span data-progress></span></div>
+    {dev && <Presenter />}
 
     <script>
-      const talkUrl = `/talks/${document.querySelector<HTMLElement>(".deck")!.dataset.talk}`;
+      const deck = document.querySelector<HTMLElement>(".deck")!;
+      const talkUrl = `/talks/${deck.dataset.talk}`;
       const slides = Array.from(document.querySelectorAll<HTMLElement>(".slide"));
       const counter = document.querySelector<HTMLElement>("[data-counter]")!;
       const progress = document.querySelector<HTMLElement>("[data-progress]")!;
       let current = -1;
 
+      // Dev only: a speaker view (Presenter.astro) at ?presenter in a second window.
+      // Both windows share a channel and follow each other's slide changes.
+      const presenter = import.meta.env.DEV && new URLSearchParams(location.search).has("presenter");
+      const channel = import.meta.env.DEV ? new BroadcastChannel(`deck:${deck.dataset.talk}`) : null;
+
       // Slides can listen for these to start/stop their own animations:
       //   slide.addEventListener("slide:enter", ...) / "slide:leave"
-      function go(n: number) {
+      // `broadcast` is false when following the other window, so changes don't echo back.
+      function go(n: number, broadcast = true) {
         const next = Math.max(0, Math.min(slides.length - 1, n));
         if (next === current) return;
-        if (current >= 0) slides[current].dispatchEvent(new CustomEvent("slide:leave"));
+        // the speaker view never shows the slides, so don't start their animations there
+        if (current >= 0 && !presenter) slides[current].dispatchEvent(new CustomEvent("slide:leave"));
         current = next;
         slides.forEach((s, i) => (s.hidden = i !== current));
-        document.body.toggleAttribute("data-slide-dark", !!slides[current].querySelector("[data-dark]"));
-        slides[current].dispatchEvent(new CustomEvent("slide:enter"));
+        if (!presenter) {
+          document.body.toggleAttribute("data-slide-dark", !!slides[current].querySelector("[data-dark]"));
+          slides[current].dispatchEvent(new CustomEvent("slide:enter"));
+        }
         counter.textContent = `${current + 1} / ${slides.length}`;
         progress.style.width = `${((current + 1) / slides.length) * 100}%`;
-        history.replaceState(null, "", `#${current + 1}`);
+        history.replaceState(null, "", `${location.search}#${current + 1}`);
+        deck.dataset.current = String(current);
+        document.dispatchEvent(new CustomEvent("deck:go", { detail: current }));
+        if (broadcast) channel?.postMessage({ type: "go", index: current });
       }
 
       const fromHash = () => (parseInt(location.hash.slice(1), 10) || 1) - 1;
-      go(fromHash());
+      // the speaker view starts wherever the deck is, so it asks instead of announcing
+      go(fromHash(), !presenter);
+      if (channel) {
+        channel.addEventListener("message", ({ data }) => {
+          if (data.type === "go") go(data.index, false);
+          else if (data.type === "hello") channel.postMessage({ type: "go", index: current });
+        });
+        if (presenter) channel.postMessage({ type: "hello" });
+      }
+
+      const openPresenter = import.meta.env.DEV
+        ? () => window.open(`${location.pathname}?presenter#${current + 1}`, `presenter:${deck.dataset.talk}`, "popup,width=960,height=720")
+        : null;
       window.addEventListener("hashchange", () => go(fromHash()));
 
       const gotoForm = document.querySelector<HTMLFormElement>("[data-goto]")!;
@@ -146,8 +175,9 @@ const slides = getSlides(talk.id);
         else if (e.key === "f") toggleFullscreen();
         else if (e.key === "r") go(0);
         else if (e.key === "g") openGoto();
+        else if (openPresenter && e.key === "p" && !presenter) openPresenter();
         // In fullscreen the browser uses Esc to exit fullscreen, so only leave the deck outside it.
-        else if (e.key === "Escape" && !document.fullscreenElement) location.href = talkUrl;
+        else if (e.key === "Escape" && !document.fullscreenElement && !presenter) location.href = talkUrl;
         else return;
         e.preventDefault();
       });
@@ -156,6 +186,7 @@ const slides = getSlides(talk.id);
       document.querySelector("[data-next]")!.addEventListener("click", () => go(current + 1));
       document.querySelector("[data-restart]")!.addEventListener("click", () => go(0));
       document.querySelector("[data-fullscreen]")!.addEventListener("click", toggleFullscreen);
+      if (openPresenter) document.querySelector("[data-open-presenter]")!.addEventListener("click", openPresenter);
 
       let touchX: number | null = null;
       document.addEventListener("touchstart", (e) => (touchX = e.touches[0].clientX), { passive: true });

@@ -1,5 +1,5 @@
 ---
-/** Shared frame for a slide: optional kicker + title, body, and hidden speaker notes. */
+/** Shared frame for a slide: optional kicker + title, body, and hidden speaker notes (dev builds only). */
 type Props = {
   kicker?: string;
   title?: string;
@@ -18,5 +18,6 @@ const { kicker, title, notes, dark, class: className } = Astro.props;
   <div class="s-body">
     <slot />
   </div>
-  {notes && <aside class="s-notes" hidden>{notes}</aside>}
+  {/* notes only ship in dev, for the presenter view; production HTML never contains them */}
+  {notes && import.meta.env.DEV && <aside class="s-notes" hidden>{notes}</aside>}
 </div>

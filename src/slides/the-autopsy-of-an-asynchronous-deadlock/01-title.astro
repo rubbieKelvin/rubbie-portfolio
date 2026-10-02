@@ -24,9 +24,11 @@ const notes =
         <span>rubbietheone.com</span>
         <span>examples in rust · ideas for every language</span>
     </div>
-    <aside class="s-notes" hidden>
-        {notes}
-    </aside>
+    {import.meta.env.DEV && (
+        <aside class="s-notes" hidden>
+            {notes}
+        </aside>
+    )}
 </div>
 
 <style>

@@ -1,0 +1,136 @@
+---
+/**
+ * Speaker view for the deck, dev builds only. The deck page renders it when
+ * import.meta.env.DEV is set and opens it in a second window (key: p) at
+ * ?presenter. It reads the current slide from .deck[data-current] and the
+ * "deck:go" event, and shows that slide's notes, what's next, and a timer.
+ * Keeping the two windows in sync is the deck's job (see slides.astro).
+ */
+---
+
+<div class="presenter" data-presenter-view hidden>
+  <header class="presenter-bar small muted">
+    <span data-presenter-counter></span>
+    <button type="button" class="nav-link" data-presenter-timer title="reset timer">00:00</button>
+    <span data-presenter-clock></span>
+  </header>
+
+  <div class="presenter-main">
+    <p class="presenter-title" data-presenter-title></p>
+    <div class="presenter-notes" data-presenter-notes></div>
+  </div>
+
+  <footer class="presenter-next">
+    <span class="muted">next</span>
+    <span data-presenter-next></span>
+  </footer>
+</div>
+
+<style>
+  .presenter {
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 2rem;
+    gap: 1.5rem;
+  }
+
+  .presenter[hidden] {
+    display: none;
+  }
+
+  .presenter-bar {
+    display: flex;
+    justify-content: space-between;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .presenter-bar button {
+    cursor: pointer;
+    font-size: 1.6rem;
+    color: var(--color-text);
+  }
+
+  .presenter-main {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .presenter-title {
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+  }
+
+  .presenter-notes {
+    font-size: 1.5rem;
+    line-height: 1.6;
+    white-space: pre-line;
+    max-width: 48rem;
+  }
+
+  .presenter-next {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* in presenter mode the page is the speaker view, not the deck */
+  :global(.deck-body[data-presenter] .deck),
+  :global(.deck-body[data-presenter] .deck-controls),
+  :global(.deck-body[data-presenter] .deck-progress) {
+    display: none;
+  }
+</style>
+
+<script>
+  if (new URLSearchParams(location.search).has("presenter")) {
+    const view = document.querySelector<HTMLElement>("[data-presenter-view]")!;
+    const deck = document.querySelector<HTMLElement>(".deck")!;
+    const slides = Array.from(document.querySelectorAll<HTMLElement>(".slide"));
+    const q = (sel: string) => view.querySelector<HTMLElement>(sel)!;
+    const el = {
+      counter: q("[data-presenter-counter]"),
+      timer: q("[data-presenter-timer]"),
+      clock: q("[data-presenter-clock]"),
+      title: q("[data-presenter-title]"),
+      notes: q("[data-presenter-notes]"),
+      next: q("[data-presenter-next]"),
+    };
+
+    document.body.setAttribute("data-presenter", "");
+    view.hidden = false;
+    document.title = `presenter · ${document.title}`;
+
+    const titleOf = (slide: HTMLElement | undefined) =>
+      slide?.querySelector("h1, h2")?.textContent?.replace(/\s+/g, " ").trim() || "untitled";
+
+    function render(i: number) {
+      el.counter.textContent = `${i + 1} / ${slides.length}`;
+      el.title.textContent = titleOf(slides[i]);
+      el.notes.textContent =
+        slides[i].querySelector(".s-notes")?.textContent?.trim() || "no notes for this slide.";
+      el.next.textContent = i + 1 < slides.length ? titleOf(slides[i + 1]) : "end of deck";
+    }
+
+    render(Number(deck.dataset.current ?? 0));
+    document.addEventListener("deck:go", (e) => render((e as CustomEvent<number>).detail));
+
+    const pad = (n: number) => String(n).padStart(2, "0");
+    let start = Date.now();
+    function tick() {
+      const s = Math.floor((Date.now() - start) / 1000);
+      el.timer.textContent = `${pad(Math.floor(s / 60))}:${pad(s % 60)}`;
+      el.clock.textContent = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    }
+    tick();
+    setInterval(tick, 1000);
+    el.timer.addEventListener("click", () => {
+      start = Date.now();
+      tick();
+      // don't keep focus, so space/arrows stay with the deck
+      el.timer.blur();
+    });
+  }
+</script>
