@@ -584,6 +584,36 @@ html {
     color: var(--color-text-muted);
 }
 
+/* syntax highlighting (Shiki's css-variables theme): a calm palette,
+   leaving orange for the lines that matter */
+.deck {
+    --astro-code-foreground: var(--color-text);
+    --astro-code-background: transparent;
+    --astro-code-token-keyword: light-dark(#7a4fb5, #b79be4);
+    --astro-code-token-string: light-dark(#1f6aa5, #82b6e0);
+    --astro-code-token-string-expression: light-dark(#1f6aa5, #82b6e0);
+    --astro-code-token-constant: light-dark(#1f6aa5, #82b6e0);
+    --astro-code-token-function: var(--color-text);
+    --astro-code-token-parameter: var(--color-text);
+    --astro-code-token-punctuation: var(--color-text-muted);
+    --astro-code-token-comment: var(--color-text-muted);
+    --astro-code-token-link: var(--color-text);
+}
+
+.deck .astro-code {
+    font-family: var(--font-mono);
+}
+
+/* a line that matters: its comment turns accent */
+.astro-code .line.is-accent {
+    --astro-code-token-comment: var(--color-accent);
+}
+
+/* a line that never runs */
+.astro-code .line.is-muted {
+    opacity: 0.4;
+}
+
 .deck-controls {
     height: 3rem;
     display: flex;

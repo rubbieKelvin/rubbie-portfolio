@@ -1,20 +1,49 @@
 ---
-/** A code block where each line can carry a side annotation, e.g. ["commit;", "never reached", "muted"]. */
+/**
+ * A slide code block. Each line can carry a note and a tone,
+ * e.g. ["commit;", "never reached", "muted"].
+ *
+ * With `lang`, the code is syntax highlighted (Shiki, colours from the slide
+ * palette in global.css) and notes become real comments in that language.
+ * Without it, it renders as plain text with the note beside the line.
+ */
+import { Code as Highlight } from "astro:components";
+import type { ShikiTransformer } from "shiki";
+
 type Tone = "accent" | "muted";
 type Line = string | [code: string, note?: string, tone?: Tone];
 
 type Props = {
   lines: Line[];
   label?: string;
+  lang?: "rust" | "sql" | "javascript" | "python" | "csharp";
 };
 
-const { lines, label } = Astro.props;
-const rows = lines.map((l) => (typeof l === "string" ? [l] : l));
+const { lines, label, lang } = Astro.props;
+const rows = lines.map((l) => (typeof l === "string" ? [l] : l)) as [string, string?, Tone?][];
+
+const comment = lang === "sql" ? "--" : "//";
+const source = rows.map(([code, note]) => (note ? `${code}  ${comment} ${note}` : code)).join("\n");
+
+// tag each highlighted line with its tone so the slide styles can colour it
+const tones: ShikiTransformer = {
+  name: "slide-line-tones",
+  line(node, n) {
+    const tone = rows[n - 1]?.[2];
+    if (tone) this.addClassToHast(node, `is-${tone}`);
+  },
+};
 ---
 
 <figure class="s-code">
   {label && <figcaption class="s-code-label">{label}</figcaption>}
-  <pre>{rows.map(([code, note, tone]) => (
-    <span class:list={["s-code-line", tone && `is-${tone}`]}><code>{code || " "}</code>{note && <span class="s-code-note">{note}</span>}</span>
-  ))}</pre>
+  {
+    lang ? (
+      <Highlight code={source} lang={lang} theme="css-variables" transformers={[tones]} />
+    ) : (
+      <pre>{rows.map(([code, note, tone]) => (
+        <span class:list={["s-code-line", tone && `is-${tone}`]}><code>{code || " "}</code>{note && <span class="s-code-note">{note}</span>}</span>
+      ))}</pre>
+    )
+  }
 </figure>

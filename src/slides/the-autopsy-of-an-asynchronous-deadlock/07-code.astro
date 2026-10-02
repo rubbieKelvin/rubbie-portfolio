@@ -2,29 +2,54 @@
 import Slide from "@/components/slides/Slide.astro";
 import Code from "@/components/slides/Code.astro";
 
-const notes = "About 90 seconds. This is pseudocode on purpose, so everyone can read it. The live demo is the same thing in Rust with tokio-postgres; in Node, Python or C# it looks the same. A request marks order 42 as paid inside a transaction. That locks row 42 until the commit. Before committing, it hands the receipt to a worker and awaits the result. The worker, written months later by someone else, also updates row 42. Ask the room: \"which line is the bug?\" Let them look. Answer: none of them. Each line is fine. The bug is the order: an await while the transaction is still open. Point at the four cards: stockroom, key, assistant, desk. Why it hides: plain reads never wait for writers, so this only breaks the day someone adds a write to the worker. And unit tests usually mock the worker.";
+const notes = "About 90 seconds. The code is Rust with tokio-postgres, but nothing here is Rust-specific: in Node, Python or C# it looks the same, so walk it line by line for anyone who doesn't read Rust. A request marks order 42 as paid inside a transaction. That locks row 42 until the commit. Before committing, it hands the receipt to send_receipt and awaits the result. send_receipt lives in another file, was written months later by someone else, takes its own connection from the pool, and also updates row 42. Ask the room: \"which line is the bug?\" Let them look. Answer: none of them. Each line is fine. The bug is the order: an await while the transaction is still open. Point at the four cards: stockroom, key, assistant, desk. Why it hides: plain reads never wait for writers, so this only breaks the day someone adds a write to the worker. And unit tests usually mock the worker.";
 ---
 
-<Slide kicker="scenario 1 · the stockroom key" title="the code." notes={notes}>
+<Slide kicker="scenario 1 · the stockroom key" title="the code." notes={notes} class="rust-code">
   <div class="s-lines">
-      <Code
-        label="// the request handler"
-        lines={[
-          ["begin;"],
-          ["update orders set status = 'paid' where id = 42;", "row 42 is now locked"],
-          ["await send_receipt(42);", "wait for the worker…", "accent"],
-          ["commit;", "never reached", "muted"],
-        ]}
-      />
-      <Code
-        label="// send_receipt(id: i64) - the receipt worker, in another file"
-        lines={[["update orders set receipt_sent = true where id = 42;", "waits for row 42", "accent"]]}
-      />
+    <Code
+      lang="rust"
+      label="// orders.rs: the request handler"
+      lines={[
+        "async fn mark_paid(db: &mut Client, id: i64) -> anyhow::Result<()> {",
+        "    let tx = db.transaction().await?;",
+        ["    tx.execute(\"update orders set status = 'paid' where id = $1\", &[&id]).await?;", "locks row 42"],
+        ["    send_receipt(id).await?;", "waits for the worker…", "accent"],
+        ["    Ok(tx.commit().await?)", "never reached", "muted"],
+        "}",
+      ]}
+    />
+    <Code
+      lang="rust"
+      label="// receipts.rs: the receipt worker, in another file"
+      lines={[
+        "async fn send_receipt(id: i64) -> anyhow::Result<()> {",
+        ["    let db = POOL.get().await?;", "a different connection"],
+        ["    db.execute(\"update orders set receipt_sent = true where id = $1\", &[&id]).await?;", "waits for row 42", "accent"],
+        "    mailer::send(id).await",
+        "}",
+      ]}
+    />
   </div>
   <div class="s-cols mt-auto" style="--cols: 4">
-      <div class="s-card"><p class="s-card-label">the stockroom</p><p>row 42</p></div>
-      <div class="s-card"><p class="s-card-label">the key in your pocket</p><p>the open transaction</p></div>
-      <div class="s-card"><p class="s-card-label">your assistant</p><p>the receipt worker</p></div>
-      <div class="s-card is-accent"><p class="s-card-label">waiting at your desk</p><p>await</p></div>
+    <div class="s-card"><p class="s-card-label">the stockroom</p><p>row 42</p></div>
+    <div class="s-card"><p class="s-card-label">the key in your pocket</p><p>the open transaction</p></div>
+    <div class="s-card"><p class="s-card-label">your assistant</p><p>send_receipt</p></div>
+    <div class="s-card is-accent"><p class="s-card-label">waiting at your desk</p><p>.await</p></div>
   </div>
 </Slide>
+
+<style>
+  /* real Rust lines are long: give this slide more width and a slightly smaller code size */
+  :global(.s.rust-code) {
+    padding: 3em 2em;
+  }
+
+  :global(.s.rust-code .s-title) {
+    margin-bottom: 0.75em;
+  }
+
+  :global(.s.rust-code .s-code) {
+    font-size: 0.8em;
+  }
+</style>
