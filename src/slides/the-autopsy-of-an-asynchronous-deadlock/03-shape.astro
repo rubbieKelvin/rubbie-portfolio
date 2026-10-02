@@ -1,23 +1,343 @@
 ---
 import Slide from "@/components/slides/Slide.astro";
-import Table from "@/components/slides/Table.astro";
+import DemoControl from "@/components/slides/DemoControl.astro";
 
-const notes = "About 90 seconds. A deadlock needs two things: something is held while its holder waits for something else, and the waits form a loop. Nobody in the loop is doing anything wrong in isolation; the loop is the bug. The table is the first question of every incident: which kind of \"stuck\" is this? A crash is loud. A slowdown is still moving, so waiting helps. A deadlock is the quiet one: the process is alive, nothing errors, the health check passes, and waiting longer changes nothing. That last row is the quickest test you have.";
+const notes = "About 90 seconds. Click the arrow under the diagram to step through it, one line of code per click. Task a takes x, task b takes y. Then a reaches for y and has to wait for b, and b reaches for x and has to wait for a. The last arrow closes the loop, and the dot keeps going round it: nobody will ever move. A deadlock needs two things: something is held while its holder waits for something else, and the waits form a loop. Nobody in the loop is doing anything wrong in isolation; every line of code on the slide is fine. The loop is the bug.\n\nThe slide only shows what a deadlock looks like. Why developers should care is yours to explain here, in your own words; it is not on the slide.\n\nIf it helps, the first question of every incident: which kind of \"stuck\" is this? A crash is loud. A slowdown is still moving, so waiting helps. A deadlock is the quiet one: the process is alive, nothing errors, the health check passes, and waiting longer changes nothing. That last row is the quickest test you have.\n\ncrash vs slowdown vs deadlock:\n- the process: gone / busy / alive, and idle\n- errors: loud / some timeouts / none\n- health check: fails / usually passes / passes\n- waiting longer: — / helps / changes nothing";
+
+const tasks = [
+  { id: "a", x: 0, lines: ["lock(x)", "lock(y)", "work()"] },
+  { id: "b", x: 790, lines: ["lock(y)", "lock(x)", "work()"] },
+];
+const LINE_Y = [96, 146, 196];
 ---
 
 <Slide kicker="first, the shape" title="a deadlock is a loop of waiting." notes={notes}>
-  <div class="s-lines s-big">
-    <p>a waits for b. b waits for a.</p>
-    <p class="s-muted">nobody is broken. nobody will ever move.</p>
+  <div class="shape" data-shape data-step="0">
+    <svg viewBox="0 0 1000 340" class="shape-svg" aria-hidden="true">
+      <defs>
+        <marker id="shape-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="head-held" />
+        </marker>
+        <marker id="shape-head-wait" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="head-wait" />
+        </marker>
+      </defs>
+
+      {
+        tasks.map((task) => (
+          <g class={`task task-${task.id}`}>
+            <text x={task.x} y="34" class="task-label">task {task.id}</text>
+            {task.lines.map((line, i) => (
+              <text x={task.x + 34} y={LINE_Y[i]} class={`code line-${i + 1}`}>{line}</text>
+            ))}
+            <path
+              d={`M${task.x + 2},${LINE_Y[0] - 19} l18,10 l-18,10 z`}
+              class="pointer"
+              data-pointer={task.id}
+            />
+          </g>
+        ))
+      }
+
+      <!-- the two things the tasks fight over -->
+      <g class="res res-x">
+        <text x="500" y="62" class="res-label">x</text>
+        <g class="padlock" data-lock="x" transform="translate(518 36)">
+          <path d="M3.5,8 V5.5 a4.5,4.5 0 0 1 9,0 V8" class="padlock-shackle" />
+          <rect x="1" y="8" width="14" height="11" rx="2" class="padlock-body" />
+        </g>
+        <text x="500" y="90" class="res-caption" data-caption="x">free</text>
+      </g>
+      <g class="res res-y">
+        <text x="500" y="282" class="res-label">y</text>
+        <g class="padlock" data-lock="y" transform="translate(518 256)">
+          <path d="M3.5,8 V5.5 a4.5,4.5 0 0 1 9,0 V8" class="padlock-shackle" />
+          <rect x="1" y="8" width="14" height="11" rx="2" class="padlock-body" />
+        </g>
+        <text x="500" y="310" class="res-caption" data-caption="y">free</text>
+      </g>
+
+      <!-- the loop: a → y → b → x → a, drawn one arrow at a time -->
+      <path d="M455,62 L190,120" class="edge held" data-edge="x-a" pathLength="1" marker-end="url(#shape-head)" />
+      <path d="M545,272 L780,180" class="edge held" data-edge="y-b" pathLength="1" marker-end="url(#shape-head)" />
+      <path d="M190,170 L455,262" class="edge wait" data-edge="a-y" marker-end="url(#shape-head-wait)" />
+      <path d="M780,120 L545,52" class="edge wait" data-edge="b-x" marker-end="url(#shape-head-wait)" />
+      <text x="300" y="248" class="edge-label" data-edge-label="a-y">waits</text>
+      <text x="690" y="70" class="edge-label" data-edge-label="b-x">waits</text>
+
+      <!-- once the loop is closed, a dot travels it forever: along the arrows, around the labels -->
+      <circle r="6" class="pulse" data-pulse>
+        <animateMotion
+          dur="5s"
+          repeatCount="indefinite"
+          begin="indefinite"
+          path="M190,170 L455,262 Q500,226 545,272 L780,180 L780,120 L545,52 Q500,14 455,62 L190,120 Z"
+        />
+      </circle>
+    </svg>
+
+    <DemoControl states={6} />
+
+    <div class="s-lines s-big shape-lines">
+      <p>task a waits for task b. task b waits for task a.</p>
+      <p class="s-muted">nobody is broken. nobody will ever move.</p>
+    </div>
   </div>
-  <Table
-    head={["", "crash", "slowdown", "deadlock"]}
-    rows={[
-      ["the process", "gone", "busy", "alive, and idle"],
-      ["errors", "loud", "some timeouts", "none"],
-      ["health check", "fails", "usually passes", "passes"],
-      ["waiting longer", "—", "helps", "changes nothing"],
-    ]}
-    highlight={3}
-  />
 </Slide>
+
+<style>
+  .shape {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 0;
+    margin-top: -0.5em;
+  }
+
+  .shape-svg {
+    width: 100%;
+    height: auto;
+    max-height: 16em;
+    overflow: visible;
+    font-family: var(--font-mono);
+  }
+
+  /* ---------- tasks ---------- */
+
+  .task-label {
+    font-size: 17px;
+    fill: var(--color-text-muted);
+  }
+
+  .code {
+    font-size: 27px;
+    fill: var(--color-text);
+    transition: fill 0.3s;
+  }
+
+  /* lines the task hasn't reached yet */
+  .code.is-pending {
+    fill: color-mix(in srgb, var(--color-text) 25%, transparent);
+  }
+
+  .pointer {
+    fill: var(--color-text);
+    transition: transform 0.35s ease, fill 0.3s, opacity 0.3s;
+  }
+
+  /* a waiting task: its pointer stops on the line it can't get past, in accent, and dims (parked) */
+  [data-step="3"] .task-a .line-2,
+  [data-step="4"] .task-a .line-2,
+  [data-step="5"] .task-a .line-2,
+  [data-step="4"] .task-b .line-2,
+  [data-step="5"] .task-b .line-2 {
+    fill: var(--color-accent);
+  }
+
+  .pointer.is-waiting {
+    fill: var(--color-accent);
+    animation: parked 1.6s ease-in-out infinite;
+  }
+
+  @keyframes parked {
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  /* ---------- resources ---------- */
+
+  .res-label {
+    font-size: 34px;
+    text-anchor: middle;
+    fill: var(--color-text);
+  }
+
+  .res-caption {
+    font-size: 16px;
+    text-anchor: middle;
+    fill: var(--color-text-muted);
+  }
+
+  /* the lock icon appears on a resource the moment a task acquires it */
+  .padlock {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .padlock.is-on {
+    opacity: 1;
+  }
+
+  .padlock-shackle {
+    fill: none;
+    stroke: var(--color-text);
+    stroke-width: 2;
+  }
+
+  .padlock-body {
+    fill: var(--color-text);
+  }
+
+  /* ---------- edges ---------- */
+
+  .edge {
+    fill: none;
+    stroke-width: 2;
+  }
+
+  .edge.held {
+    stroke: var(--color-text-muted);
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+
+  .edge.held.is-on {
+    stroke-dashoffset: 0;
+  }
+
+  .edge.wait {
+    stroke: var(--color-accent);
+    stroke-dasharray: 8 8;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .edge.wait.is-on {
+    opacity: 1;
+  }
+
+  .edge-label {
+    font-size: 16px;
+    fill: var(--color-accent);
+    text-anchor: middle;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .edge-label.is-on {
+    opacity: 1;
+  }
+
+  .head-held {
+    fill: var(--color-text-muted);
+  }
+
+  .head-wait {
+    fill: var(--color-accent);
+  }
+
+  /* markers stay hidden until their edge shows up */
+  .edge:not(.is-on) {
+    marker-end: none;
+  }
+
+  .pulse {
+    fill: var(--color-accent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  [data-step="5"] .pulse {
+    opacity: 1;
+  }
+
+  /* ---------- text ---------- */
+
+  .shape-lines {
+    opacity: 0;
+    transition: opacity 0.6s;
+  }
+
+  [data-step="5"] .shape-lines {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  import { updateDemoControl } from "@/components/slides/demo-control";
+
+  const root = document.querySelector<HTMLElement>("[data-shape]")!;
+  const section = root.closest<HTMLElement>(".slide")!;
+  const q = <T extends Element>(sel: string) => root.querySelector<T>(sel)!;
+
+  const pointer = { a: q<SVGPathElement>('[data-pointer="a"]'), b: q<SVGPathElement>('[data-pointer="b"]') };
+  const caption = { x: q<SVGTextElement>('[data-caption="x"]'), y: q<SVGTextElement>('[data-caption="y"]') };
+  const edge = (id: string) => q<SVGPathElement>(`[data-edge="${id}"]`);
+  const edgeLabel = (id: string) => q<SVGTextElement>(`[data-edge-label="${id}"]`);
+  const pulse = q<SVGAnimateMotionElement>("[data-pulse] animateMotion");
+  const lock = (id: string) => q<SVGGElement>(`[data-lock="${id}"]`);
+  const control = q<HTMLButtonElement>("[data-demo-next]");
+
+  const LINE_GAP = 50; // distance between code lines, in svg units
+  const LAST = 5;
+  let current = 0;
+
+  // move a task's pointer to `line` (1-based) and dim every line after it
+  function moveTo(task: "a" | "b", line: number) {
+    pointer[task].style.transform = `translateY(${(line - 1) * LINE_GAP}px)`;
+    root.querySelectorAll(`.task-${task} .code`).forEach((el, i) => el.classList.toggle("is-pending", i + 1 > line));
+  }
+
+  // each click runs one line of code; step 5 is the closed loop
+  const steps: Record<number, () => void> = {
+    0: () => {
+      moveTo("a", 1);
+      moveTo("b", 1);
+      pointer.a.classList.remove("is-waiting");
+      pointer.b.classList.remove("is-waiting");
+      caption.x.textContent = "free";
+      caption.y.textContent = "free";
+      root.querySelectorAll(".is-on").forEach((el) => el.classList.remove("is-on"));
+      try {
+        pulse.endElement();
+      } catch {}
+    },
+    // task a: lock(x) → gets it
+    1: () => {
+      caption.x.textContent = "held by task a";
+      lock("x").classList.add("is-on");
+      edge("x-a").classList.add("is-on");
+      moveTo("a", 2);
+    },
+    // task b: lock(y) → gets it
+    2: () => {
+      caption.y.textContent = "held by task b";
+      lock("y").classList.add("is-on");
+      edge("y-b").classList.add("is-on");
+      moveTo("b", 2);
+    },
+    // task a: lock(y) → has to wait for b
+    3: () => {
+      edge("a-y").classList.add("is-on");
+      edgeLabel("a-y").classList.add("is-on");
+      pointer.a.classList.add("is-waiting");
+    },
+    // task b: lock(x) → has to wait for a. the loop is closed.
+    4: () => {
+      edge("b-x").classList.add("is-on");
+      edgeLabel("b-x").classList.add("is-on");
+      pointer.b.classList.add("is-waiting");
+    },
+    5: () => pulse.beginElement(),
+  };
+
+  function show(step: number) {
+    current = step;
+    root.dataset.step = String(step);
+    steps[step]();
+    updateDemoControl(control, step);
+  }
+
+  control.addEventListener("click", () => {
+    show(current >= LAST ? 0 : current + 1);
+    // don't keep focus, so space/arrows stay with the deck
+    control.blur();
+  });
+
+  section.addEventListener("slide:enter", () => show(0));
+  show(0);
+</script>

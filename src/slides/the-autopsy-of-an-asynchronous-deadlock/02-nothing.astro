@@ -1,5 +1,6 @@
 ---
 import Slide from "@/components/slides/Slide.astro";
+import DemoControl from "@/components/slides/DemoControl.astro";
 
 const notes = "About 90 seconds. Start the scenario 1 demo live (have the recording ready as a fallback) and let it freeze. Then stay silent for a few seconds; the silence is the point. Walk the chips: the process is up, the health check answers 200, no errors in the logs, CPU is idle. And yet no order has completed in five minutes. Say: \"Every dashboard we own says this service is fine. Nothing crashed. Nothing is slow. Nothing is happening at all.\" Then: \"By the end of this talk you'll know how to take this apart, whatever language you write.\"I’m supposed to show what a deadlock is here.";
 ---
@@ -46,11 +47,7 @@ const notes = "About 90 seconds. Start the scenario 1 demo live (have the record
       </div>
     </div>
 
-    <button type="button" class="nothing-next" data-demo-next aria-label="Advance the demo">
-      <span class="nothing-dots"><i></i><i></i><i></i><i></i></span>
-      <span class="nothing-arrow">→</span>
-      <span class="nothing-replay">↺</span>
-    </button>
+    <DemoControl states={4} />
   </div>
 </Slide>
 
@@ -204,58 +201,11 @@ const notes = "About 90 seconds. Start the scenario 1 demo live (have the record
     color: var(--color-text-muted);
   }
 
-  /* ---------- the demo's own control: progress dots and an arrow ---------- */
-
-  .nothing-next {
-    position: absolute;
-    right: 0;
-    bottom: -3.25em;
-    display: flex;
-    align-items: center;
-    gap: 0.8em;
-    font-size: 0.85em;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-
-  .nothing-next:hover {
-    opacity: 0.55;
-  }
-
-  .nothing-dots {
-    display: flex;
-    gap: 0.4em;
-  }
-
-  .nothing-dots i {
-    width: 0.4em;
-    height: 0.4em;
-    border-radius: 9999px;
-    background: var(--color-border);
-  }
-
-  /* once every state has been shown, the control becomes a single replay icon */
-  .nothing-replay,
-  [data-state="3"] .nothing-dots,
-  [data-state="3"] .nothing-arrow {
-    display: none;
-  }
-
-  [data-state="3"] .nothing-replay {
-    display: inline;
-    font-size: 1.3em;
-    line-height: 1;
-  }
-
-  [data-state="0"] .nothing-dots i:nth-child(1),
-  [data-state="1"] .nothing-dots i:nth-child(-n + 2),
-  [data-state="2"] .nothing-dots i:nth-child(-n + 3) {
-    background: var(--color-text-muted);
-  }
 </style>
 
 <script>
+  import { updateDemoControl } from "@/components/slides/demo-control";
+
   const root = document.querySelector<HTMLElement>("[data-nothing]")!;
   const section = root.closest<HTMLElement>(".slide")!;
   const q = <T extends Element = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
@@ -396,7 +346,7 @@ const notes = "About 90 seconds. Start the scenario 1 demo live (have the record
   function setState(next: number) {
     state = next;
     root.dataset.state = String(state);
-    el.next.setAttribute("aria-label", state === 3 ? "Replay the demo" : "Advance the demo");
+    updateDemoControl(el.next, state);
     if (state === 0) reset();
     if (state === 1) {
       frozenAt = sim;

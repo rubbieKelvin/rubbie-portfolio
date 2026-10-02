@@ -1,0 +1,68 @@
+---
+/**
+ * The in-slide control for a stepped demo: one dot per state, an arrow to advance,
+ * and a replay icon once the last state is showing. It never touches the deck's
+ * own navigation; the slide's script listens for clicks on [data-demo-next] and
+ * calls updateDemoControl() from ./demo-control.ts after each state change.
+ * It sits at the bottom-right of the nearest positioned ancestor.
+ */
+type Props = {
+  states: number;
+};
+
+const { states } = Astro.props;
+---
+
+<button type="button" class="demo-control" data-demo-next aria-label="Advance the demo">
+  <span class="demo-dots">{Array.from({ length: states }, () => <i data-dot />)}</span>
+  <span class="demo-arrow">→</span>
+  <span class="demo-replay">↺</span>
+</button>
+
+<style>
+  .demo-control {
+    position: absolute;
+    right: 0;
+    bottom: -3.25em;
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    font-size: 0.85em;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .demo-control:hover {
+    opacity: 0.55;
+  }
+
+  .demo-dots {
+    display: flex;
+    gap: 0.4em;
+  }
+
+  .demo-dots i {
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: 9999px;
+    background: var(--color-border);
+  }
+
+  .demo-dots i:global(.is-on) {
+    background: var(--color-text-muted);
+  }
+
+  /* once every state has been shown, the control becomes a single replay icon */
+  .demo-replay,
+  .demo-control[data-done] .demo-dots,
+  .demo-control[data-done] .demo-arrow {
+    display: none;
+  }
+
+  .demo-control[data-done] .demo-replay {
+    display: inline;
+    font-size: 1.3em;
+    line-height: 1;
+  }
+</style>
