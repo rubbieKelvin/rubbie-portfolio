@@ -5,8 +5,9 @@ import DemoControl from "@/components/slides/DemoControl.astro";
 const notes = "About 90 seconds. Press space to step through it, one line of code per press. Task a takes x, task b takes y. Then a reaches for y and has to wait for b, and b reaches for x and has to wait for a. The last arrow closes the loop, and the dot keeps going round it: nobody will ever move. A deadlock needs two things: something is held while its holder waits for something else, and the waits form a loop. Nobody in the loop is doing anything wrong in isolation; every line of code on the slide is fine. The loop is the bug.\n\nThe slide only shows what a deadlock looks like. Why developers should care is yours to explain here, in your own words; it is not on the slide.\n\nIf it helps, the first question of every incident: which kind of \"stuck\" is this? A crash is loud. A slowdown is still moving, so waiting helps. A deadlock is the quiet one: the process is alive, nothing errors, the health check passes, and waiting longer changes nothing. That last row is the quickest test you have.\n\ncrash vs slowdown vs deadlock:\n- the process: gone / busy / alive, and idle\n- errors: loud / some timeouts / none\n- health check: fails / usually passes / passes\n- waiting longer: — / helps / changes nothing";
 
 const tasks = [
-  { id: "a", x: 0, lines: ["lock(x)", "lock(y)", "work()"] },
-  { id: "b", x: 790, lines: ["lock(y)", "lock(x)", "work()"] },
+  // box: the task's frame; the arrows meet its inner edge (x 190 for a, 780 for b)
+  { id: "a", x: 0, box: { x: -16, w: 206 }, lines: ["lock(x)", "lock(y)", "work()"] },
+  { id: "b", x: 790, box: { x: 780, w: 190 }, lines: ["lock(y)", "lock(x)", "work()"] },
 ];
 const LINE_Y = [96, 146, 196];
 ---
@@ -26,7 +27,8 @@ const LINE_Y = [96, 146, 196];
       {
         tasks.map((task) => (
           <g class={`task task-${task.id}`}>
-            <text x={task.x} y="34" class="task-label">task {task.id}</text>
+            <rect x={task.box.x} y="4" width={task.box.w} height="220" rx="6" class="task-box" />
+            <text x={task.x + 14} y="34" class="task-label">task {task.id}</text>
             {task.lines.map((line, i) => (
               <text x={task.x + 34} y={LINE_Y[i]} class={`code line-${i + 1}`}>{line}</text>
             ))}
@@ -105,6 +107,13 @@ const LINE_Y = [96, 146, 196];
   }
 
   /* ---------- tasks ---------- */
+
+  /* a frame around each task, so the arrows point at the task, not at one of its lines */
+  .task-box {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 1.5;
+  }
 
   .task-label {
     font-size: 17px;
