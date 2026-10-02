@@ -6,7 +6,8 @@ const isHome = pathname === "/";
 const navLinks = [
     { title: "projects", url: "/projects" },
     { title: "writing", url: "/blog" },
-    { title: "talks", url: "/talks" },
+    // not on phones: the header row is too narrow for three links
+    { title: "talks", url: "/talks", desktopOnly: true },
 ];
 ---
 
@@ -31,7 +32,7 @@ const navLinks = [
                     {navLinks.map((link) => (
                         <a
                             href={link.url}
-                            class="nav-link"
+                            class:list={["nav-link", link.desktopOnly && "hidden sm:inline"]}
                             aria-current={pathname.startsWith(link.url) ? "page" : undefined}
                         >
                             {link.title}
