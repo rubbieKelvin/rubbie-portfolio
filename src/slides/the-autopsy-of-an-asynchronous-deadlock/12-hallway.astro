@@ -2,7 +2,7 @@
 import Slide from "@/components/slides/Slide.astro";
 import DemoControl from "@/components/slides/DemoControl.astro";
 
-const notes = "About 60 seconds. The second story. Click the arrow to play each line in the scene: the hallway is seen from above, the shaded wedge is the camera's view. The guard is the database's deadlock detector. The camera covers the database. The corner is your application's memory. First half of the story: a deadlock the guard can see, and fixes on its own. Second half: the same standoff, with one person out of view. The guard sees someone waiting and assumes it's normal. \"Next slide: the half the guard can see.\"";
+const notes = "About 60 seconds. The second story. Press space to play each line in the scene: the hallway is seen from above, the shaded wedge is the camera's view. The guard is the database's deadlock detector. The camera covers the database. The corner is your application's memory. First half of the story: a deadlock the guard can see, and fixes on its own. Second half: the same standoff, with one person out of view. The guard sees someone waiting and assumes it's normal. \"Next slide: the half the guard can see.\"";
 ---
 
 <Slide dark notes={notes} class="hallway">
@@ -287,7 +287,7 @@ const notes = "About 60 seconds. The second story. Click the arrow to play each 
 </style>
 
 <script>
-  import { updateDemoControl } from "@/components/slides/demo-control";
+  import { onAdvance, updateDemoControl } from "@/components/slides/demo-control";
 
   const root = document.querySelector<HTMLElement>("[data-hallway]")!;
   const section = root.closest<HTMLElement>(".slide")!;
@@ -312,6 +312,9 @@ const notes = "About 60 seconds. The second story. Click the arrow to play each 
     // don't keep focus, so space/arrows stay with the deck
     control.blur();
   });
+
+  // space: the next line of the story, until the last one
+  onAdvance(root, () => step < LAST && (show(step + 1), true));
 
   section.addEventListener("slide:enter", () => show(0));
   show(0);

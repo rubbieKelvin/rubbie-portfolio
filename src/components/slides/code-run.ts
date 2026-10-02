@@ -5,6 +5,8 @@
  * Styles live in global.css (.line.is-running, .run-dots, .run-lock, .run-play).
  *
  * The play button toggles ▶ (run) / ↺ (reset); leaving or re-entering the slide resets it.
+ * Space (the deck's "slide:advance") starts the run; while it plays space is ignored,
+ * and once it's done space moves on to the next slide.
  */
 
 /** one line, or every line of a statement that spans several */
@@ -63,6 +65,7 @@ function padlock(id: string) {
 export function codeRun({ root, play, label, stepMs = 900, steps }: Options) {
   const section = root.closest<HTMLElement>(".slide")!;
   let timers: number[] = [];
+  let status: "idle" | "running" | "done" = "idle";
 
   const api: Api = {
     run(lines) {
@@ -100,19 +103,35 @@ export function codeRun({ root, play, label, stepMs = 900, steps }: Options) {
       line.classList.remove("is-stuck");
     });
     root.querySelectorAll(".run-lock").forEach((el) => el.remove());
+    status = "idle";
     setButton(false);
   }
 
-  play.addEventListener("click", () => {
-    const replay = play.textContent === "↺";
+  function start() {
     reset();
-    // don't keep focus, so space/arrows stay with the deck
-    play.blur();
-    if (replay) return;
+    status = "running";
     play.disabled = true;
     const list = steps(api);
     list.forEach((step, i) => timers.push(window.setTimeout(step, i * stepMs)));
-    timers.push(window.setTimeout(() => setButton(true), (list.length - 1) * stepMs));
+    timers.push(
+      window.setTimeout(() => {
+        status = "done";
+        setButton(true);
+      }, (list.length - 1) * stepMs),
+    );
+  }
+
+  play.addEventListener("click", () => {
+    // don't keep focus, so space/arrows stay with the deck
+    play.blur();
+    if (status === "done") reset();
+    else start();
+  });
+
+  section.addEventListener("slide:advance", (e) => {
+    if (status === "done") return;
+    e.preventDefault();
+    if (status === "idle") start();
   });
 
   section.addEventListener("slide:enter", reset);

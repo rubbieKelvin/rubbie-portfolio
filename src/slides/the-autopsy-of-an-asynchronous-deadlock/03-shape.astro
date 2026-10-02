@@ -2,7 +2,7 @@
 import Slide from "@/components/slides/Slide.astro";
 import DemoControl from "@/components/slides/DemoControl.astro";
 
-const notes = "About 90 seconds. Click the arrow under the diagram to step through it, one line of code per click. Task a takes x, task b takes y. Then a reaches for y and has to wait for b, and b reaches for x and has to wait for a. The last arrow closes the loop, and the dot keeps going round it: nobody will ever move. A deadlock needs two things: something is held while its holder waits for something else, and the waits form a loop. Nobody in the loop is doing anything wrong in isolation; every line of code on the slide is fine. The loop is the bug.\n\nThe slide only shows what a deadlock looks like. Why developers should care is yours to explain here, in your own words; it is not on the slide.\n\nIf it helps, the first question of every incident: which kind of \"stuck\" is this? A crash is loud. A slowdown is still moving, so waiting helps. A deadlock is the quiet one: the process is alive, nothing errors, the health check passes, and waiting longer changes nothing. That last row is the quickest test you have.\n\ncrash vs slowdown vs deadlock:\n- the process: gone / busy / alive, and idle\n- errors: loud / some timeouts / none\n- health check: fails / usually passes / passes\n- waiting longer: — / helps / changes nothing";
+const notes = "About 90 seconds. Press space to step through it, one line of code per press. Task a takes x, task b takes y. Then a reaches for y and has to wait for b, and b reaches for x and has to wait for a. The last arrow closes the loop, and the dot keeps going round it: nobody will ever move. A deadlock needs two things: something is held while its holder waits for something else, and the waits form a loop. Nobody in the loop is doing anything wrong in isolation; every line of code on the slide is fine. The loop is the bug.\n\nThe slide only shows what a deadlock looks like. Why developers should care is yours to explain here, in your own words; it is not on the slide.\n\nIf it helps, the first question of every incident: which kind of \"stuck\" is this? A crash is loud. A slowdown is still moving, so waiting helps. A deadlock is the quiet one: the process is alive, nothing errors, the health check passes, and waiting longer changes nothing. That last row is the quickest test you have.\n\ncrash vs slowdown vs deadlock:\n- the process: gone / busy / alive, and idle\n- errors: loud / some timeouts / none\n- health check: fails / usually passes / passes\n- waiting longer: — / helps / changes nothing";
 
 const tasks = [
   { id: "a", x: 0, lines: ["lock(x)", "lock(y)", "work()"] },
@@ -258,7 +258,7 @@ const LINE_Y = [96, 146, 196];
 </style>
 
 <script>
-  import { updateDemoControl } from "@/components/slides/demo-control";
+  import { onAdvance, updateDemoControl } from "@/components/slides/demo-control";
 
   const root = document.querySelector<HTMLElement>("[data-shape]")!;
   const section = root.closest<HTMLElement>(".slide")!;
@@ -337,6 +337,9 @@ const LINE_Y = [96, 146, 196];
     // don't keep focus, so space/arrows stay with the deck
     control.blur();
   });
+
+  // space: the next line of code, until the loop is closed
+  onAdvance(root, () => current < LAST && (show(current + 1), true));
 
   section.addEventListener("slide:enter", () => show(0));
   show(0);

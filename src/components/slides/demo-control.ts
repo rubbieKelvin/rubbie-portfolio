@@ -6,3 +6,13 @@ export function updateDemoControl(button: HTMLElement, state: number) {
   button.toggleAttribute("data-done", done);
   button.setAttribute("aria-label", done ? "Replay the demo" : "Advance the demo");
 }
+
+/**
+ * Let the deck's space bar step this slide. `step()` takes the next step and returns
+ * true, or returns false when there's nothing left so the deck moves to the next slide.
+ */
+export function onAdvance(el: HTMLElement, step: () => boolean) {
+  el.closest(".slide")!.addEventListener("slide:advance", (e) => {
+    if (step()) e.preventDefault();
+  });
+}

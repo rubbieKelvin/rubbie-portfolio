@@ -2,7 +2,7 @@
 import Slide from "@/components/slides/Slide.astro";
 import DemoControl from "@/components/slides/DemoControl.astro";
 
-const notes = "About 90 seconds. Tell the story before any code. Everyone has locked a door. Read it slowly, one line at a time: each click on the arrow plays the next line in the little scene and shows it on screen. Pause on \"for you\". Then the last line: nobody is busy, nobody complains, and nothing will ever change until someone gives up. \"Keep this picture in your head. The next slide is the same story in code, and you'll be able to point at the stockroom, the key and the assistant.\"";
+const notes = "About 90 seconds. Tell the story before any code. Everyone has locked a door. Read it slowly, one line at a time: each press of space plays the next line in the little scene and shows it on screen. Pause on \"for you\". Then the last line: nobody is busy, nobody complains, and nothing will ever change until someone gives up. \"Keep this picture in your head. The next slide is the same story in code, and you'll be able to point at the stockroom, the key and the assistant.\"";
 ---
 
 <Slide dark notes={notes} class="stockroom">
@@ -296,7 +296,7 @@ const notes = "About 90 seconds. Tell the story before any code. Everyone has lo
 </style>
 
 <script>
-  import { updateDemoControl } from "@/components/slides/demo-control";
+  import { onAdvance, updateDemoControl } from "@/components/slides/demo-control";
 
   const root = document.querySelector<HTMLElement>("[data-stockroom]")!;
   const section = root.closest<HTMLElement>(".slide")!;
@@ -321,6 +321,9 @@ const notes = "About 90 seconds. Tell the story before any code. Everyone has lo
     // don't keep focus, so space/arrows stay with the deck
     control.blur();
   });
+
+  // space: the next line of the story, until the last one
+  onAdvance(root, () => step < LAST && (show(step + 1), true));
 
   section.addEventListener("slide:enter", () => show(0));
   show(0);

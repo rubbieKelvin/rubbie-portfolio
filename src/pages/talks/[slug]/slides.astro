@@ -89,6 +89,8 @@ const dev = import.meta.env.DEV;
 
       // Slides can listen for these to start/stop their own animations:
       //   slide.addEventListener("slide:enter", ...) / "slide:leave"
+      // and for "slide:advance" (space): a slide with a step left takes it and calls
+      // preventDefault(); otherwise the deck moves on to the next slide.
       // `broadcast` is false when following the other window, so changes don't echo back.
       function go(n: number, broadcast = true) {
         const next = Math.max(0, Math.min(slides.length - 1, n));
@@ -109,12 +111,25 @@ const dev = import.meta.env.DEV;
         if (broadcast) channel?.postMessage({ type: "go", index: current });
       }
 
+      // Space: the current slide's next step, or the next slide when it has none left.
+      // In the speaker view the slides aren't live, so it asks the deck window to do it.
+      function advance() {
+        if (presenter) {
+          channel?.postMessage({ type: "advance" });
+          return;
+        }
+        const step = new CustomEvent("slide:advance", { cancelable: true });
+        slides[current].dispatchEvent(step);
+        if (!step.defaultPrevented) go(current + 1);
+      }
+
       const fromHash = () => (parseInt(location.hash.slice(1), 10) || 1) - 1;
       // the speaker view starts wherever the deck is, so it asks instead of announcing
       go(fromHash(), !presenter);
       if (channel) {
         channel.addEventListener("message", ({ data }) => {
           if (data.type === "go") go(data.index, false);
+          else if (data.type === "advance" && !presenter) advance();
           else if (data.type === "hello") channel.postMessage({ type: "go", index: current });
         });
         if (presenter) channel.postMessage({ type: "hello" });
@@ -168,7 +183,8 @@ const dev = import.meta.env.DEV;
       document.addEventListener("keydown", (e) => {
         const t = e.target as HTMLElement;
         if (t.closest("input, textarea, select, [contenteditable]")) return;
-        if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) go(current + 1);
+        if (e.key === " ") advance();
+        else if (["ArrowRight", "ArrowDown", "PageDown"].includes(e.key)) go(current + 1);
         else if (["ArrowLeft", "ArrowUp", "PageUp"].includes(e.key)) go(current - 1);
         else if (e.key === "Home") go(0);
         else if (e.key === "End") go(slides.length - 1);
@@ -180,6 +196,11 @@ const dev = import.meta.env.DEV;
         else if (e.key === "Escape" && !document.fullscreenElement && !presenter) location.href = talkUrl;
         else return;
         e.preventDefault();
+      });
+
+      // a focused button would also "click" on space; space belongs to the deck
+      document.addEventListener("keyup", (e) => {
+        if (e.key === " " && (e.target as HTMLElement).closest("button")) e.preventDefault();
       });
 
       document.querySelector("[data-prev]")!.addEventListener("click", () => go(current - 1));

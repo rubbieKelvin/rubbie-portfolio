@@ -204,7 +204,7 @@ const notes = "About 90 seconds. Start the scenario 1 demo live (have the record
 </style>
 
 <script>
-  import { updateDemoControl } from "@/components/slides/demo-control";
+  import { onAdvance, updateDemoControl } from "@/components/slides/demo-control";
 
   const root = document.querySelector<HTMLElement>("[data-nothing]")!;
   const section = root.closest<HTMLElement>(".slide")!;
@@ -373,6 +373,9 @@ const notes = "About 90 seconds. Start the scenario 1 demo live (have the record
     // don't keep focus, so space/arrows stay with the deck
     el.next.blur();
   });
+
+  // space: the next state, until "nothing." is showing
+  onAdvance(root, () => state < 3 && (setState(state + 1), true));
 
   section.addEventListener("slide:enter", start);
   section.addEventListener("slide:leave", () => cancelAnimationFrame(raf));
