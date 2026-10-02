@@ -18,8 +18,8 @@ resources:
 draft: true
 ---
 
-A checkout service is up, the health check is green, the logs are clean, the CPU is idle, and no order has completed in five minutes. Nothing crashed. Nothing is slow. Nothing is happening at all.
+Your services are up, the health checks are green, the logs are clean, the CPU is idle, and no order has completed in five minutes. Nothing crashed. Nothing is slow. Nothing is happening at all.
 
 This talk takes that freeze apart. It walks through two asynchronous deadlocks, one hidden behind an `await` inside an open transaction and one split between an in-memory lock and a database row, and shows why no single tool ever shows you the whole loop. The database sees half of it, the runtime sees the other half, and you have to draw the last arrow yourself.
 
-The demos are written in Rust with tokio, but everything applies to any language with async/await (JavaScript, Python, C#, Go) and to any database.
+The demos are written in Rust with tokio, but everything applies to any language with async/await (JS, Python, C#, Go) and to any database.
