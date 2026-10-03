@@ -12,3 +12,19 @@ const notes = "About 2 minutes. Zoom out: this is what we did twice, and it work
     <div class="s-card"><p class="s-accent s-big">04</p><p class="strong mt-[0.5em]">break one arrow</p><p class="s-muted mt-[0.5em]">release before you await. one lock order. a deadline on every wait.</p></div>
   </div>
 </Slide>
+
+<style>
+  /* hovering a step highlights it, so the audience can see what you're pointing at.
+     padding and an equal negative margin keep the layout where it was */
+  .s-card {
+    cursor: default;
+    padding: 0.75em 0.75em 0.5em;
+    margin: 0 -0.75em -0.5em;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+  }
+
+  .s-card:hover {
+    background: color-mix(in srgb, var(--color-accent) 22%, transparent);
+  }
+</style>

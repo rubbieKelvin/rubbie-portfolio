@@ -122,6 +122,14 @@ const states = E + W + 2;
             </>
           ) : (
             <>
+              <rect
+                x={n.x - 10 - n.label.length * 7.8 - 14}
+                y={n.y - 34}
+                width={n.label.length * 17.3 + 12 + 28}
+                height="56"
+                rx="8"
+                class="node-hit"
+              />
               <text x={n.x - 10} y={n.y + 10} class="node-label">{n.label}</text>
               <g class="padlock" transform={`translate(${n.x + (n.label.length * 9.5) - 2} ${n.y - 18})`}>
                 <path d="M3.5,8 V5.5 a4.5,4.5 0 0 1 9,0 V8" class="padlock-shackle" />
@@ -207,9 +215,27 @@ const states = E + W + 2;
   /* ---------- points ---------- */
 
   .task-box {
-    fill: none;
+    fill: transparent;
     stroke: var(--color-border);
     stroke-width: 1.5;
+    pointer-events: all;
+    transition: fill 0.2s;
+  }
+
+  /* hovering a point highlights it, so the audience can see what you're pointing at */
+  .node {
+    cursor: default;
+  }
+
+  .node-hit {
+    fill: transparent;
+    pointer-events: all;
+    transition: fill 0.2s;
+  }
+
+  .node:hover .task-box,
+  .node:hover .node-hit {
+    fill: color-mix(in srgb, var(--color-accent) 22%, transparent);
   }
 
   .node-label {

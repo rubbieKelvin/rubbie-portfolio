@@ -87,6 +87,7 @@ const LINE_Y = [96, 146, 196];
 
             <!-- the two things the tasks fight over -->
             <g class="res res-x">
+        <rect x="410" y="28" width="180" height="76" rx="8" class="res-hit" />
                 <text x="500" y="62" class="res-label">
                     x
                 </text>
@@ -109,6 +110,7 @@ const LINE_Y = [96, 146, 196];
                 </text>
             </g>
             <g class="res res-y">
+        <rect x="410" y="248" width="180" height="76" rx="8" class="res-hit" />
                 <text x="500" y="282" class="res-label">
                     y
                 </text>
@@ -258,6 +260,21 @@ const LINE_Y = [96, 146, 196];
     }
 
     /* ---------- resources ---------- */
+
+  /* hovering a resource highlights it, so the audience can see what you're pointing at */
+  .res {
+    cursor: default;
+  }
+
+  .res-hit {
+    fill: transparent;
+    pointer-events: all;
+    transition: fill 0.2s;
+  }
+
+  .res:hover .res-hit {
+    fill: color-mix(in srgb, var(--color-accent) 22%, transparent);
+  }
 
     .res-label {
         font-size: 34px;
