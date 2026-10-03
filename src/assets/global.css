@@ -391,20 +391,21 @@ div.prose {
     color-scheme: dark;
 }
 
-/* The accent is resolved once, against the site theme on <html>, so a slide forced
-   dark keeps the same orange as the rest of the site instead of the dark variant. */
-@property --site-accent {
+/* Slides have their own green accent. It is resolved once, against the site theme on
+   <html>, so a slide forced dark keeps the same green as the other slides instead of
+   the dark variant. */
+@property --slide-accent {
     syntax: "<color>";
     inherits: true;
-    initial-value: #e8590c;
+    initial-value: #0f8a4f;
 }
 
 html {
-    --site-accent: var(--color-accent);
+    --slide-accent: light-dark(#0f8a4f, #3ddc84);
 }
 
 .deck-body {
-    --color-accent: var(--site-accent);
+    --color-accent: var(--slide-accent);
 }
 
 /* Slides are laid out on a fixed 16:9 stage that scales to the viewport.
